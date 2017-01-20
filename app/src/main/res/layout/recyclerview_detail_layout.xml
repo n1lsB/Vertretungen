@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/overview_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardCornerRadius="1dp"
+        app:cardElevation="0dp"
+        app:contentPadding="0dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="false">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_gravity="center_vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:id="@+id/text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. Stunde"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/icon_marked_courses" />
+
+            <TextView
+                android:text="-"
+                android:layout_width="wrap_content"
+                android:textSize="13sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_modified"
+                android:layout_below="@+id/text_room"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:text="Aufgabe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_info"
+                android:textStyle="normal|italic"
+                android:textSize="13sp"
+                android:textAlignment="center"
+                android:layout_below="@+id/text_modified"
+                android:layout_toStartOf="@+id/text_modified"
+                android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:text="Informatik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_original"
+                android:textSize="13sp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/text_room" />
+
+            <TextView
+                android:id="@+id/text_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="10dp"
+                android:paddingEnd="0dp"
+                android:text="R125"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:text="→"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_arrow"
+                android:textSize="13sp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/text_room" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_reference"
+                android:layout_below="@+id/text_info"
+                android:layout_alignParentStart="true"
+                android:textAlignment="center"
+                android:text="Gefunden in EPQ1"
+                android:textAllCaps="false"
+                android:background="#cf002c4b"
+                android:layout_marginTop="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:visibility="visible"
+                android:textSize="13sp"
+                android:textStyle="normal|bold"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/text_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/icon_marked_courses"
+                android:text="Eigenverantworliches Arbeiten"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="16sp"
+                android:textStyle="normal|bold"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/icon_marked_courses"
+                android:layout_width="13sp"
+                android:layout_height="10sp"
+                android:layout_alignBottom="@+id/text_time"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:tint="@android:color/secondary_text_dark"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_star_black_24dp" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

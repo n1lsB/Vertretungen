@@ -1,0 +1,214 @@
+package de.nils_beyer.android.Vertretungen;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import de.nils_beyer.android.Vertretungen.data.DataModel;
+import de.nils_beyer.android.Vertretungen.data.Klasse;
+import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
+
+
+public class OverviewFragment extends Fragment {
+    /**
+     * The fragment argument representing the section number for this
+     * fragment.
+     */
+    private static final String ARG_KLASSE_ID = "KLASSE_ID";
+    private static final String ARG_DATE_ID = "DATE_ID";
+    private static final String ARG_IMMEDIACY_ID = "IMMEDIACY_DATE";
+
+    private ArrayList<Klasse> klasseArrayList;
+    private TextView noReplcaements;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private Date date;
+    private Date immediacy;
+    private OverviewAdapter overviewAdapter = new OverviewAdapter();
+    private ViewGroup container;
+    private View rootView;
+
+    public OverviewFragment() {
+        super();
+    }
+
+    public static OverviewFragment getIntance(Context c, DataModel.source source) {
+        Bundle bundle = new Bundle();
+        switch (source) {
+            case Today:
+                bundle.putSerializable(ARG_KLASSE_ID, DataModel.getToday(c));
+                bundle.putSerializable(ARG_DATE_ID, DataModel.getDateToday(c));
+                bundle.putSerializable(ARG_IMMEDIACY_ID, DataModel.getImmediacityToday(c));
+                break;
+            case Tomorrow:
+                bundle.putSerializable(ARG_KLASSE_ID, DataModel.getTomorrow(c));
+                bundle.putSerializable(ARG_DATE_ID, DataModel.getDateTomorrow(c));
+                bundle.putSerializable(ARG_IMMEDIACY_ID, DataModel.getImmediacityTomorrow(c));
+                break;
+        }
+
+        OverviewFragment fragment = new OverviewFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        swipeRefreshLayout.removeAllViews();
+        super.onDestroyView();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        klasseArrayList = (ArrayList<Klasse>) getArguments().getSerializable(ARG_KLASSE_ID);
+        date = (Date) getArguments().getSerializable(ARG_DATE_ID);
+        immediacy = (Date) getArguments().getSerializable(ARG_IMMEDIACY_ID);
+        this.container = container;
+
+
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+        noReplcaements = (TextView) rootView.findViewById(R.id.text_noreplacemants);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                MainActivity activity = (MainActivity) getActivity();
+
+                if (activity != null)
+                    activity.requestData();
+            }
+        });
+
+        if (klasseArrayList.size() == 0) {
+            if (immediacy == null) {
+                noReplcaements.setText(getString(R.string.no_data_downloaded));
+            } else {
+                noReplcaements.setText(getString(R.string.no_data));
+            }
+
+            noReplcaements.setVisibility(View.VISIBLE);
+        } else {
+            noReplcaements.setVisibility(View.GONE);
+        }
+
+        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_main);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(overviewAdapter);
+
+        return rootView;
+    }
+
+    void resetSwipeRefreshLayout() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHolder> {
+
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+                TextView className;
+                TextView replacementCounter;
+                CardView cardView;
+                ImageView marked;
+
+                ViewHolder(View v) {
+                    super(v);
+                    cardView = (CardView) v.findViewById(R.id.overview_card);
+                    className = (TextView) v.findViewById(R.id.text_class_name);
+                    replacementCounter = (TextView) v.findViewById(R.id.text_replacement_count);
+                    marked = (ImageView) v.findViewById(R.id.image_class_marked);
+                }
+
+                void bind(final Klasse klasse) {
+                    className.setText("Klasse " + klasse.name);
+                    if (klasse.replacements.length > 1)
+                        replacementCounter.setText(klasse.replacements.length + " Vertretungen");
+                    else
+                        replacementCounter.setText(klasse.replacements.length + " Vertretung");
+
+                    marked.setVisibility(MarkedKlasses.isMarked(getActivity().getApplication(), klasse.name) ? View.VISIBLE : View.GONE);
+
+                    cardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(OverviewFragment.this.getContext(), DetailActivity.class);
+                            intent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) klasse);
+                            intent.putExtra(DetailActivity.ARG_DATE_EXTRA, date);
+                            OverviewFragment.this.startActivity(intent);
+                        }
+                    });
+                }
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (position == 0) {
+                holder.cardView.setOnClickListener(null);
+                holder.replacementCounter.setVisibility(View.GONE);
+                holder.className.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                holder.cardView.setClickable(false);
+                holder.marked.setVisibility(View.GONE);
+                if (immediacy != null) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+                    holder.className.setText("Stand: " + DateParser.parseDateToShortString(getContext(), immediacy) + " " + simpleDateFormat.format(immediacy));
+                }
+                else {
+                    holder.cardView.setVisibility(View.GONE);
+                }
+            } else {
+                holder.cardView.setClickable(true);
+                holder.cardView.setVisibility(View.VISIBLE);
+                holder.replacementCounter.setVisibility(View.VISIBLE);
+                holder.marked.setVisibility(View.VISIBLE);
+                holder.className.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+                holder.bind(OverviewFragment.this.klasseArrayList.get(position - 1));
+
+
+            }
+
+        }
+
+        @Override
+        public int getItemCount() {
+            if (OverviewFragment.this.klasseArrayList.size() == 0) {
+                return 0;
+            } else {
+                return OverviewFragment.this.klasseArrayList.size() + 1;
+            }
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recyclerview_overview_layout, parent, false);
+            ViewHolder vh = new ViewHolder(v);
+            return vh;
+        }
+    }
+}

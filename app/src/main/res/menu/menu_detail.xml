@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="de.nils_beyer.android.Vertretungen.DetailActivity">
+
+    <item
+        android:id="@+id/menu_detail_star"
+        android:title="@string/mark_class_menu_item_title"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_star_border_white_24dp" />
+</menu>

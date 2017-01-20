@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Vertretungsplan</string>
+    <string name="app_name_short">Vertretungen</string>
+
+    <!-- Process Dialog Text -->
+    <string name="loading_text">Aktualisieren...</string>
+    <string name="loading_subtext">Neue Vertretungen werden heruntergeladen</string>
+
+    <!-- No Data Info Texts -->
+    <string name="no_data">Keine Vertretungen</string>
+    <string name="no_data_downloaded">Keine Daten heruntergeladen</string>
+
+    <!-- Connection Info Texts -->
+    <string name="io_error">Verbindungsfehler \nBitte überprüfen Sie Ihre Internetverbindung</string>
+    <string name="download_success">Daten erfolgreich heruntergeladen</string>
+
+
+    <!-- Dates Short Names -->
+    <string name="today">Heute</string>
+    <string name="tomorrow">Morgen</string>
+    <string name="Yesterday">Gestern</string>
+
+    <string name="MONDAY">Montag</string>
+    <string name="TUESDAY">Dienstag</string>
+    <string name="WEDNESDAY">Mittwoch</string>
+    <string name="THURSDAY">Donnerstag</string>
+    <string name="FRIDAY">Freitag</string>
+    <string name="SATURDAY">Samstag</string>
+    <string name="SUNDAY">Sonntag</string>
+
+    <!-- Detail Placeholders -->
+    <string name="placeholder_time">%s. Stunde</string>
+    <string name="mark_class_menu_item_title">Markieren</string>
+    <string name="placeholder_reference">Gefunden in "%s"</string>
+
+    <!-- Information -->
+    <string name="info_menuitem_title">Informationen</string>
+    <string name="info_title">Informationen</string>
+    <string name="info_app_with_version">Vertretungsplan %s</string>
+    <string name="info_developer">© 2017 Nils Beyer</string>
+    <string name="info_libaries">Verwendete Fremdsoftware: JSoup 1.10.2\n\nCopyright © 2009 - 2016 Jonathan Hedley (jonathan@hedley.net)\n\
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+
+
+    <!-- Login -->
+    <string name="login_infotext">Bitte melde dich mit den Benutzerdaten für den Vertretungsplan an</string>
+    <string name="login_button">Anmelden</string>
+    <string name="login_username">Benutzername</string>
+    <string name="login_password">Passwort</string>
+    <string name="login_error">Die eingegebenen Daten stimmen nicht.</string>
+    <string name="login_info">Hinweis: Es handelt sich um ein privates, inoffizielles Projekt. Alle Angaben ohne Gewähr.</string>
+
+    <!-- Preferences: Markierte Kurse -->
+
+    <string name="marked_courses_title">Markierte Kurse</string>
+    <string name="marked_courses_menu_entry">Markierte Kurse</string>
+    <string name="marked_courses_remove_all">Alle entfernen</string>
+    <string name="marked_courses_info">Hier kannst du Kurse definieren, die besonders hervorgehoben werden sollen. Bitte gibt den vollständigen und offiziellen Namen deiner Kurse an.</string>
+    <string name="marked_courses_delete">Löschen</string>
+</resources>

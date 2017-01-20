@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <declare-styleable name="ChromeCustomTabsFAB">
+        <attr name="fabSize" />
+        <attr name="srcCompat" />
+        <attr name="layout_anchor" />
+        <attr name="elevation" />
+        <attr name="backgroundTint" />
+        <attr name="layout_anchorGravity" />
+    </declare-styleable>
+</resources>

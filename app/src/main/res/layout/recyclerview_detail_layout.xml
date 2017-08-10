@@ -119,14 +119,10 @@
             <ImageView
                 android:id="@+id/icon_marked_courses"
                 android:layout_width="13sp"
-                android:layout_height="10sp"
+                android:layout_height="12sp"
                 android:layout_alignBottom="@+id/text_time"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentTop="true"
                 android:layout_marginRight="5dp"
-                android:tint="@android:color/secondary_text_dark"
-                android:visibility="visible"
-                app:srcCompat="@drawable/ic_star_black_24dp" />
+                android:src="@drawable/ic_star_black_24dp" />
 
         </RelativeLayout>
 

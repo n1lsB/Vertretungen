@@ -2,6 +2,7 @@
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -33,6 +34,14 @@
             android:layout_centerHorizontal="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/info_build_variant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textAlignment="center"
+            tools:text="@string/info_warning_debug" />
 
         <TextView
             android:text="@string/info_developer"

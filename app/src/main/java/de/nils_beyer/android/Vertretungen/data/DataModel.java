@@ -136,7 +136,7 @@ public class DataModel implements Serializable {
                 sharedPreferences.contains(KEY_DATASET_TOMORROW);
     }
 
-    private static void sort(final Context c, ArrayList<Klasse> list) {
+    public static void sort(final Context c, ArrayList<Klasse> list) {
         Collections.sort(list, new Comparator<Klasse>() {
             @Override
             public int compare(Klasse o1, Klasse o2) {

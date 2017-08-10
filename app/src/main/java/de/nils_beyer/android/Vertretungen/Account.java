@@ -36,11 +36,7 @@ public final class Account {
     public static boolean isRegistered(Context c) {
         SharedPreferences sharedPreferences = c.getSharedPreferences(KEY_PREFERENCE_ACCOUNT, Context.MODE_PRIVATE);
 
-        if (sharedPreferences.contains(KEY_USER_NAME) && sharedPreferences.contains(KEY_PASSWORD)) {
-            return true;
-        } else {
-            return false;
-        }
+        return sharedPreferences.contains(KEY_USER_NAME) && sharedPreferences.contains(KEY_PASSWORD);
     }
 
     public static void logout(Context c) {

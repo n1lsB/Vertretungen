@@ -2,17 +2,20 @@ package de.nils_beyer.android.Vertretungen.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.DateParser;
+import de.nils_beyer.android.Vertretungen.DetailActivity;
 import de.nils_beyer.android.Vertretungen.MainActivity;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.R;
@@ -25,9 +28,8 @@ import de.nils_beyer.android.Vertretungen.data.Replacements;
  */
 
 public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
-    private ArrayList<String> klasseNames = new ArrayList<>();
-    private ArrayList<Replacements> replacements= new ArrayList<>();
-
+    private DataModel.source selectedSource;
+    private ArrayList<Klasse> klasses = new ArrayList<>();
     private Context context = null;
 
 
@@ -38,12 +40,39 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getCount() {
-        return replacements.size();
+        int count = 0;
+        for (Klasse k : klasses) {
+            count += k.replacements.length;
+        }
+
+        return count;
     }
 
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    private Replacements getReplacement(int pos) {
+        int count = 0;
+        for (Klasse k : klasses) {
+            if (count + k.replacements.length > pos) {
+                return k.replacements[pos-count];
+            }
+            count += k.replacements.length;
+        }
+        return null;
+    }
+
+    private Klasse getKlasseAt(int pos) {
+        int count = 0;
+        for (Klasse k : klasses) {
+            if (count + k.replacements.length > pos) {
+                return k;
+            }
+            count += k.replacements.length;
+        }
+        return null;
     }
 
     /*
@@ -57,10 +86,10 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
                 context.getPackageName(), R.layout.widget_row_layout);
 
 
-        Replacements r = replacements.get(position);
+        Replacements r = getReplacement(position);
 
         remoteView.setTextViewText(R.id.widget_row_type, r.type);
-        remoteView.setTextViewText(R.id.widget_row_klasse, klasseNames.get(position));
+        remoteView.setTextViewText(R.id.widget_row_klasse, getKlasseAt(position).name);
         remoteView.setTextViewText(R.id.widget_row_original, r.originalSubject);
         remoteView.setTextViewText(R.id.widget_row_replacement, r.modifiedSubject);
         remoteView.setTextViewText(R.id.widget_row_information, r.information);
@@ -78,8 +107,16 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
             remoteView.setViewVisibility(R.id.widget_row_arrow, View.VISIBLE);
         }
 
-        Intent onClickIntent = new Intent(context, MainActivity.class);
-
+        Intent onClickIntent = new Intent(context, DetailActivity.class);
+        switch (selectedSource) {
+            case Today:
+                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, DataModel.getDateToday(context));
+                break;
+            case Tomorrow:
+                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, DataModel.getDateTomorrow(context));
+                break;
+        }
+        onClickIntent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) getKlasseAt(position));
 
         remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, onClickIntent);
 
@@ -115,37 +152,23 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         }
         if (DateParser.sameDay(DataModel.getDateToday(context), new Date())) {
             input = DataModel.getToday(context);
+            selectedSource = DataModel.source.Today;
         } else {
             input = DataModel.getTomorrow(context);
+            selectedSource = DataModel.source.Tomorrow;
         }
 
-        Collections.sort(input, new Comparator<Klasse>() {
-            @Override
-            public int compare(Klasse o1, Klasse o2) {
-                boolean o1Marked = MarkedKlasses.isMarked(context, o1.name);
-                boolean o2Marked = MarkedKlasses.isMarked(context, o2.name);
+        DataModel.sort(context, input);
 
-                if (o1Marked && !o2Marked) {
-                    return -1;
-                } else if (!o1Marked && o2Marked) {
-                    return 1;
-                } else {
-                    return o1.name.compareTo(o2.name);
+        if (MarkedKlasses.hasMarked(context)) {
+            klasses = new ArrayList<Klasse>();
+            for (Klasse k : input) {
+                if (MarkedKlasses.isMarked(context, k.name)) {
+                    klasses.add(k);
                 }
             }
-        });
-
-        klasseNames.clear();
-        replacements.clear();
-        Log.d("Factory", "onDataSetChanged: " + MarkedKlasses.hasMarked(context));
-        for (Klasse k : input) {
-
-            if (MarkedKlasses.isMarked(context, k.name) || !MarkedKlasses.hasMarked(context)) {
-                for (Replacements r : k.replacements) {
-                    klasseNames.add(k.name);
-                    replacements.add(r);
-                }
-            }
+        } else {
+            klasses = input;
         }
     }
 

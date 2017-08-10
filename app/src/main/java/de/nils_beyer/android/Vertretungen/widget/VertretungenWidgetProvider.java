@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.DateParser;
+import de.nils_beyer.android.Vertretungen.DetailActivity;
 import de.nils_beyer.android.Vertretungen.MainActivity;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
@@ -54,12 +55,11 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
             }
         }
 
-        Intent openActivity = new Intent(context.getApplicationContext(), MainActivity.class);
+        Intent openActivity = new Intent(context.getApplicationContext(), DetailActivity.class);
             openActivity.setAction("");
         PendingIntent clickPI = PendingIntent.getActivity(context.getApplicationContext(), 60,
                 openActivity, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setPendingIntentTemplate(R.id.widget_listview, clickPI);
-        remoteViews.setOnClickPendingIntent(R.id.widget_title_text, clickPI);
 
 
 
@@ -68,6 +68,10 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
             refreshIntent.setAction("refresh");
         PendingIntent clickPIRefresh = PendingIntent.getActivity(context.getApplicationContext(), 60, refreshIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.widget_button_refresh, clickPIRefresh);
+
+        Intent startApp = new Intent(context.getApplicationContext(), MainActivity.class);
+        PendingIntent startPI = PendingIntent.getActivity(context.getApplicationContext(), 60, startApp, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.widget_title_text, startPI);
 
         return remoteViews;
     }

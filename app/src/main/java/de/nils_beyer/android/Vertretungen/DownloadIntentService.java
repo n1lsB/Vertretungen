@@ -87,14 +87,6 @@ public class DownloadIntentService extends IntentService {
                 Date immediacyToday = readImmediacy(HTML_today);
                 Date immediacyTomorrow = readImmediacy(HTML_tomorrow);
 
-                result.putExtra(DATE_TODAY_KEY, dateToday);
-
-                result.putExtra(IMMEDIACY_TODAY_KEY, immediacyToday);
-
-                result.putExtra(DATE_TOMORROW_KEY, dateTomorrow);
-                result.putExtra(IMMEDIACY_TOMORROW_KEY, immediacyTomorrow);
-
-
                 DataModel.save(getApplicationContext(), dataSetToday, dataSetTomorrow, dateToday, dateTomorrow, immediacyToday, immediacyTomorrow);
                 VertretungenWidgetProvider.updateWidgetData(this);
 
@@ -113,7 +105,6 @@ public class DownloadIntentService extends IntentService {
     protected String downloadHTMLFile(String url) throws  Exception{
         HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
         urlConnection.setRequestProperty("Authorization", Account.generateHTTPHeaderAuthorization(getApplicationContext()));
-
 
         try {
            StringBuilder stringBuilder = new StringBuilder();
@@ -144,8 +135,6 @@ public class DownloadIntentService extends IntentService {
                     continue;
                 }
 
-
-
                 if (!(row.attr("class").contains("even") || row.attr("class").contains("odd"))) {
                     continue;
                 }
@@ -160,6 +149,10 @@ public class DownloadIntentService extends IntentService {
 
                 ArrayList<String> klassenNames = parseKlassenName(name);
                 for (String klasse : klassenNames) {
+                    if (klasse == null) {
+                        continue;
+                    }
+
                     Klasse k = klasseMap.get(klasse);
                     if (k == null) {
                         k = new Klasse();
@@ -186,21 +179,7 @@ public class DownloadIntentService extends IntentService {
             }
             ArrayList<Klasse> klassenArrayList = new ArrayList<Klasse>(klasseMap.values());
 
-            Collections.sort(klassenArrayList, new Comparator<Klasse>() {
-                @Override
-                public int compare(Klasse o1, Klasse o2) {
-                    boolean o1Marked = MarkedKlasses.isMarked(getApplication(), o1.name);
-                    boolean o2Marked = MarkedKlasses.isMarked(getApplication(), o2.name);
-
-                    if (o1Marked && !o2Marked) {
-                        return -1;
-                    } else if (!o1Marked && o2Marked) {
-                        return 1;
-                    } else {
-                        return o1.name.compareTo(o2.name);
-                    }
-                }
-            });
+            DataModel.sort(getApplication(), klassenArrayList);
 
             return klassenArrayList;
         } catch (Exception e) {

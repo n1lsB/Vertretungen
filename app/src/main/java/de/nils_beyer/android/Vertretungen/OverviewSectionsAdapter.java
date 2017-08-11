@@ -3,23 +3,25 @@ package de.nils_beyer.android.Vertretungen;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import java.util.Date;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 
 
 
-class OverviewSectionsAdapter extends FragmentStatePagerAdapter {
+class OverviewSectionsAdapter extends FragmentPagerAdapter {
 
     private OverviewFragment f0;
     private OverviewFragment f1;
-    Context context;
+    private Context context;
+    private DownloadingActivity downloadingActivity;
 
-    OverviewSectionsAdapter(Context c, FragmentManager fm) {
+    OverviewSectionsAdapter(Context c, FragmentManager fm, DownloadingActivity _downloadingActivity) {
         super(fm);
         context = c;
-
+        downloadingActivity = _downloadingActivity;
     }
 
     @Override
@@ -36,8 +38,20 @@ class OverviewSectionsAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment of = (Fragment) super.instantiateItem(container, position);
+        switch (position) {
+            case 0:
+                f0 = (OverviewFragment) of;
+                break;
+            case 1:
+                f1 = (OverviewFragment) of;
+                break;
+        }
+
+        checkIfDownloading();
+
+        return of;
     }
 
     @Override
@@ -69,14 +83,51 @@ class OverviewSectionsAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        // Disable Spinning Button
-        if (f0 != null)
+        // Update Fragments
+        if (f0 != null) {
+            f0.updateData();
+        }
+
+        if (f1 != null) {
+            f1.updateData();
+        }
+
+        super.notifyDataSetChanged();
+    }
+
+    public void hideDownloading() {
+        // Hide Spinning Button
+        if (f0 != null) {
             f0.resetSwipeRefreshLayout();
+        }
 
         if (f1 != null) {
             f1.resetSwipeRefreshLayout();
         }
+    }
 
-        super.notifyDataSetChanged();
+    public void showDownloading() {
+        // Enable Spinning Button
+
+
+        if (f0 != null) {
+            f0.showSwipeRefreshLayout();
+        }
+
+        if (f1 != null) {
+            f1.showSwipeRefreshLayout();
+        }
+    }
+
+    private void checkIfDownloading() {
+        if (downloadingActivity.isDownloading()) {
+            showDownloading();
+        } else {
+            hideDownloading();
+        }
+    }
+
+    public interface DownloadingActivity {
+        boolean isDownloading();
     }
 }

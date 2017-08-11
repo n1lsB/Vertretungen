@@ -2,6 +2,7 @@ package de.nils_beyer.android.Vertretungen;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,6 +23,7 @@ import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.data.Klasse;
+import de.nils_beyer.android.Vertretungen.data.Replacements;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
@@ -30,43 +32,44 @@ public class OverviewFragment extends Fragment {
      * The fragment argument representing the section number for this
      * fragment.
      */
-    private static final String ARG_KLASSE_ID = "KLASSE_ID";
-    private static final String ARG_DATE_ID = "DATE_ID";
-    private static final String ARG_IMMEDIACY_ID = "IMMEDIACY_DATE";
+    // Bundle String for Datamodel.source
+    private static String ARG_SOURCE = "ARG_SOURCE_ID";
+    private static String ARG_DACTIVITY = "ARG_DACTIVITY";
 
-    private ArrayList<Klasse> klasseArrayList;
+    // Data Model
+    private DataModel.source source;    
+
+    // Data
+    ArrayList<Klasse> klasseArrayList;
+    Date immediacy;
+    Date date;
+
+    // View References
     private TextView noReplcaements;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private Date date;
-    private Date immediacy;
     private OverviewAdapter overviewAdapter = new OverviewAdapter();
     private ViewGroup container;
     private View rootView;
+    private RecyclerView recyclerView;
+    private OverviewSectionsAdapter.DownloadingActivity downloadingActivity;
 
     public OverviewFragment() {
         super();
     }
 
     public static OverviewFragment getIntance(Context c, DataModel.source source) {
-        Bundle bundle = new Bundle();
-        switch (source) {
-            case Today:
-                bundle.putSerializable(ARG_KLASSE_ID, DataModel.getToday(c));
-                bundle.putSerializable(ARG_DATE_ID, DataModel.getDateToday(c));
-                bundle.putSerializable(ARG_IMMEDIACY_ID, DataModel.getImmediacityToday(c));
-                break;
-            case Tomorrow:
-                bundle.putSerializable(ARG_KLASSE_ID, DataModel.getTomorrow(c));
-                bundle.putSerializable(ARG_DATE_ID, DataModel.getDateTomorrow(c));
-                bundle.putSerializable(ARG_IMMEDIACY_ID, DataModel.getImmediacityTomorrow(c));
-                break;
-        }
 
+        // Put DataModel.source in the bundle
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARG_SOURCE, source);
+
+
+
+        // Create the Fragment and return it.
         OverviewFragment fragment = new OverviewFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -78,15 +81,15 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        klasseArrayList = (ArrayList<Klasse>) getArguments().getSerializable(ARG_KLASSE_ID);
-        date = (Date) getArguments().getSerializable(ARG_DATE_ID);
-        immediacy = (Date) getArguments().getSerializable(ARG_IMMEDIACY_ID);
+        if (getActivity() instanceof OverviewSectionsAdapter.DownloadingActivity) {
+            downloadingActivity = (OverviewSectionsAdapter.DownloadingActivity) getActivity();
+        }
+
+        source = (DataModel.source) getArguments().getSerializable(ARG_SOURCE);
+
+
         this.container = container;
-
-
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
-
         noReplcaements = (TextView) rootView.findViewById(R.id.text_noreplacemants);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
@@ -97,10 +100,18 @@ public class OverviewFragment extends Fragment {
             public void onRefresh() {
                 MainActivity activity = (MainActivity) getActivity();
 
-                if (activity != null)
+                if (activity != null) {
                     activity.requestData();
+                }
             }
         });
+
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_main);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(overviewAdapter);
+
+        updateData();
 
         if (klasseArrayList.size() == 0) {
             if (immediacy == null) {
@@ -114,17 +125,40 @@ public class OverviewFragment extends Fragment {
             noReplcaements.setVisibility(View.GONE);
         }
 
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_main);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(overviewAdapter);
-
         return rootView;
+    }
+
+    public void updateData() {
+        if (downloadingActivity.isDownloading()) {
+            showSwipeRefreshLayout();
+        } else {
+            resetSwipeRefreshLayout();
+        }
+
+        switch (source) {
+            case Today:
+                klasseArrayList = DataModel.getToday(getContext());
+                date = DataModel.getDateToday(getContext());
+                immediacy = DataModel.getImmediacityToday(getContext());
+                break;
+            case Tomorrow:
+                klasseArrayList = DataModel.getTomorrow(getContext());
+                date = DataModel.getDateTomorrow(getContext());
+                immediacy = DataModel.getImmediacityTomorrow(getContext());
+                break;
+        }
+
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     void resetSwipeRefreshLayout() {
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+    void showSwipeRefreshLayout() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(true);
         }
     }
 

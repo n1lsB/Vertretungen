@@ -13,11 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
 
-public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity {
+public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity, OverviewSectionsAdapter.DownloadingActivity {
 
     public static int KlasseRequestCode = 6;
     public static String RefreshKey = "REFRESH_KEY";
@@ -29,11 +30,9 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
     private OverviewSectionsAdapter mOverviewSectionsAdapter;
 
-
     private boolean isDownloading = false;
 
     private TabLayout tabLayout;
-    private ProgressDialog progressDialog;
     private ChromeCustomTabsFAB fab;
 
 
@@ -47,20 +46,15 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (!Account.isRegistered(this)) {
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
 
-        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(), getSupportFragmentManager());
+        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(), getSupportFragmentManager(), this);
 
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mOverviewSectionsAdapter);
-
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -70,8 +64,21 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // NotifyDataSetChanged in order to refresh
+        // order of Klasses (e.g. in case of a new marked item)
+        mOverviewSectionsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
+
+        if (!Account.isRegistered(this)) {
+            startActivity(new Intent(this, LoginActivity.class));
+        }
 
         if (getIntent().hasExtra(RefreshKey) && getIntent().getBooleanExtra(RefreshKey, false)) {
             getIntent().removeExtra(RefreshKey);
@@ -79,57 +86,29 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         }
 
         if (!DataModel.containsData(getApplicationContext())) {
-                requestData();
+            requestData();
         }
     }
 
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        mOverviewSectionsAdapter.notifyDataSetChanged();
-    }
-
-    public void requestData() {
+    public boolean requestData() {
         if (isDownloading || !Account.isRegistered(this)) {
-            return;
+            return false;
         }
 
-        showProgressDialog();
         isDownloading = true;
+        mOverviewSectionsAdapter.showDownloading();
 
-
-
+        // Start Downloading Service
         PendingIntent pendingResult = createPendingResult(
                 KlasseRequestCode, new Intent(), 0);
         Intent intent = new Intent(getApplicationContext(), DownloadIntentService.class);
         intent.putExtra(DownloadIntentService.PENDING_RESULT_EXTRA, pendingResult);
 
         startService(intent);
+
+        return true;
     }
 
-    protected void showProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-
-        progressDialog.setTitle(getString(R.string.loading_text));
-        progressDialog.setMessage(getString(R.string.loading_subtext));
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        //progressDialog.show();
-    }
-
-    protected void hideProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.hide();
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,19 +117,19 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                 mOverviewSectionsAdapter.notifyDataSetChanged();
 
                 isDownloading = false;
-                hideProgressDialog();
 
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.download_success), Snackbar.LENGTH_SHORT);
                 snackbar.show();
+                mOverviewSectionsAdapter.hideDownloading();
             } else if (resultCode == DownloadIntentService.ERROR_CODE) {
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.io_error), Snackbar.LENGTH_LONG);
 
                 isDownloading = false;
-                hideProgressDialog();
+                mOverviewSectionsAdapter.hideDownloading();
                 snackbar.show();
             }
         }
@@ -185,18 +164,9 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        if (savedInstanceState.getBoolean(isDownloadingKey)) {
-            isDownloading = true;
-            showProgressDialog();
-        } else {
-            isDownloading = false;
-        }
+        isDownloading = savedInstanceState.getBoolean(isDownloadingKey);
     }
 
-    @Override
-    public void onBackPressed() {
-        finishAffinity();
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -214,5 +184,10 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
             default:
                 return null;
         }
+    }
+
+    @Override
+    public boolean isDownloading() {
+        return isDownloading;
     }
 }

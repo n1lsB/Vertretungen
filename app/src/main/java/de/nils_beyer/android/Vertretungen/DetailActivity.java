@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,9 +29,10 @@ public class DetailActivity extends AppCompatActivity {
 
     public static final String ARG_KLASSE_EXTRA = "ARG_KLASSE_EXTRA";
     public static final String ARG_DATE_EXTRA = "ARG_DATE_EXTRA";
+
     private Klasse klasse;
     private Date date;
-
+    private FrameLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +58,13 @@ public class DetailActivity extends AppCompatActivity {
         });
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview_detail);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new DetailAdapter());
 
+        fragmentContainer = (FrameLayout) findViewById(R.id.detail_fragment_container);
+        DetailFragment detailFragment = DetailFragment.newInstance(klasse);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(fragmentContainer.getId(), detailFragment)
+                .commit();
 
     }
 
@@ -93,90 +97,5 @@ public class DetailActivity extends AppCompatActivity {
     }
 
 
-    private class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView text_original;
-            TextView text_time;
-            TextView text_replacement;
-            TextView text_info;
-            TextView text_type;
-            TextView text_room;
-            TextView text_arrow;
-            CardView overview_card;
-            TextView text_reference;
-            ImageView marked_cours;
 
-            public ViewHolder(View v) {
-                super(v);
-
-                text_original = (TextView) v.findViewById(R.id.text_original);
-                text_time = (TextView) v.findViewById(R.id.text_time);
-                text_replacement = (TextView) v.findViewById(R.id.text_modified);
-                text_type = (TextView) v.findViewById(R.id.text_type);
-                text_info = (TextView) v.findViewById(R.id.text_info);
-                text_room = (TextView) v.findViewById(R.id.text_room);
-                text_arrow = (TextView) v.findViewById(R.id.text_arrow);
-                text_reference = (TextView) v.findViewById(R.id.text_reference);
-                overview_card = (CardView) v.findViewById(R.id.overview_card);
-                marked_cours = (ImageView) v.findViewById(R.id.icon_marked_courses);
-            }
-
-            public void bind(Replacements r) {
-                text_original.setText(r.originalSubject);
-                text_time.setText(String.format(getString(R.string.placeholder_time), r.time));
-                text_replacement.setText(r.modifiedSubject);
-                text_info.setText(r.information);
-                text_type.setText(r.type);
-                text_room.setText(r.room);
-
-                if (MarkedCourses.isMarked(getApplicationContext(), klasse.name, r.originalSubject) ||
-                        MarkedCourses.isMarked(getApplicationContext(), klasse.name, r.modifiedSubject)) {
-                    marked_cours.setVisibility(View.VISIBLE);
-                } else {
-                    marked_cours.setVisibility(View.GONE);
-                }
-
-                if (r.originalSubject.equals(" ") && r.modifiedSubject.equals(" ")) {
-                    text_original.setVisibility(View.GONE);
-                    text_replacement.setVisibility(View.GONE);
-                    text_arrow.setVisibility(View.GONE);
-                } else {
-
-                }
-
-                if(r.information.equals(" ")) {
-                    text_info.setVisibility(View.GONE);
-                } else {
-                    text_info.setVisibility(View.VISIBLE);
-                }
-
-                if (r.hasReference()) {
-                    text_reference.setVisibility(View.VISIBLE);
-                    text_reference.setText(String.format(getString(R.string.placeholder_reference), r.reference));
-                } else {
-                    text_reference.setVisibility(View.GONE);
-                }
-
-            }
-        }
-
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.bind(DetailActivity.this.klasse.replacements[position]);
-        }
-
-        @Override
-        public int getItemCount() {
-            return DetailActivity.this.klasse.replacements.length;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recyclerview_detail_layout, parent, false);
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
-        }
-    }
 }

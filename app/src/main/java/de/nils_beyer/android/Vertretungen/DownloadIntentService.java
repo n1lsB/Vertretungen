@@ -255,6 +255,13 @@ public class DownloadIntentService extends IntentService {
                 classes.add("Q2");
         }
 
+        if (_input.contains("Q12")) {
+            if (!classes.contains("Q2"))
+                classes.add("Q2");
+            if (!classes.contains("Q1"))
+                classes.add("Q1");
+        }
+
         Pattern pattern = Pattern.compile("\\d[a-z]+");
         Matcher matcher = pattern.matcher(_input);
         while (matcher.find())

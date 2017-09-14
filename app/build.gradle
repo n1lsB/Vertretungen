@@ -8,8 +8,8 @@ android {
         applicationId "de.nils_beyer.android.testapplication"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 3
-        versionName "1.5.12"
+        versionCode 4
+        versionName "1.5.13"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         versionNameSuffix 'D'
     }

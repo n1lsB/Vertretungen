@@ -1,5 +1,6 @@
 package de.nils_beyer.android.Vertretungen;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class InfoActivity extends AppCompatActivity {
@@ -54,6 +56,16 @@ public class InfoActivity extends AppCompatActivity {
         } else {
             buildVariant.setVisibility(View.GONE);
         }
+
+        Button btn_license = (Button) findViewById(R.id.info_button_license);
+        btn_license.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startActivity = new Intent(InfoActivity.this, LicenseActivity.class);
+                startActivity(startActivity);
+            }
+        });
+
     }
 
 }

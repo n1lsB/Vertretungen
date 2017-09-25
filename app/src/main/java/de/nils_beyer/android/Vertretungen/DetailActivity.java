@@ -60,11 +60,15 @@ public class DetailActivity extends AppCompatActivity {
 
 
         fragmentContainer = (FrameLayout) findViewById(R.id.detail_fragment_container);
-        DetailFragment detailFragment = DetailFragment.newInstance(klasse);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(fragmentContainer.getId(), detailFragment)
-                .commit();
+
+        if(savedInstanceState == null) {
+            DetailFragment detailFragment = DetailFragment.newInstance(klasse);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(fragmentContainer.getId(), detailFragment)
+                    .commit();
+
+        }
 
     }
 

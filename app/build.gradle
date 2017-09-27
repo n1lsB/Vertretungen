@@ -8,8 +8,8 @@ android {
         applicationId "de.nils_beyer.android.testapplication"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 5
-        versionName "1.5.14"
+        versionCode 6
+        versionName "1.5.15"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

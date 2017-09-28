@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;
 
-import de.nils_beyer.android.Vertretungen.download.DownloadIntentService;
+import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
@@ -52,9 +52,9 @@ public final class ChromeCustomTabsFAB extends FloatingActionButton {
 
                 try {
                     if (tabActivity.getSelectedSource() == StudentStorage.source.Today) {
-                        customtabintent.build().launchUrl(getContext(), Uri.parse(DownloadIntentService.URL_TODAY));
+                        customtabintent.build().launchUrl(getContext(), Uri.parse(StudentDownloadService.URL_TODAY));
                     } else {
-                        customtabintent.build().launchUrl(getContext(), Uri.parse(DownloadIntentService.URL_TOMORROW));
+                        customtabintent.build().launchUrl(getContext(), Uri.parse(StudentDownloadService.URL_TOMORROW));
                     }
                 } catch(Exception e) {
                     Toast.makeText(getContext(), "Kein Browser installiert", Toast.LENGTH_SHORT).show();

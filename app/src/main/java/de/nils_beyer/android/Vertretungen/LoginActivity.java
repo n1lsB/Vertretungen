@@ -19,7 +19,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
-import de.nils_beyer.android.Vertretungen.download.DownloadIntentService;
+import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(DownloadIntentService.URL_TODAY).openConnection();
+                    HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(StudentDownloadService.URL_TODAY).openConnection();
                     urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(
                             username.getText().toString(),
                             password.getText().toString()

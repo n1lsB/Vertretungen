@@ -13,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import de.nils_beyer.android.Vertretungen.download.DownloadIntentService;
+import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
 import de.nils_beyer.android.Vertretungen.R;
@@ -104,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         // Start Downloading Service
         PendingIntent pendingResult = createPendingResult(
                 KlasseRequestCode, new Intent(), 0);
-        Intent intent = new Intent(getApplicationContext(), DownloadIntentService.class);
-        intent.putExtra(DownloadIntentService.PENDING_RESULT_EXTRA, pendingResult);
+        Intent intent = new Intent(getApplicationContext(), StudentDownloadService.class);
+        intent.putExtra(StudentDownloadService.PENDING_RESULT_EXTRA, pendingResult);
 
         startService(intent);
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KlasseRequestCode ) {
-            if (resultCode == DownloadIntentService.RESULT_CODE) {
+            if (resultCode == StudentDownloadService.RESULT_CODE) {
                 mOverviewSectionsAdapter.notifyDataSetChanged();
 
                 isDownloading = false;
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                         .make(coordinatorLayout, getString(R.string.download_success), Snackbar.LENGTH_SHORT);
                 snackbar.show();
                 mOverviewSectionsAdapter.hideDownloading();
-            } else if (resultCode == DownloadIntentService.ERROR_CODE) {
+            } else if (resultCode == StudentDownloadService.ERROR_CODE) {
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.io_error), Snackbar.LENGTH_LONG);

@@ -19,11 +19,10 @@ import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
-
-public class StudentStorage implements Serializable{
+public class TeacherStorage implements Serializable {
     public enum source {Today, Tomorrow};
 
-    private static final String KEY_PREFERENCE_STORAGE = "KEY_PREFERENCE_STORAGE";
+    private static final String KEY_PREFERENCE_STORAGE = "KEY_PREFERENCE_STORAGE_TEACHER";
 
     private static final String KEY_DATE_TODAY = "KEY_DATE_TODAY";
     private static final String KEY_DATE_TOMORROW = "KEY_DATE_TOMORROW";
@@ -32,18 +31,19 @@ public class StudentStorage implements Serializable{
     private static final String KEY_DATASET_TODAY = "KEY_DATASET_TODAY";
     private static final String KEY_DATASET_TOMORROW = "KEY_DATASET_TOMORROW";
 
-    public static void save(Context context, ArrayList<Group> today, ArrayList<Group> tomorrow, Date dateToday, Date dateTomorrow, Date immediacityToday, Date immediacitryTomorrow) {
+    public static void save(Context context, GroupCollection today, GroupCollection tomorrow) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putLong(KEY_DATE_TODAY, dateToday.getTime());
-        editor.putLong(KEY_DATE_TOMORROW, dateTomorrow.getTime());
-        editor.putLong(KEY_IMMEDIACY_TODAY, immediacityToday.getTime());
-        editor.putLong(KEY_IMMEDIACY_TOMORROW, immediacitryTomorrow.getTime());
+        editor.putLong(KEY_DATE_TODAY, today.getDate().getTime());
+        editor.putLong(KEY_DATE_TOMORROW, tomorrow.getDate().getTime());
+        editor.putLong(KEY_IMMEDIACY_TODAY, today.getImmediacity().getTime());
+        editor.putLong(KEY_IMMEDIACY_TOMORROW, tomorrow.getImmediacity().getTime());
 
-        editor.putStringSet(KEY_DATASET_TODAY, parseSetToJson(today));
 
-        editor.putStringSet(KEY_DATASET_TOMORROW, parseSetToJson(tomorrow));
+        editor.putStringSet(KEY_DATASET_TODAY, parseSetToJson(today.getGroupArrayList()));
+
+        editor.putStringSet(KEY_DATASET_TOMORROW, parseSetToJson(tomorrow.getGroupArrayList()));
 
         editor.commit();
     }

@@ -15,13 +15,13 @@ public class Entry implements Serializable{
     public String reference;
 
     public static class Builder {
-        public String originalSubject;
-        public String modifiedSubject;
-        public String type;
-        public String time;
-        public String information;
-        public String room;
-        public String reference;
+        String originalSubject;
+        String modifiedSubject;
+        String type;
+        String time;
+        String information;
+        String room;
+        String reference;
 
         public Builder setOriginalSubject(String _originalSubject) {
             originalSubject = _originalSubject;

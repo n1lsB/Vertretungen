@@ -38,8 +38,8 @@ import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
  * <p>
  *
  */
-public class DownloadIntentService extends IntentService {
-    private static final String TAG = DownloadIntentService.class.getSimpleName();
+public class StudentDownloadService extends IntentService {
+    private static final String TAG = StudentDownloadService.class.getSimpleName();
 
 
     public static final String PENDING_RESULT_EXTRA = "pending_result_intent";
@@ -53,7 +53,7 @@ public class DownloadIntentService extends IntentService {
     public static final int RESULT_CODE = 0;
     public static final int ERROR_CODE = 2;
 
-    public DownloadIntentService() {
+    public StudentDownloadService() {
         super(TAG);
     }
 

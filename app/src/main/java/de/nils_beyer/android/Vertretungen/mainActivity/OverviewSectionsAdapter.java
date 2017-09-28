@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.account.AccountManager;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.R;
@@ -20,6 +21,7 @@ class OverviewSectionsAdapter extends FragmentPagerAdapter {
     private Context context;
     private DownloadingActivity downloadingActivity;
 
+
     OverviewSectionsAdapter(Context c, FragmentManager fm, DownloadingActivity _downloadingActivity) {
         super(fm);
         context = c;
@@ -28,6 +30,7 @@ class OverviewSectionsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+
         switch (position) {
             case 0:
                 f0 = OverviewFragment.getIntance(context, StudentStorage.source.Today);

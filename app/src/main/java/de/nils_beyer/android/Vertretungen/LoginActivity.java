@@ -19,6 +19,7 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
+import de.nils_beyer.android.Vertretungen.download.DownloadIntentService;
 
 public class LoginActivity extends AppCompatActivity {
 

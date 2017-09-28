@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;
 
-import de.nils_beyer.android.Vertretungen.DownloadIntentService;
+import de.nils_beyer.android.Vertretungen.download.DownloadIntentService;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.data.DataModel;

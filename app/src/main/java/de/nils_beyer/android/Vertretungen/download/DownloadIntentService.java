@@ -1,4 +1,4 @@
-package de.nils_beyer.android.Vertretungen;
+package de.nils_beyer.android.Vertretungen.download;
 
 import android.app.IntentService;
 import android.app.PendingIntent;

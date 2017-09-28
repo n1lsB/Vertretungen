@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Replacements;
+import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCourses;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
@@ -50,7 +50,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
             marked_cours = (ImageView) v.findViewById(R.id.icon_marked_courses);
         }
 
-        public void bind(Replacements r) {
+        public void bind(Entry r) {
             text_original.setText(r.originalSubject);
             text_time.setText(String.format(c.getString(R.string.placeholder_time), r.time));
             text_replacement.setText(r.modifiedSubject);

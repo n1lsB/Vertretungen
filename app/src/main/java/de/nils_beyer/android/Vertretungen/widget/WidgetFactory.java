@@ -2,7 +2,6 @@ package de.nils_beyer.android.Vertretungen.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -10,18 +9,15 @@ import android.widget.RemoteViewsService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.DateParser;
 import de.nils_beyer.android.Vertretungen.DetailActivity;
-import de.nils_beyer.android.Vertretungen.MainActivity;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Replacements;
+import de.nils_beyer.android.Vertretungen.data.Entry;
 
 /**
  * Created by nbeye on 03. Feb. 2017.
@@ -53,7 +49,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         return position;
     }
 
-    private Replacements getReplacement(int pos) {
+    private Entry getReplacement(int pos) {
         int count = 0;
         for (Klasse k : klasses) {
             if (count + k.replacements.length > pos) {
@@ -86,7 +82,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
                 context.getPackageName(), R.layout.widget_row_layout);
 
 
-        Replacements r = getReplacement(position);
+        Entry r = getReplacement(position);
 
         remoteView.setTextViewText(R.id.widget_row_type, r.type);
         remoteView.setTextViewText(R.id.widget_row_klasse, getKlasseAt(position).name);

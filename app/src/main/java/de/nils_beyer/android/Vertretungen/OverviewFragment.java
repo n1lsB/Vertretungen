@@ -2,7 +2,6 @@ package de.nils_beyer.android.Vertretungen;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,7 +22,6 @@ import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Replacements;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 

@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.Entry;
@@ -101,7 +102,7 @@ public class DownloadIntentService extends IntentService {
 
     protected String downloadHTMLFile(String url) throws  Exception{
         HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
-        urlConnection.setRequestProperty("Authorization", Account.generateHTTPHeaderAuthorization(getApplicationContext()));
+        urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(getApplicationContext()));
 
         try {
            StringBuilder stringBuilder = new StringBuilder();

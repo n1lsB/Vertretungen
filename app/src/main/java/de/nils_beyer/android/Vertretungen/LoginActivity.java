@@ -1,27 +1,24 @@
 package de.nils_beyer.android.Vertretungen;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.http.HttpsConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -63,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressbar.setVisibility(View.GONE);
                         btn_login.setEnabled(true);
                         if (accepted) {
-                            Account.register(getApplicationContext(), username.getText().toString(), password.getText().toString());
+                            StudentAccount.register(getApplicationContext(), username.getText().toString(), password.getText().toString());
 
                             canClose = true;
                             finish();
@@ -100,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 try {
                     HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(DownloadIntentService.URL_TODAY).openConnection();
-                    urlConnection.setRequestProperty("Authorization", Account.generateHTTPHeaderAuthorization(
+                    urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(
                             username.getText().toString(),
                             password.getText().toString()
                         )

@@ -1,7 +1,6 @@
 package de.nils_beyer.android.Vertretungen;
 
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -13,8 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
 
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     protected void onStart() {
         super.onStart();
 
-        if (!Account.isRegistered(this)) {
+        if (!StudentAccount.isRegistered(this)) {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     }
 
     public boolean requestData() {
-        if (isDownloading || !Account.isRegistered(this)) {
+        if (isDownloading || !StudentAccount.isRegistered(this)) {
             return false;
         }
 
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                 startActivity(new Intent(this, MarkedCoursesActivity.class));
                 return true;
             case R.id.menu_item_logout:
-                Account.logout(this);
+                StudentAccount.logout(this);
                 startActivity(new Intent(this, LoginActivity.class));
                 return true;
         }

@@ -1,4 +1,4 @@
-package de.nils_beyer.android.Vertretungen;
+package de.nils_beyer.android.Vertretungen.account;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,11 +8,10 @@ import android.util.Base64;
  * Created by nbeye on 22. Mai. 2017.
  */
 
-public final class Account {
+public final class StudentAccount {
     private static final String KEY_PREFERENCE_ACCOUNT = "KEY_PREFERENCE_ACCOUNT";
     private static final String KEY_USER_NAME = "KEY_USER_NAME";
     private static final String KEY_PASSWORD = "KEY_PASSWORD";
-
 
     public static String getUserName(Context c) {
         SharedPreferences sharedPreferences = c.getSharedPreferences(KEY_PREFERENCE_ACCOUNT, Context.MODE_PRIVATE);

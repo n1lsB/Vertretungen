@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;
 
+import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 
 
@@ -43,7 +44,7 @@ public final class ChromeCustomTabsFAB extends FloatingActionButton {
 
 
                 Bundle headerArgs = new Bundle();
-                headerArgs.putString("Authorization", Account.generateHTTPHeaderAuthorization(getContext()));
+                headerArgs.putString("Authorization", StudentAccount.generateHTTPHeaderAuthorization(getContext()));
 
                 customtabintent.build().intent.putExtra(Browser.EXTRA_HEADERS, headerArgs);
 

@@ -122,12 +122,7 @@ public class DataModel implements Serializable {
 
     public static boolean containsData(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
-        Log.d("DATAMODEL", "containsData: " + (sharedPreferences.contains(KEY_IMMEDIACITY_TODAY ) &&
-                sharedPreferences.contains(KEY_IMMEDIACITY_TOMORROW) &&
-                sharedPreferences.contains(KEY_DATE_TODAY) &&
-                sharedPreferences.contains(KEY_DATE_TOMORROW) &&
-                sharedPreferences.contains(KEY_DATASET_TODAY) &&
-                sharedPreferences.contains(KEY_DATASET_TOMORROW)));
+
         return  sharedPreferences.contains(KEY_IMMEDIACITY_TODAY ) &&
                 sharedPreferences.contains(KEY_IMMEDIACITY_TOMORROW) &&
                 sharedPreferences.contains(KEY_DATE_TODAY) &&

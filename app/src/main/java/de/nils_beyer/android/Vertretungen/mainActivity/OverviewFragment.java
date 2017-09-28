@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.R;
+import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.data.Group;
 
@@ -31,11 +32,7 @@ public class OverviewFragment extends Fragment {
 
     // Data Model
     private StudentStorage.source source;
-
-    // Data
-    ArrayList<Group> groupArrayList;
-    Date immediacy;
-    Date date;
+    private GroupCollection groupCollection;
 
     // View References
     private TextView noReplcaements;
@@ -113,8 +110,8 @@ public class OverviewFragment extends Fragment {
 
         updateData();
 
-        if (groupArrayList.size() == 0) {
-            if (immediacy == null) {
+        if (groupCollection.getGroupArrayList().size() == 0) {
+            if (groupCollection.getImmediacity() == null) {
                 noReplcaements.setText(getString(R.string.no_data_downloaded));
             } else {
                 noReplcaements.setText(getString(R.string.no_data));
@@ -135,20 +132,18 @@ public class OverviewFragment extends Fragment {
             resetSwipeRefreshLayout();
         }
 
+
+
         switch (source) {
             case Today:
-                groupArrayList = StudentStorage.getToday(getContext());
-                date = StudentStorage.getDateToday(getContext());
-                immediacy = StudentStorage.getImmediacityToday(getContext());
+                groupCollection = StudentStorage.getTodaySource(getContext());
                 break;
             case Tomorrow:
-                groupArrayList = StudentStorage.getTomorrow(getContext());
-                date = StudentStorage.getDateTomorrow(getContext());
-                immediacy = StudentStorage.getImmediacityTomorrow(getContext());
+                groupCollection = StudentStorage.getTomorrowSource(getContext());
                 break;
         }
 
-        recyclerView.getAdapter().notifyDataSetChanged();
+        overviewAdapter.update(groupCollection);
     }
 
     void resetSwipeRefreshLayout() {

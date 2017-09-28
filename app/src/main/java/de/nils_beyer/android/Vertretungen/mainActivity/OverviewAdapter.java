@@ -2,6 +2,7 @@ package de.nils_beyer.android.Vertretungen.mainActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -114,5 +115,13 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
                 .inflate(R.layout.recyclerview_overview_layout, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
+    }
+
+    public void update(@Nullable GroupCollection collection) {
+        if (collection == null) {
+            return;
+        }
+        this.groupCollection = collection;
+        notifyDataSetChanged();
     }
 }

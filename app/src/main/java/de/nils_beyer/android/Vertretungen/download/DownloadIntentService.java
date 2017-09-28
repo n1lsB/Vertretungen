@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
-import de.nils_beyer.android.Vertretungen.data.DataModel;
+import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
@@ -81,7 +81,7 @@ public class DownloadIntentService extends IntentService {
                 Date immediacyToday = readImmediacy(HTML_today);
                 Date immediacyTomorrow = readImmediacy(HTML_tomorrow);
 
-                DataModel.save(getApplicationContext(), dataSetToday, dataSetTomorrow, dateToday, dateTomorrow, immediacyToday, immediacyTomorrow);
+                StudentStorage.save(getApplicationContext(), dataSetToday, dataSetTomorrow, dateToday, dateTomorrow, immediacyToday, immediacyTomorrow);
                 VertretungenWidgetProvider.updateWidgetData(this);
 
 
@@ -173,7 +173,7 @@ public class DownloadIntentService extends IntentService {
             }
             ArrayList<Group> klassenArrayList = new ArrayList<Group>(klasseMap.values());
 
-            DataModel.sort(getApplication(), klassenArrayList);
+            StudentStorage.sort(getApplication(), klassenArrayList);
 
             return klassenArrayList;
         } catch (Exception e) {

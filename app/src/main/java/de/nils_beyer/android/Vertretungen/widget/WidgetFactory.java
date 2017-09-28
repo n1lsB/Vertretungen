@@ -11,12 +11,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.R;
-import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.data.Entry;
 
 /**
@@ -24,7 +24,7 @@ import de.nils_beyer.android.Vertretungen.data.Entry;
  */
 
 public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
-    private DataModel.source selectedSource;
+    private StudentStorage.source selectedSource;
     private ArrayList<Group> klasses = new ArrayList<>();
     private Context context = null;
 
@@ -106,10 +106,10 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         Intent onClickIntent = new Intent(context, DetailActivity.class);
         switch (selectedSource) {
             case Today:
-                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, DataModel.getDateToday(context));
+                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, StudentStorage.getDateToday(context));
                 break;
             case Tomorrow:
-                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, DataModel.getDateTomorrow(context));
+                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, StudentStorage.getDateTomorrow(context));
                 break;
         }
         onClickIntent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) getKlasseAt(position));
@@ -143,18 +143,18 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     public void onDataSetChanged() {
         Log.d("Factory", "onDataSetChanged: ");
         ArrayList<Group> input = new ArrayList<>();
-        if (!DataModel.containsData(context)) {
+        if (!StudentStorage.containsData(context)) {
             return;
         }
-        if (DateParser.sameDay(DataModel.getDateToday(context), new Date())) {
-            input = DataModel.getToday(context);
-            selectedSource = DataModel.source.Today;
+        if (DateParser.sameDay(StudentStorage.getDateToday(context), new Date())) {
+            input = StudentStorage.getToday(context);
+            selectedSource = StudentStorage.source.Today;
         } else {
-            input = DataModel.getTomorrow(context);
-            selectedSource = DataModel.source.Tomorrow;
+            input = StudentStorage.getTomorrow(context);
+            selectedSource = StudentStorage.source.Tomorrow;
         }
 
-        DataModel.sort(context, input);
+        StudentStorage.sort(context, input);
 
         if (MarkedKlasses.hasMarked(context)) {
             klasses = new ArrayList<Group>();

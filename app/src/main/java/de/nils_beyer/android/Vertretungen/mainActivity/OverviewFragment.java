@@ -1,31 +1,23 @@
 package de.nils_beyer.android.Vertretungen.mainActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.R;
-import de.nils_beyer.android.Vertretungen.data.DataModel;
+import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.data.Group;
-import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
-import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
 public class OverviewFragment extends Fragment {
@@ -38,7 +30,7 @@ public class OverviewFragment extends Fragment {
     private static String ARG_DACTIVITY = "ARG_DACTIVITY";
 
     // Data Model
-    private DataModel.source source;    
+    private StudentStorage.source source;
 
     // Data
     ArrayList<Group> groupArrayList;
@@ -58,9 +50,9 @@ public class OverviewFragment extends Fragment {
         super();
     }
 
-    public static OverviewFragment getIntance(Context c, DataModel.source source) {
+    public static OverviewFragment getIntance(Context c, StudentStorage.source source) {
 
-        // Put DataModel.source in the bundle
+        // Put StudentStorage.source in the bundle
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_SOURCE, source);
 
@@ -86,13 +78,13 @@ public class OverviewFragment extends Fragment {
             downloadingActivity = (OverviewSectionsAdapter.DownloadingActivity) getActivity();
         }
 
-        source = (DataModel.source) getArguments().getSerializable(ARG_SOURCE);
+        source = (StudentStorage.source) getArguments().getSerializable(ARG_SOURCE);
         switch (source) {
             case Today:
-                overviewAdapter = new OverviewAdapter(getContext(), DataModel.getTodaySource(getContext()));
+                overviewAdapter = new OverviewAdapter(getContext(), StudentStorage.getTodaySource(getContext()));
                 break;
             case Tomorrow:
-                overviewAdapter = new OverviewAdapter(getContext(), DataModel.getTomorrowSource(getContext()));
+                overviewAdapter = new OverviewAdapter(getContext(), StudentStorage.getTomorrowSource(getContext()));
                 break;
         }
 
@@ -145,14 +137,14 @@ public class OverviewFragment extends Fragment {
 
         switch (source) {
             case Today:
-                groupArrayList = DataModel.getToday(getContext());
-                date = DataModel.getDateToday(getContext());
-                immediacy = DataModel.getImmediacityToday(getContext());
+                groupArrayList = StudentStorage.getToday(getContext());
+                date = StudentStorage.getDateToday(getContext());
+                immediacy = StudentStorage.getImmediacityToday(getContext());
                 break;
             case Tomorrow:
-                groupArrayList = DataModel.getTomorrow(getContext());
-                date = DataModel.getDateTomorrow(getContext());
-                immediacy = DataModel.getImmediacityTomorrow(getContext());
+                groupArrayList = StudentStorage.getTomorrow(getContext());
+                date = StudentStorage.getDateTomorrow(getContext());
+                immediacy = StudentStorage.getImmediacityTomorrow(getContext());
                 break;
         }
 

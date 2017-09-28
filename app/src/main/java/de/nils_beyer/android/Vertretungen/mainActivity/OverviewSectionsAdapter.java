@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.R;
-import de.nils_beyer.android.Vertretungen.data.DataModel;
-
 
 
 class OverviewSectionsAdapter extends FragmentPagerAdapter {
@@ -31,10 +30,10 @@ class OverviewSectionsAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                f0 = OverviewFragment.getIntance(context, DataModel.source.Today);
+                f0 = OverviewFragment.getIntance(context, StudentStorage.source.Today);
                 return f0;
             case 1:
-                f1 = OverviewFragment.getIntance(context, DataModel.source.Tomorrow);
+                f1 = OverviewFragment.getIntance(context, StudentStorage.source.Tomorrow);
                 return f1;
         }
         return null;
@@ -65,8 +64,8 @@ class OverviewSectionsAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        final Date dateToday = DataModel.getDateToday(context);
-        final Date dateTomorrow = DataModel.getDateTomorrow(context);
+        final Date dateToday = StudentStorage.getDateToday(context);
+        final Date dateTomorrow = StudentStorage.getDateTomorrow(context);
 
         switch (position) {
             case 0:

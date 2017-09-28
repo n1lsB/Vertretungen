@@ -14,7 +14,7 @@ import android.widget.Toast;
 import de.nils_beyer.android.Vertretungen.download.DownloadIntentService;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
-import de.nils_beyer.android.Vertretungen.data.DataModel;
+import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 
 
 public final class ChromeCustomTabsFAB extends FloatingActionButton {
@@ -51,7 +51,7 @@ public final class ChromeCustomTabsFAB extends FloatingActionButton {
                 customtabintent.build().intent.putExtra(Browser.EXTRA_HEADERS, headerArgs);
 
                 try {
-                    if (tabActivity.getSelectedSource() == DataModel.source.Today) {
+                    if (tabActivity.getSelectedSource() == StudentStorage.source.Today) {
                         customtabintent.build().launchUrl(getContext(), Uri.parse(DownloadIntentService.URL_TODAY));
                     } else {
                         customtabintent.build().launchUrl(getContext(), Uri.parse(DownloadIntentService.URL_TOMORROW));
@@ -65,6 +65,6 @@ public final class ChromeCustomTabsFAB extends FloatingActionButton {
     }
 
     public interface TabActivity {
-        DataModel.source getSelectedSource();
+        StudentStorage.source getSelectedSource();
     }
 }

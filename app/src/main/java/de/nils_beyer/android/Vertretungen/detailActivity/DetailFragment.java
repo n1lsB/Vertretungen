@@ -39,15 +39,15 @@ public class DetailFragment extends Fragment {
             group = (Group) getArguments().get(ARG_PARAM1);
 //            String klassName = getArguments().getString(ARG_PARAM1);
 //            int sourceOrdinal = getArguments().getInt(ARG_PARAM2);
-//            DataModel.source source = DataModel.source.values()[sourceOrdinal];
+//            StudentStorage.source source = StudentStorage.source.values()[sourceOrdinal];
 //            ArrayList<Group> list;
 //
 //            switch (source) {
 //                case Today:
-//                        list = DataModel.getToday(getContext());
+//                        list = StudentStorage.getToday(getContext());
 //                    break;
 //                case Tomorrow:
-//                        list = DataModel.getTomorrow(getContext());
+//                        list = StudentStorage.getTomorrow(getContext());
 //                    break;
 //            }
 //

@@ -10,11 +10,11 @@ import android.widget.RemoteViews;
 
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
 import de.nils_beyer.android.Vertretungen.mainActivity.MainActivity;
 import de.nils_beyer.android.Vertretungen.R;
-import de.nils_beyer.android.Vertretungen.data.DataModel;
 
 
 public class VertretungenWidgetProvider extends AppWidgetProvider {
@@ -47,11 +47,11 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
 
         remoteViews.setRemoteAdapter(R.id.widget_listview, serviceIntent);
 
-        if (DataModel.containsData(context)) {
-            if (DateParser.sameDay(DataModel.getDateToday(context), new Date())) {
-                remoteViews.setTextViewText(R.id.widget_title_text, "Vertretungen (" + DateParser.parseDateToShortString(context, DataModel.getDateToday(context)) + ")");
+        if (StudentStorage.containsData(context)) {
+            if (DateParser.sameDay(StudentStorage.getDateToday(context), new Date())) {
+                remoteViews.setTextViewText(R.id.widget_title_text, "Vertretungen (" + DateParser.parseDateToShortString(context, StudentStorage.getDateToday(context)) + ")");
             } else {
-                remoteViews.setTextViewText(R.id.widget_title_text, "Vertretungen (" + DateParser.parseDateToShortString(context, DataModel.getDateTomorrow(context)) + ")");
+                remoteViews.setTextViewText(R.id.widget_title_text, "Vertretungen (" + DateParser.parseDateToShortString(context, StudentStorage.getDateTomorrow(context)) + ")");
             }
         }
 

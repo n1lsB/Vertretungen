@@ -1,4 +1,4 @@
-package de.nils_beyer.android.Vertretungen.data;
+package de.nils_beyer.android.Vertretungen.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,11 +14,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.nils_beyer.android.Vertretungen.data.Group;
+import de.nils_beyer.android.Vertretungen.data.Source;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
 
-public class DataModel implements Serializable {
+public class StudentStorage implements Serializable {
     public enum source {Today, Tomorrow};
 
     private static final String KEY_PREFERENCE_STORAGE = "KEY_PREFERENCE_STORAGE";

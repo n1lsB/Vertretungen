@@ -18,7 +18,7 @@ import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
-import de.nils_beyer.android.Vertretungen.data.DataModel;
+import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
 
 public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity, OverviewSectionsAdapter.DownloadingActivity {
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
             requestData();
         }
 
-        if (!DataModel.containsData(getApplicationContext())) {
+        if (!StudentStorage.containsData(getApplicationContext())) {
             requestData();
         }
     }
@@ -178,12 +178,12 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     }
 
     @Override
-    public DataModel.source getSelectedSource() {
+    public StudentStorage.source getSelectedSource() {
         switch(tabLayout.getSelectedTabPosition()) {
             case 0:
-                return DataModel.source.Today;
+                return StudentStorage.source.Today;
             case 1:
-                return DataModel.source.Tomorrow;
+                return StudentStorage.source.Tomorrow;
             default:
                 return null;
         }

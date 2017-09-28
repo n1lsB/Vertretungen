@@ -11,7 +11,7 @@ import android.widget.RemoteViews;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.DateParser;
-import de.nils_beyer.android.Vertretungen.DetailActivity;
+import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
 import de.nils_beyer.android.Vertretungen.MainActivity;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.DataModel;

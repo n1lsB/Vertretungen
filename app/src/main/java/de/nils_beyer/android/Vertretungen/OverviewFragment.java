@@ -22,6 +22,7 @@ import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.data.Group;
+import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 

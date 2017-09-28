@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="de.nils_beyer.android.Vertretungen.MainActivity">
+    tools:context="de.nils_beyer.android.Vertretungen.mainActivity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -47,7 +47,7 @@
 
     </android.support.v4.view.ViewPager>
 
-    <de.nils_beyer.android.Vertretungen.ChromeCustomTabsFAB
+    <de.nils_beyer.android.Vertretungen.mainActivity.ChromeCustomTabsFAB
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"

@@ -1,4 +1,4 @@
-package de.nils_beyer.android.Vertretungen;
+package de.nils_beyer.android.Vertretungen.mainActivity;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,6 +11,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Toast;
 
+import de.nils_beyer.android.Vertretungen.DownloadIntentService;
+import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 

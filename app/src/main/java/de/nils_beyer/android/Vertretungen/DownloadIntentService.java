@@ -45,10 +45,6 @@ public class DownloadIntentService extends IntentService {
     public static final String PENDING_RESULT_EXTRA = "pending_result_intent";
     public static final String KLASSE_TODAY_KEY = "KLASSE_TODAY_KEY";
     public static final String KLASSE_TOMORROW_KEY = "KLASSE_TOMORROW_KEY";
-    public static final String DATE_TODAY_KEY = "DATE_TODAY_KEY";
-    public static final String IMMEDIACY_TODAY_KEY = "IMMEDIACY_TODAY_KEY";
-    public static final String IMMEDIACY_TOMORROW_KEY = "IMMEDIACY_TOMORROW_KEY";
-    public static final String DATE_TOMORROW_KEY = "DATE_TOMORROW_KEY";
 
 
     public static final String URL_TODAY = "https://www.burgaugymnasium.de/vertretungsplan/sus/heute/subst_001.htm";

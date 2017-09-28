@@ -1,4 +1,4 @@
-package de.nils_beyer.android.Vertretungen;
+package de.nils_beyer.android.Vertretungen.mainActivity;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
 import java.util.Date;
+
+import de.nils_beyer.android.Vertretungen.DateParser;
+import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 
 

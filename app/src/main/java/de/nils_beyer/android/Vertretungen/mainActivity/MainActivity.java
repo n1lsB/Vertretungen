@@ -1,4 +1,4 @@
-package de.nils_beyer.android.Vertretungen;
+package de.nils_beyer.android.Vertretungen.mainActivity;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -13,6 +13,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import de.nils_beyer.android.Vertretungen.DownloadIntentService;
+import de.nils_beyer.android.Vertretungen.InfoActivity;
+import de.nils_beyer.android.Vertretungen.LoginActivity;
+import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;

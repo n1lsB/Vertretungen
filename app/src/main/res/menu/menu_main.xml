@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="de.nils_beyer.android.Vertretungen.MainActivity">
+    tools:context="de.nils_beyer.android.Vertretungen.mainActivity.MainActivity">
     <item
         android:id="@+id/menu_item_info"
         android:title="@string/info_menuitem_title" />

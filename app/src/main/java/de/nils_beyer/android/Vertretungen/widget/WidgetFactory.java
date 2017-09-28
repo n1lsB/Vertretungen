@@ -2,7 +2,6 @@ package de.nils_beyer.android.Vertretungen.widget;
 
 import android.content.Context;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -10,18 +9,15 @@ import android.widget.RemoteViewsService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.DateParser;
 import de.nils_beyer.android.Vertretungen.DetailActivity;
-import de.nils_beyer.android.Vertretungen.MainActivity;
+import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
-import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Replacements;
+import de.nils_beyer.android.Vertretungen.data.Entry;
 
 /**
  * Created by nbeye on 03. Feb. 2017.
@@ -29,7 +25,7 @@ import de.nils_beyer.android.Vertretungen.data.Replacements;
 
 public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     private DataModel.source selectedSource;
-    private ArrayList<Klasse> klasses = new ArrayList<>();
+    private ArrayList<Group> klasses = new ArrayList<>();
     private Context context = null;
 
 
@@ -41,7 +37,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public int getCount() {
         int count = 0;
-        for (Klasse k : klasses) {
+        for (Group k : klasses) {
             count += k.replacements.length;
         }
 
@@ -53,9 +49,9 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         return position;
     }
 
-    private Replacements getReplacement(int pos) {
+    private Entry getReplacement(int pos) {
         int count = 0;
-        for (Klasse k : klasses) {
+        for (Group k : klasses) {
             if (count + k.replacements.length > pos) {
                 return k.replacements[pos-count];
             }
@@ -64,9 +60,9 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         return null;
     }
 
-    private Klasse getKlasseAt(int pos) {
+    private Group getKlasseAt(int pos) {
         int count = 0;
-        for (Klasse k : klasses) {
+        for (Group k : klasses) {
             if (count + k.replacements.length > pos) {
                 return k;
             }
@@ -86,7 +82,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
                 context.getPackageName(), R.layout.widget_row_layout);
 
 
-        Replacements r = getReplacement(position);
+        Entry r = getReplacement(position);
 
         remoteView.setTextViewText(R.id.widget_row_type, r.type);
         remoteView.setTextViewText(R.id.widget_row_klasse, getKlasseAt(position).name);
@@ -146,7 +142,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         Log.d("Factory", "onDataSetChanged: ");
-        ArrayList<Klasse> input = new ArrayList<>();
+        ArrayList<Group> input = new ArrayList<>();
         if (!DataModel.containsData(context)) {
             return;
         }
@@ -161,8 +157,8 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         DataModel.sort(context, input);
 
         if (MarkedKlasses.hasMarked(context)) {
-            klasses = new ArrayList<Klasse>();
-            for (Klasse k : input) {
+            klasses = new ArrayList<Group>();
+            for (Group k : input) {
                 if (MarkedKlasses.isMarked(context, k.name)) {
                     klasses.add(k);
                 }

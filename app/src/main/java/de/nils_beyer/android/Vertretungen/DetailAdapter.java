@@ -9,17 +9,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Replacements;
+import de.nils_beyer.android.Vertretungen.data.Group;
+import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCourses;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
     private Context c;
-    private Klasse klasse;
+    private Group group;
 
-    public DetailAdapter(Context c, Klasse k) {
+    public DetailAdapter(Context c, Group k) {
         this.c = c;
-        this.klasse = k;
+        this.group = k;
     }
 
 
@@ -50,7 +50,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
             marked_cours = (ImageView) v.findViewById(R.id.icon_marked_courses);
         }
 
-        public void bind(Replacements r) {
+        public void bind(Entry r) {
             text_original.setText(r.originalSubject);
             text_time.setText(String.format(c.getString(R.string.placeholder_time), r.time));
             text_replacement.setText(r.modifiedSubject);
@@ -59,8 +59,8 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
             text_room.setText(r.room);
 
             if  (
-                    MarkedCourses.isMarked(c, klasse.name, r.originalSubject) ||
-                    MarkedCourses.isMarked(c, klasse.name, r.modifiedSubject)
+                    MarkedCourses.isMarked(c, group.name, r.originalSubject) ||
+                    MarkedCourses.isMarked(c, group.name, r.modifiedSubject)
                 ) {
                 marked_cours.setVisibility(View.VISIBLE);
             } else {
@@ -94,12 +94,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(klasse.replacements[position]);
+        holder.bind(group.replacements[position]);
     }
 
     @Override
     public int getItemCount() {
-        return klasse.replacements.length;
+        return group.replacements.length;
     }
 
     @Override

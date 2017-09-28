@@ -17,8 +17,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +26,8 @@ import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.nils_beyer.android.Vertretungen.data.DataModel;
-import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Replacements;
-import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
+import de.nils_beyer.android.Vertretungen.data.Group;
+import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
 
 
@@ -73,11 +70,11 @@ public class DownloadIntentService extends IntentService {
                 Intent result = new Intent();
 
                 String HTML_today = downloadHTMLFile(URL_TODAY);
-                ArrayList<Klasse> dataSetToday = parseHTMLFile(HTML_today);
+                ArrayList<Group> dataSetToday = parseHTMLFile(HTML_today);
 
 
                 String HTML_tomorrow = downloadHTMLFile(URL_TOMORROW);
-                ArrayList<Klasse> dataSetTomorrow = parseHTMLFile(HTML_tomorrow);
+                ArrayList<Group> dataSetTomorrow = parseHTMLFile(HTML_tomorrow);
 
                 result.putParcelableArrayListExtra(KLASSE_TODAY_KEY, dataSetToday);
                 result.putParcelableArrayListExtra(KLASSE_TOMORROW_KEY, dataSetTomorrow);
@@ -123,9 +120,9 @@ public class DownloadIntentService extends IntentService {
 
     }
 
-    protected ArrayList<Klasse> parseHTMLFile(String html) {
+    protected ArrayList<Group> parseHTMLFile(String html) {
         try {
-            Map<String, Klasse> klasseMap = new HashMap<String, Klasse>();
+            Map<String, Group> klasseMap = new HashMap<String, Group>();
 
             Document document = Jsoup.parse(html, "UTF-8");
             document.outputSettings().charset("UTF-8");
@@ -153,14 +150,14 @@ public class DownloadIntentService extends IntentService {
                         continue;
                     }
 
-                    Klasse k = klasseMap.get(klasse);
+                    Group k = klasseMap.get(klasse);
                     if (k == null) {
-                        k = new Klasse();
+                        k = new Group();
                         k.name = klasse;
                         klasseMap.put(klasse, k);
                     }
 
-                    Replacements.Builder builder = new Replacements.Builder()
+                    Entry.Builder builder = new Entry.Builder()
                         .setType(type)
                         .setTime(time)
                         .setOriginalSubject(original)
@@ -177,7 +174,7 @@ public class DownloadIntentService extends IntentService {
                     k.add(builder.build());
                 }
             }
-            ArrayList<Klasse> klassenArrayList = new ArrayList<Klasse>(klasseMap.values());
+            ArrayList<Group> klassenArrayList = new ArrayList<Group>(klasseMap.values());
 
             DataModel.sort(getApplication(), klassenArrayList);
 
@@ -186,7 +183,7 @@ public class DownloadIntentService extends IntentService {
             e.printStackTrace();
         }
 
-        return new ArrayList<Klasse>();
+        return new ArrayList<Group>();
     }
 
     protected Date readDate(String html) {

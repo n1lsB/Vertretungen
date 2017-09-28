@@ -9,12 +9,12 @@ import java.io.Serializable;
  * Created by nbeye on 07.11.2016.
  */
 
-public class Klasse implements Serializable, Parcelable {
+public class Group implements Serializable, Parcelable {
     public String name;
-    public Replacements[] replacements = new Replacements[0];
+    public Entry[] replacements = new Entry[0];
 
-    public void add(Replacements r) {
-        Replacements[] newReplacements = new Replacements[replacements.length + 1];
+    public void add(Entry r) {
+        Entry[] newReplacements = new Entry[replacements.length + 1];
         for (int i = 0; i < replacements.length; i++) {
             newReplacements[i] = replacements[i];
         }
@@ -34,13 +34,13 @@ public class Klasse implements Serializable, Parcelable {
         dest.writeString(name);
     }
 
-    public static final Parcelable.Creator<Klasse> CREATOR = new Parcelable.Creator<Klasse>() {
-        public Klasse[] newArray(int size) {
-            return new Klasse[size];
+    public static final Parcelable.Creator<Group> CREATOR = new Parcelable.Creator<Group>() {
+        public Group[] newArray(int size) {
+            return new Group[size];
         }
-        public Klasse createFromParcel(Parcel in) {
-            Klasse k = new Klasse();
-            k.replacements = (Replacements[]) in.readSerializable();
+        public Group createFromParcel(Parcel in) {
+            Group k = new Group();
+            k.replacements = (Entry[]) in.readSerializable();
             k.name = in.readString();
 
             return k;

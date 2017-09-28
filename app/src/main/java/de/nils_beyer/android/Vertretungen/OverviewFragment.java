@@ -2,7 +2,6 @@ package de.nils_beyer.android.Vertretungen;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,8 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.data.DataModel;
-import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Replacements;
+import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
@@ -40,7 +38,7 @@ public class OverviewFragment extends Fragment {
     private DataModel.source source;    
 
     // Data
-    ArrayList<Klasse> klasseArrayList;
+    ArrayList<Group> groupArrayList;
     Date immediacy;
     Date date;
 
@@ -113,7 +111,7 @@ public class OverviewFragment extends Fragment {
 
         updateData();
 
-        if (klasseArrayList.size() == 0) {
+        if (groupArrayList.size() == 0) {
             if (immediacy == null) {
                 noReplcaements.setText(getString(R.string.no_data_downloaded));
             } else {
@@ -137,12 +135,12 @@ public class OverviewFragment extends Fragment {
 
         switch (source) {
             case Today:
-                klasseArrayList = DataModel.getToday(getContext());
+                groupArrayList = DataModel.getToday(getContext());
                 date = DataModel.getDateToday(getContext());
                 immediacy = DataModel.getImmediacityToday(getContext());
                 break;
             case Tomorrow:
-                klasseArrayList = DataModel.getTomorrow(getContext());
+                groupArrayList = DataModel.getTomorrow(getContext());
                 date = DataModel.getDateTomorrow(getContext());
                 immediacy = DataModel.getImmediacityTomorrow(getContext());
                 break;
@@ -179,20 +177,20 @@ public class OverviewFragment extends Fragment {
                     marked = (ImageView) v.findViewById(R.id.image_class_marked);
                 }
 
-                void bind(final Klasse klasse) {
-                    className.setText("Klasse " + klasse.name);
-                    if (klasse.replacements.length > 1)
-                        replacementCounter.setText(klasse.replacements.length + " Vertretungen");
+                void bind(final Group group) {
+                    className.setText("Group " + group.name);
+                    if (group.replacements.length > 1)
+                        replacementCounter.setText(group.replacements.length + " Vertretungen");
                     else
-                        replacementCounter.setText(klasse.replacements.length + " Vertretung");
+                        replacementCounter.setText(group.replacements.length + " Vertretung");
 
-                    marked.setVisibility(MarkedKlasses.isMarked(getActivity().getApplication(), klasse.name) ? View.VISIBLE : View.GONE);
+                    marked.setVisibility(MarkedKlasses.isMarked(getActivity().getApplication(), group.name) ? View.VISIBLE : View.GONE);
 
                     cardView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(OverviewFragment.this.getContext(), DetailActivity.class);
-                            intent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) klasse);
+                            intent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) group);
                             intent.putExtra(DetailActivity.ARG_DATE_EXTRA, date);
                             OverviewFragment.this.startActivity(intent);
                         }
@@ -221,7 +219,7 @@ public class OverviewFragment extends Fragment {
                 holder.replacementCounter.setVisibility(View.VISIBLE);
                 holder.marked.setVisibility(View.VISIBLE);
                 holder.className.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                holder.bind(OverviewFragment.this.klasseArrayList.get(position - 1));
+                holder.bind(OverviewFragment.this.groupArrayList.get(position - 1));
 
 
             }
@@ -230,10 +228,10 @@ public class OverviewFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if (OverviewFragment.this.klasseArrayList.size() == 0) {
+            if (OverviewFragment.this.groupArrayList.size() == 0) {
                 return 0;
             } else {
-                return OverviewFragment.this.klasseArrayList.size() + 1;
+                return OverviewFragment.this.groupArrayList.size() + 1;
             }
         }
 

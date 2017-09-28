@@ -29,7 +29,7 @@ public class DataModel implements Serializable {
     private static final String KEY_DATASET_TODAY = "KEY_DATASET_TODAY";
     private static final String KEY_DATASET_TOMORROW = "KEY_DATASET_TOMORROW";
 
-    public static void save(Context context, ArrayList<Klasse> today, ArrayList<Klasse> tomorrow, Date dateToday, Date dateTomorrow, Date immediacityToday, Date immediacitryTomorrow) {
+    public static void save(Context context, ArrayList<Group> today, ArrayList<Group> tomorrow, Date dateToday, Date dateTomorrow, Date immediacityToday, Date immediacitryTomorrow) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -41,7 +41,7 @@ public class DataModel implements Serializable {
         // Dataset Today
         Set<String> klassesString = new HashSet<>();
 
-        for (Klasse k : today) {
+        for (Group k : today) {
             klassesString.add(new Gson().toJson(k));
         }
 
@@ -50,7 +50,7 @@ public class DataModel implements Serializable {
         // Dataset Tomorrow
         klassesString = new HashSet<>();
 
-        for (Klasse k : tomorrow) {
+        for (Group k : tomorrow) {
             klassesString.add(new Gson().toJson(k));
         }
 
@@ -60,12 +60,12 @@ public class DataModel implements Serializable {
         Log.d("DATAMODEL", "save: saved");
     }
 
-    public static ArrayList<Klasse> getToday(final Context context) {
+    public static ArrayList<Group> getToday(final Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         Set<String> input = sharedPreferences.getStringSet(KEY_DATASET_TODAY, new HashSet<String>());
-        ArrayList<Klasse> klasses = new ArrayList<Klasse>();
+        ArrayList<Group> klasses = new ArrayList<Group>();
         for (String s : input) {
-            Klasse k = new Gson().fromJson(s, Klasse.class);
+            Group k = new Gson().fromJson(s, Group.class);
             klasses.add(k);
         }
 
@@ -74,12 +74,12 @@ public class DataModel implements Serializable {
         return klasses;
     }
 
-    public static ArrayList<Klasse> getTomorrow(final Context context) {
+    public static ArrayList<Group> getTomorrow(final Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         Set<String> input = sharedPreferences.getStringSet(KEY_DATASET_TOMORROW, new HashSet<String>());
-        ArrayList<Klasse> klasses = new ArrayList<Klasse>();
+        ArrayList<Group> klasses = new ArrayList<Group>();
         for (String s : input) {
-            Klasse k = new Gson().fromJson(s, Klasse.class);
+            Group k = new Gson().fromJson(s, Group.class);
             klasses.add(k);
         }
 
@@ -136,10 +136,10 @@ public class DataModel implements Serializable {
                 sharedPreferences.contains(KEY_DATASET_TOMORROW);
     }
 
-    public static void sort(final Context c, ArrayList<Klasse> list) {
-        Collections.sort(list, new Comparator<Klasse>() {
+    public static void sort(final Context c, ArrayList<Group> list) {
+        Collections.sort(list, new Comparator<Group>() {
             @Override
-            public int compare(Klasse o1, Klasse o2) {
+            public int compare(Group o1, Group o2) {
                 boolean o1Marked = MarkedKlasses.isMarked(c, o1.name);
                 boolean o2Marked = MarkedKlasses.isMarked(c, o2.name);
 

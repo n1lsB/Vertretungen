@@ -10,27 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
-import de.nils_beyer.android.Vertretungen.data.DataModel;
-import de.nils_beyer.android.Vertretungen.data.Klasse;
+import de.nils_beyer.android.Vertretungen.data.Group;
 
 
 public class DetailFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private Klasse klasse;
+    private Group group;
 
     public DetailFragment() {
         // Required empty public constructor
     }
 
-    public static DetailFragment newInstance(Klasse klasse) {
+    public static DetailFragment newInstance(Group group) {
         DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ARG_PARAM1, klasse);
+        args.putSerializable(ARG_PARAM1, group);
         fragment.setArguments(args);
         return fragment;
     }
@@ -39,11 +35,11 @@ public class DetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            klasse = (Klasse) getArguments().get(ARG_PARAM1);
+            group = (Group) getArguments().get(ARG_PARAM1);
 //            String klassName = getArguments().getString(ARG_PARAM1);
 //            int sourceOrdinal = getArguments().getInt(ARG_PARAM2);
 //            DataModel.source source = DataModel.source.values()[sourceOrdinal];
-//            ArrayList<Klasse> list;
+//            ArrayList<Group> list;
 //
 //            switch (source) {
 //                case Today:
@@ -54,9 +50,9 @@ public class DetailFragment extends Fragment {
 //                    break;
 //            }
 //
-//            for (Klasse k : list) {
+//            for (Group k : list) {
 //                if (k.name == klassName) {
-//                    klasse = k;
+//                    group = k;
 //                    break;
 //                }
 //            }
@@ -73,7 +69,7 @@ public class DetailFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recyclerview_detail);
         recyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        recyclerView.setAdapter(new DetailAdapter(this.getContext(), klasse));
+        recyclerView.setAdapter(new DetailAdapter(this.getContext(), group));
     }
 
     @Override

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by nbeye on 07.11.2016.
  */
-public class Replacements implements Serializable{
+public class Entry implements Serializable{
     public String originalSubject;
     public String modifiedSubject;
     public String type;
@@ -66,8 +66,8 @@ public class Replacements implements Serializable{
             return this;
         }
 
-        public Replacements build() {
-            Replacements r = new Replacements();
+        public Entry build() {
+            Entry r = new Entry();
             r.originalSubject = originalSubject;
             r.modifiedSubject = modifiedSubject;
             r.time = time;

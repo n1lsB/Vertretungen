@@ -17,6 +17,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +29,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 import de.nils_beyer.android.Vertretungen.data.Klasse;
-import de.nils_beyer.android.Vertretungen.data.Entry;
+import de.nils_beyer.android.Vertretungen.data.Replacements;
+import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
 
 
@@ -157,7 +160,7 @@ public class DownloadIntentService extends IntentService {
                         klasseMap.put(klasse, k);
                     }
 
-                    Entry.Builder builder = new Entry.Builder()
+                    Replacements.Builder builder = new Replacements.Builder()
                         .setType(type)
                         .setTime(time)
                         .setOriginalSubject(original)

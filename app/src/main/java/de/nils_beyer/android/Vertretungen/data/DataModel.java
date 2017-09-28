@@ -88,6 +88,22 @@ public class DataModel implements Serializable {
         return klasses;
     }
 
+    public static Source getTodaySource(final Context context) {
+        Date date = getDateToday(context);
+        Date immediacity = getImmediacityToday(context);
+        ArrayList<Group> groupArrayList = getToday(context);
+
+        return new Source(date, immediacity, groupArrayList);
+    }
+
+    public static Source getTomorrowSource(final Context context) {
+        Date date = getDateTomorrow(context);
+        Date immediacity = getImmediacityTomorrow(context);
+        ArrayList<Group> groupArrayList = getTomorrow(context);
+
+        return new Source(date, immediacity, groupArrayList);
+    }
+
     public static Date getDateToday(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         if (sharedPreferences.contains(KEY_DATE_TODAY))

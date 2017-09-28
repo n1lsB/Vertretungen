@@ -48,7 +48,7 @@ public class OverviewFragment extends Fragment {
     // View References
     private TextView noReplcaements;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private OverviewAdapter overviewAdapter = new OverviewAdapter();
+    private OverviewAdapter overviewAdapter;
     private ViewGroup container;
     private View rootView;
     private RecyclerView recyclerView;
@@ -87,7 +87,14 @@ public class OverviewFragment extends Fragment {
         }
 
         source = (DataModel.source) getArguments().getSerializable(ARG_SOURCE);
-
+        switch (source) {
+            case Today:
+                overviewAdapter = new OverviewAdapter(getContext(), DataModel.getTodaySource(getContext()));
+                break;
+            case Tomorrow:
+                overviewAdapter = new OverviewAdapter(getContext(), DataModel.getTomorrowSource(getContext()));
+                break;
+        }
 
         this.container = container;
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -163,87 +170,5 @@ public class OverviewFragment extends Fragment {
         }
     }
 
-    private class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHolder> {
 
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-                TextView className;
-                TextView replacementCounter;
-                CardView cardView;
-                ImageView marked;
-
-                ViewHolder(View v) {
-                    super(v);
-                    cardView = (CardView) v.findViewById(R.id.overview_card);
-                    className = (TextView) v.findViewById(R.id.text_class_name);
-                    replacementCounter = (TextView) v.findViewById(R.id.text_replacement_count);
-                    marked = (ImageView) v.findViewById(R.id.image_class_marked);
-                }
-
-                void bind(final Group group) {
-                    className.setText("Group " + group.name);
-                    if (group.replacements.length > 1)
-                        replacementCounter.setText(group.replacements.length + " Vertretungen");
-                    else
-                        replacementCounter.setText(group.replacements.length + " Vertretung");
-
-                    marked.setVisibility(MarkedKlasses.isMarked(getActivity().getApplication(), group.name) ? View.VISIBLE : View.GONE);
-
-                    cardView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(OverviewFragment.this.getContext(), DetailActivity.class);
-                            intent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) group);
-                            intent.putExtra(DetailActivity.ARG_DATE_EXTRA, date);
-                            OverviewFragment.this.startActivity(intent);
-                        }
-                    });
-                }
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            if (position == 0) {
-                holder.cardView.setOnClickListener(null);
-                holder.replacementCounter.setVisibility(View.GONE);
-                holder.className.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                holder.cardView.setClickable(false);
-                holder.marked.setVisibility(View.GONE);
-                if (immediacy != null) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                    holder.className.setText("Stand: " + DateParser.parseDateToShortString(getContext(), immediacy) + " " + simpleDateFormat.format(immediacy));
-                }
-                else {
-                    holder.cardView.setVisibility(View.GONE);
-                }
-            } else {
-                holder.cardView.setClickable(true);
-                holder.cardView.setVisibility(View.VISIBLE);
-                holder.replacementCounter.setVisibility(View.VISIBLE);
-                holder.marked.setVisibility(View.VISIBLE);
-                holder.className.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                holder.bind(OverviewFragment.this.groupArrayList.get(position - 1));
-
-
-            }
-
-        }
-
-        @Override
-        public int getItemCount() {
-            if (OverviewFragment.this.groupArrayList.size() == 0) {
-                return 0;
-            } else {
-                return OverviewFragment.this.groupArrayList.size() + 1;
-            }
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.recyclerview_overview_layout, parent, false);
-            ViewHolder vh = new ViewHolder(v);
-            return vh;
-        }
-    }
 }

@@ -7,13 +7,13 @@ import java.util.Date;
  * Created by nils on 28.09.17.
  */
 
-public final class Source {
+public final class GroupCollection {
     private Date date;
     private Date immediacity;
     private ArrayList<Group> groupArrayList;
 
 
-    public Source(Date date, Date immediacity, ArrayList<Group> groupArrayList) {
+    public GroupCollection(Date date, Date immediacity, ArrayList<Group> groupArrayList) {
         this.date = date;
         this.immediacity = immediacity;
         this.groupArrayList = groupArrayList;

@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.nils_beyer.android.Vertretungen.data.Group;
-import de.nils_beyer.android.Vertretungen.data.Source;
+import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
@@ -90,20 +90,20 @@ public class StudentStorage implements Serializable {
         return klasses;
     }
 
-    public static Source getTodaySource(final Context context) {
+    public static GroupCollection getTodaySource(final Context context) {
         Date date = getDateToday(context);
         Date immediacity = getImmediacityToday(context);
         ArrayList<Group> groupArrayList = getToday(context);
 
-        return new Source(date, immediacity, groupArrayList);
+        return new GroupCollection(date, immediacity, groupArrayList);
     }
 
-    public static Source getTomorrowSource(final Context context) {
+    public static GroupCollection getTomorrowSource(final Context context) {
         Date date = getDateTomorrow(context);
         Date immediacity = getImmediacityTomorrow(context);
         ArrayList<Group> groupArrayList = getTomorrow(context);
 
-        return new Source(date, immediacity, groupArrayList);
+        return new GroupCollection(date, immediacity, groupArrayList);
     }
 
     public static Date getDateToday(Context context) {

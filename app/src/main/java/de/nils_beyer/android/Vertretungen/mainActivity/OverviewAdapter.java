@@ -15,18 +15,18 @@ import java.text.SimpleDateFormat;
 
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.Group;
-import de.nils_beyer.android.Vertretungen.data.Source;
+import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 
 public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHolder> {
     private Context context;
-    private Source source;
+    private GroupCollection groupCollection;
 
-    public OverviewAdapter(Context c, Source source) {
+    public OverviewAdapter(Context c, GroupCollection groupCollection) {
         context = c;
-        this.source = source;
+        this.groupCollection = groupCollection;
     }
 
 
@@ -60,7 +60,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
                 public void onClick(View v) {
                     Intent intent = new Intent(context, DetailActivity.class);
                     intent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) group);
-                    intent.putExtra(DetailActivity.ARG_DATE_EXTRA, source.getDate());
+                    intent.putExtra(DetailActivity.ARG_DATE_EXTRA, groupCollection.getDate());
                     context.startActivity(intent);
                 }
             });
@@ -75,12 +75,12 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
             holder.className.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             holder.cardView.setClickable(false);
             holder.marked.setVisibility(View.GONE);
-            if (source.getImmediacity() != null) {
+            if (groupCollection.getImmediacity() != null) {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(context.getString(R.string.date_format_only_time));
                 holder.className.setText(String.format(
                         context.getString(R.string.overview_adapter_immediacity),
-                        DateParser.parseDateToShortString(context, source.getImmediacity()),
-                        simpleDateFormat.format(source.getImmediacity()
+                        DateParser.parseDateToShortString(context, groupCollection.getImmediacity()),
+                        simpleDateFormat.format(groupCollection.getImmediacity()
                 )));
             }
             else {
@@ -92,7 +92,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
             holder.replacementCounter.setVisibility(View.VISIBLE);
             holder.marked.setVisibility(View.VISIBLE);
             holder.className.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-            holder.bind(source.getGroupArrayList().get(position - 1));
+            holder.bind(groupCollection.getGroupArrayList().get(position - 1));
 
 
         }
@@ -101,10 +101,10 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        if (source.getGroupArrayList().size() == 0) {
+        if (groupCollection.getGroupArrayList().size() == 0) {
             return 0;
         } else {
-            return source.getGroupArrayList().size() + 1;
+            return groupCollection.getGroupArrayList().size() + 1;
         }
     }
 

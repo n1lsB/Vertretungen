@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 
 import java.util.Date;
 
-import de.nils_beyer.android.Vertretungen.DateParser;
+import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;

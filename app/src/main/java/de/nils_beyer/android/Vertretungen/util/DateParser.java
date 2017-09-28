@@ -1,4 +1,4 @@
-package de.nils_beyer.android.Vertretungen;
+package de.nils_beyer.android.Vertretungen.util;
 
 import android.content.Context;
 
@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import de.nils_beyer.android.Vertretungen.R;
 
 /**
  * Created by nbeyer on 25. Feb. 2017.

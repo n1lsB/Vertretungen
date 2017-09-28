@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.Date;
 
-import de.nils_beyer.android.Vertretungen.DateParser;
+import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.DataModel;
 

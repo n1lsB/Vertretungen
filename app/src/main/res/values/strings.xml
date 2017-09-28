@@ -2,6 +2,12 @@
     <string name="app_name">Vertretungsplan</string>
     <string name="app_name_short">Vertretungen</string>
 
+    <!-- OverviewAdapter -->
+    <string name="overview_adapter_group_student">Klasse %s</string>
+    <string name="overview_adapter_entry_single">%s Vertretung</string>
+    <string name="overview_adapter_entry_multiple">%s Vertretungen</string>
+    <string name="overview_adapter_immediacity">Stand: %1$s %2$s</string>
+
     <!-- Process Dialog Text -->
     <string name="loading_text">Aktualisieren...</string>
     <string name="loading_subtext">Neue Vertretungen werden heruntergeladen</string>
@@ -14,6 +20,8 @@
     <string name="io_error">Verbindungsfehler \nBitte überprüfen Sie Ihre Internetverbindung</string>
     <string name="download_success">Daten erfolgreich heruntergeladen</string>
 
+    <!-- Date Format -->
+    <string name="date_format_only_time">HH:mm</string>
 
     <!-- Dates Short Names -->
     <string name="today">Heute</string>
@@ -52,7 +60,6 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
     <string name="login_info">Hinweis: Es handelt sich um ein privates, inoffizielles Projekt. Alle Angaben ohne Gewähr.</string>
 
     <!-- Preferences: Markierte Kurse -->
-
     <string name="marked_courses_title">Markierte Kurse</string>
     <string name="marked_courses_menu_entry">Markierte Kurse</string>
     <string name="marked_courses_remove_all">Alle entfernen</string>

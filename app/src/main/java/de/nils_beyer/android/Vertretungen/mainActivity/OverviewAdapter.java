@@ -17,7 +17,6 @@ import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.Source;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
-import de.nils_beyer.android.Vertretungen.mainActivity.OverviewFragment;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 
@@ -48,11 +47,11 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
         }
 
         void bind(final Group group) {
-            className.setText("Group " + group.name);
+            className.setText(String.format(context.getString(R.string.overview_adapter_group_student), group.name));
             if (group.replacements.length > 1)
-                replacementCounter.setText(group.replacements.length + " Vertretungen");
+                replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_multiple), String.valueOf(group.replacements.length)));
             else
-                replacementCounter.setText(group.replacements.length + " Vertretung");
+                replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_single), String.valueOf(group.replacements.length)));
 
             marked.setVisibility(MarkedKlasses.isMarked(context, group.name) ? View.VISIBLE : View.GONE);
 
@@ -77,8 +76,12 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
             holder.cardView.setClickable(false);
             holder.marked.setVisibility(View.GONE);
             if (source.getImmediacity() != null) {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-                holder.className.setText("Stand: " + DateParser.parseDateToShortString(context, source.getImmediacity()) + " " + simpleDateFormat.format(source.getImmediacity()));
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(context.getString(R.string.date_format_only_time));
+                holder.className.setText(String.format(
+                        context.getString(R.string.overview_adapter_immediacity),
+                        DateParser.parseDateToShortString(context, source.getImmediacity()),
+                        simpleDateFormat.format(source.getImmediacity()
+                )));
             }
             else {
                 holder.cardView.setVisibility(View.GONE);

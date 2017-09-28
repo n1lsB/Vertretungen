@@ -53,8 +53,6 @@ public class OverviewFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_SOURCE, source);
 
-
-
         // Create the Fragment and return it.
         OverviewFragment fragment = new OverviewFragment();
         fragment.setArguments(bundle);

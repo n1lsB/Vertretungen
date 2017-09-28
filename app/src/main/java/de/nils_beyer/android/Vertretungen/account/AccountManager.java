@@ -8,4 +8,6 @@ import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 
 public class AccountManager {
     public enum Account {Student, Teacher};
+
+    // TODO
 }

@@ -18,10 +18,12 @@ import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
+import de.nils_beyer.android.Vertretungen.download.TeacherDownloadService;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
+import de.nils_beyer.android.Vertretungen.storage.TeacherStorage;
 
-public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity, OverviewSectionsAdapter.DownloadingActivity {
+public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity, OverviewSectionsAdapter.DownloadingActivity, AccountSpinner.onAccountChangeListener{
 
     public static int KlasseRequestCode = 6;
     public static String RefreshKey = "REFRESH_KEY";
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
     private TabLayout tabLayout;
     private ChromeCustomTabsFAB fab;
+    private AccountSpinner accountSpinner;
 
 
     /**
@@ -50,11 +53,13 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         setContentView(R.layout.activity_main);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(), getSupportFragmentManager(), this);
-
+        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(), getSupportFragmentManager(), this, StudentStorage.getTodaySource(getApplicationContext()), StudentStorage.getTomorrowSource(getApplicationContext()));
+        accountSpinner = (AccountSpinner) findViewById(R.id.main_account_spinner);
+        accountSpinner.setup(this);
+        update();
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mOverviewSectionsAdapter);
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
         // NotifyDataSetChanged in order to refresh
         // order of Klasses (e.g. in case of a new marked item)
-        mOverviewSectionsAdapter.notifyDataSetChanged();
+        update();
     }
 
     @Override
@@ -104,10 +109,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         // Start Downloading Service
         PendingIntent pendingResult = createPendingResult(
                 KlasseRequestCode, new Intent(), 0);
-        Intent intent = new Intent(getApplicationContext(), StudentDownloadService.class);
-        intent.putExtra(StudentDownloadService.PENDING_RESULT_EXTRA, pendingResult);
-
-        startService(intent);
+        accountSpinner.startDownload(pendingResult);
 
         return true;
     }
@@ -117,8 +119,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KlasseRequestCode ) {
             if (resultCode == StudentDownloadService.RESULT_CODE) {
-                mOverviewSectionsAdapter.notifyDataSetChanged();
-
+                update();
                 isDownloading = false;
 
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
@@ -166,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
         isDownloading = savedInstanceState.getBoolean(isDownloadingKey);
     }
 
@@ -189,8 +189,17 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         }
     }
 
+    public void update() {
+        mOverviewSectionsAdapter.update(accountSpinner.getToday(), accountSpinner.getTomorrow());
+    }
+
     @Override
     public boolean isDownloading() {
         return isDownloading;
+    }
+
+    @Override
+    public void onAccountChanged() {
+        update();
     }
 }

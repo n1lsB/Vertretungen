@@ -12,6 +12,7 @@ public class Entry implements Serializable{
     public String time;
     public String information;
     public String room;
+    public String oldRoom;
     public String reference;
 
     public static class Builder {
@@ -21,6 +22,7 @@ public class Entry implements Serializable{
         String time;
         String information;
         String room;
+        String oldRoom;
         String reference;
 
         public Builder setOriginalSubject(String _originalSubject) {
@@ -43,6 +45,11 @@ public class Entry implements Serializable{
 
         public Builder setRoom(String _room) {
             room = _room;
+            return this;
+        }
+
+        public Builder setOldRoom(String _room) {
+            oldRoom = _room;
             return this;
         }
 
@@ -74,6 +81,7 @@ public class Entry implements Serializable{
             r.information = information;
             r.type = type;
             r.room = room;
+            r.oldRoom = oldRoom;
             r.reference = reference;
             return r;
         }

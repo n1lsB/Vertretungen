@@ -11,10 +11,10 @@ import java.util.Date;
 public final class GroupCollection implements Serializable {
     private Date date;
     private Date immediacity;
-    private ArrayList<Group> groupArrayList;
+    private ArrayList<? extends Group> groupArrayList;
 
 
-    public GroupCollection(Date date, Date immediacity, ArrayList<Group> groupArrayList) {
+    public GroupCollection(Date date, Date immediacity, ArrayList<? extends Group> groupArrayList) {
         this.date = date;
         this.immediacity = immediacity;
         this.groupArrayList = groupArrayList;
@@ -28,7 +28,7 @@ public final class GroupCollection implements Serializable {
         return immediacity;
     }
 
-    public ArrayList<Group> getGroupArrayList() {
+    public ArrayList<? extends Group> getGroupArrayList() {
         return groupArrayList;
     }
 }

@@ -16,6 +16,7 @@ import java.util.Set;
 
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
+import de.nils_beyer.android.Vertretungen.data.TeacherGroup;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
@@ -41,14 +42,14 @@ public class TeacherStorage implements Serializable {
         editor.putLong(KEY_IMMEDIACY_TOMORROW, tomorrow.getImmediacity().getTime());
 
 
-        editor.putStringSet(KEY_DATASET_TODAY, parseSetToJson(today.getGroupArrayList()));
+        editor.putStringSet(KEY_DATASET_TODAY, parseSetToJson((ArrayList<TeacherGroup>) today.getGroupArrayList()));
 
-        editor.putStringSet(KEY_DATASET_TOMORROW, parseSetToJson(tomorrow.getGroupArrayList()));
+        editor.putStringSet(KEY_DATASET_TOMORROW, parseSetToJson((ArrayList<TeacherGroup>) tomorrow.getGroupArrayList()));
 
         editor.commit();
     }
 
-    private static Set<String> parseSetToJson(ArrayList<Group>  groupArrayList) {
+    private static Set<String> parseSetToJson(ArrayList<TeacherGroup>  groupArrayList) {
         Set<String> klassesString = new HashSet<>();
 
         for (Group k : groupArrayList) {
@@ -58,30 +59,30 @@ public class TeacherStorage implements Serializable {
         return klassesString;
     }
 
-    public static ArrayList<Group> getToday(final Context context) {
+    public static ArrayList<TeacherGroup> getToday(final Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         Set<String> input = sharedPreferences.getStringSet(KEY_DATASET_TODAY, new HashSet<String>());
-        ArrayList<Group> klasses = new ArrayList<Group>();
+        ArrayList<TeacherGroup> klasses = new ArrayList<TeacherGroup>();
         for (String s : input) {
-            Group k = new Gson().fromJson(s, Group.class);
+            TeacherGroup k = new Gson().fromJson(s, TeacherGroup.class);
             klasses.add(k);
         }
 
-        sort(context, klasses);
+        sort(klasses);
 
         return klasses;
     }
 
-    public static ArrayList<Group> getTomorrow(final Context context) {
+    public static ArrayList<TeacherGroup> getTomorrow(final Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         Set<String> input = sharedPreferences.getStringSet(KEY_DATASET_TOMORROW, new HashSet<String>());
-        ArrayList<Group> klasses = new ArrayList<Group>();
+        ArrayList<TeacherGroup> klasses = new ArrayList<TeacherGroup>();
         for (String s : input) {
-            Group k = new Gson().fromJson(s, Group.class);
+            TeacherGroup k = new Gson().fromJson(s, TeacherGroup.class);
             klasses.add(k);
         }
 
-        sort(context, klasses);
+        sort(klasses);
 
         return klasses;
     }
@@ -89,7 +90,7 @@ public class TeacherStorage implements Serializable {
     public static GroupCollection getTodaySource(final Context context) {
         Date date = getDateToday(context);
         Date immediacity = getImmediacityToday(context);
-        ArrayList<Group> groupArrayList = getToday(context);
+        ArrayList<TeacherGroup> groupArrayList = getToday(context);
 
         return new GroupCollection(date, immediacity, groupArrayList);
     }
@@ -97,7 +98,7 @@ public class TeacherStorage implements Serializable {
     public static GroupCollection getTomorrowSource(final Context context) {
         Date date = getDateTomorrow(context);
         Date immediacity = getImmediacityTomorrow(context);
-        ArrayList<Group> groupArrayList = getTomorrow(context);
+        ArrayList<TeacherGroup> groupArrayList = getTomorrow(context);
 
         return new GroupCollection(date, immediacity, groupArrayList);
     }
@@ -145,20 +146,11 @@ public class TeacherStorage implements Serializable {
                 sharedPreferences.contains(KEY_DATASET_TOMORROW);
     }
 
-    public static void sort(final Context c, ArrayList<Group> list) {
+    public static void sort(ArrayList<TeacherGroup> list) {
         Collections.sort(list, new Comparator<Group>() {
             @Override
             public int compare(Group o1, Group o2) {
-                boolean o1Marked = MarkedKlasses.isMarked(c, o1.name);
-                boolean o2Marked = MarkedKlasses.isMarked(c, o2.name);
-
-                if (o1Marked && !o2Marked) {
-                    return -1;
-                } else if (!o1Marked && o2Marked) {
-                    return 1;
-                } else {
-                    return o1.name.compareTo(o2.name);
-                }
+                return o1.name.compareTo(o2.name);
             }
         });
     }

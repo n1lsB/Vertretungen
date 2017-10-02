@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
+import de.nils_beyer.android.Vertretungen.data.TeacherGroup;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
@@ -48,7 +49,12 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
         }
 
         void bind(final Group group) {
-            className.setText(String.format(context.getString(R.string.overview_adapter_group_student), group.name));
+            if (group instanceof TeacherGroup) {
+                className.setText(String.format(context.getString(R.string.overview_adapter_group_teacher), group.name));
+            } else {
+                className.setText(String.format(context.getString(R.string.overview_adapter_group_student), group.name));
+            }
+
             if (group.replacements.length > 1)
                 replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_multiple), String.valueOf(group.replacements.length)));
             else

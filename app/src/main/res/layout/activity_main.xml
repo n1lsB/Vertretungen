@@ -27,6 +27,15 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             >
 
+            <de.nils_beyer.android.Vertretungen.mainActivity.AccountSpinner
+                android:id="@+id/main_account_spinner"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:popupBackground="@color/colorPrimary"
+                >
+
+            </de.nils_beyer.android.Vertretungen.mainActivity.AccountSpinner>
+
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout

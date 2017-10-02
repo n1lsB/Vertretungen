@@ -30,6 +30,7 @@ import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.data.TeacherEntry;
+import de.nils_beyer.android.Vertretungen.data.TeacherGroup;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.storage.TeacherStorage;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
@@ -42,7 +43,7 @@ import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
  *
  */
 public class TeacherDownloadService extends IntentService {
-    private static final String TAG = TeacherDownloadService.class.getSimpleName();
+    private static final String TAG = StudentDownloadService.class.getSimpleName();
 
 
     public static final String PENDING_RESULT_EXTRA = "pending_result_intent";
@@ -50,8 +51,8 @@ public class TeacherDownloadService extends IntentService {
     public static final String KLASSE_TOMORROW_KEY = "KLASSE_TOMORROW_KEY";
 
 
-    public static final String URL_TODAY = "https://www.burgaugymnasium.de/vertretungsplan/sus/heute/subst_001.htm";
-    public static final String URL_TOMORROW = "https://www.burgaugymnasium.de/vertretungsplan/sus/morgen/subst_001.htm";
+    public static final String URL_TODAY = "https://www.burgaugymnasium.de/vertretungsplan/lul-dummy/heute/subst_001.htm";
+    public static final String URL_TOMORROW = "https://www.burgaugymnasium.de/vertretungsplan/lul-dummy/morgen/subst_001.htm";
 
     public static final int RESULT_CODE = 0;
     public static final int ERROR_CODE = 2;
@@ -64,35 +65,189 @@ public class TeacherDownloadService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         PendingIntent reply = intent.getParcelableExtra(PENDING_RESULT_EXTRA);
-
-        Entry entry = new TeacherEntry.Builder()
-                .setTeacherOld("HEI")
-                .setTeacherNew("PUC")
-                .setOriginalSubject("If")
-                .setModifiedSubject("If")
-                .setRoom("If128")
-                .setTime("1-2")
-                .setType("Vertretung")
-                .build();
-
-        Group g = new Group();
-        g.name = "PUC";
-        g.add(entry);
-
-        ArrayList<Group> groupArrayList = new ArrayList<>();
-        groupArrayList.add(g);
-
-        Date today = new Date();
-        GroupCollection groupCollection = new GroupCollection(today, today, groupArrayList);
-        GroupCollection groupCollection2 = new GroupCollection(today, today, groupArrayList);
-
-        TeacherStorage.save(getApplicationContext(), groupCollection, groupCollection2);
-
         try {
-            reply.send(this, RESULT_CODE, new Intent());
-        } catch (PendingIntent.CanceledException e) {
-            e.printStackTrace();
+            try {
+
+                Intent result = new Intent();
+
+                String HTML_today = downloadHTMLFile(URL_TODAY);
+                ArrayList<? extends Group> dataSetToday = parseHTMLFile(HTML_today);
+
+
+                String HTML_tomorrow = downloadHTMLFile(URL_TOMORROW);
+                ArrayList<? extends Group> dataSetTomorrow = parseHTMLFile(HTML_tomorrow);
+
+                result.putParcelableArrayListExtra(KLASSE_TODAY_KEY, dataSetToday);
+                result.putParcelableArrayListExtra(KLASSE_TOMORROW_KEY, dataSetTomorrow);
+
+                Date dateToday = readDate(HTML_today);
+                Date dateTomorrow = readDate(HTML_tomorrow);
+                Date immediacyToday = readImmediacy(HTML_today);
+                Date immediacyTomorrow = readImmediacy(HTML_tomorrow);
+
+                GroupCollection today = new GroupCollection(dateToday, immediacyToday, dataSetToday);
+                GroupCollection tomorrow = new GroupCollection(dateTomorrow, immediacyTomorrow, dataSetTomorrow);
+
+                TeacherStorage.save(getApplicationContext(), today, tomorrow);
+                VertretungenWidgetProvider.updateWidgetData(this);
+
+
+                reply.send(this, RESULT_CODE, result);
+            } catch (Exception exc) {
+                // could do better by treating the different sax/xml exceptions individually
+                reply.send(ERROR_CODE);
+            }
+        } catch (PendingIntent.CanceledException exc) {
+            Log.i(TAG, "reply cancelled", exc);
         }
     }
 
+
+    protected String downloadHTMLFile(String url) throws  Exception{
+        HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
+        urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(getApplicationContext()));
+
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "ISO-8859-1"));
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                stringBuilder.append(line + '\n');
+            }
+
+            return stringBuilder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+
+    }
+
+    protected ArrayList<? extends Group> parseHTMLFile(String html) {
+        try {
+            Map<String, TeacherGroup> teacherMap = new HashMap<>();
+
+            Document document = Jsoup.parse(html, "UTF-8");
+            document.outputSettings().charset("UTF-8");
+            Elements rows = document.getElementsByTag("tr");
+            for (Element row : rows) {
+                if (row.children().size() != 10) {
+                    continue;
+                }
+
+                if (!(row.attr("class").contains("even") || row.attr("class").contains("odd"))) {
+                    continue;
+                }
+
+                String vertreter = row.child(0).text();
+                String time = row.child(1).text();
+                String klasse = row.child(2).text();
+                String fach = row.child(3).text();
+                String oldLehrer = row.child(4).text();
+                String oldFach = row.child(5).text();
+                String raum = row.child(6).text();
+                String oldRaum = row.child(7).text();
+                String info = row.child(8).text();
+
+                TeacherEntry.Builder builder = new TeacherEntry.Builder();
+                builder.setTeacherOld(oldLehrer);
+                builder.setTeacherNew(vertreter);
+                builder.setType("");
+                builder.setTime(time);
+                builder.setKla(klasse);
+                builder.setOriginalSubject(oldFach);
+                builder.setModifiedSubject(fach);
+                builder.setRoom(raum);
+                builder.setOldRoom(oldRaum);
+                builder.setInformation(info);
+
+                Entry entry = builder.build();
+
+                // Für Vertreter
+                Group g = teacherMap.get(vertreter);
+                if (vertreter.equals("+") || vertreter.equals("---")) {
+
+                } else {
+                    if (g == null) {
+                        TeacherGroup tg = new TeacherGroup();
+                        tg.name = vertreter;
+                        teacherMap.put(vertreter, tg);
+                        g = tg;
+                    }
+                    g.add(entry);
+                }
+
+
+
+                // Für Verteteten Lehrer
+                g = teacherMap.get(oldLehrer);
+                if (oldLehrer.equals("+") || oldLehrer.equals("---")) {
+
+                } else {
+                    if (g == null) {
+                        TeacherGroup tg = new TeacherGroup();
+                        tg.name = oldLehrer;
+                        teacherMap.put(oldLehrer, tg);
+                        g = tg;
+                    }
+                    g.add(entry);
+                }
+
+            }
+            ArrayList<TeacherGroup> klassenArrayList = new ArrayList<TeacherGroup>(teacherMap.values());
+            TeacherStorage.sort(klassenArrayList);
+            return klassenArrayList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
+    protected Date readDate(String html) {
+        Document document = Jsoup.parse(html);
+
+        Elements searchResults = document.getElementsByClass("mon_title");
+        for (Element result : searchResults) {
+            if (result.tagName() == "div") {
+                String resultText = result.text();
+                resultText = resultText.split(" ")[0];
+
+                DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                try {
+                    Date date = dateFormat.parse(resultText);
+                    Log.d(TAG, "readDate: Datum gelesen");
+                    return date;
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+        return null;
+    }
+
+    protected Date readImmediacy(String html) {
+        Document document = Jsoup.parse(html);
+        Elements search_result = document.getElementsContainingText("Stand");
+
+        for (Element element : search_result) {
+            if (element.tagName().equals("p")) {
+                String text_element = element.text();
+                text_element = text_element.substring(text_element.indexOf("Stand: ") + 7);
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                try {
+                    return simpleDateFormat.parse(text_element);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+            }
+        }
+        return null;
+    }
 }

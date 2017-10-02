@@ -27,11 +27,9 @@ public class OverviewFragment extends Fragment {
      * fragment.
      */
     // Bundle String for Datamodel.source
-    private static String ARG_SOURCE = "ARG_SOURCE_ID";
-    private static String ARG_DACTIVITY = "ARG_DACTIVITY";
+    public static final String ARG_GROUP_COLLECTION = "GROUP_COLLECTION";
 
     // Data Model
-    private StudentStorage.source source;
     private GroupCollection groupCollection;
 
     // View References
@@ -47,11 +45,11 @@ public class OverviewFragment extends Fragment {
         super();
     }
 
-    public static OverviewFragment getIntance(Context c, StudentStorage.source source) {
+    public static OverviewFragment getIntance(Context c, GroupCollection collection) {
 
         // Put StudentStorage.source in the bundle
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARG_SOURCE, source);
+        bundle.putSerializable(ARG_GROUP_COLLECTION, collection);
 
         // Create the Fragment and return it.
         OverviewFragment fragment = new OverviewFragment();
@@ -73,15 +71,8 @@ public class OverviewFragment extends Fragment {
             downloadingActivity = (OverviewSectionsAdapter.DownloadingActivity) getActivity();
         }
 
-        source = (StudentStorage.source) getArguments().getSerializable(ARG_SOURCE);
-        switch (source) {
-            case Today:
-                overviewAdapter = new OverviewAdapter(getContext(), StudentStorage.getTodaySource(getContext()));
-                break;
-            case Tomorrow:
-                overviewAdapter = new OverviewAdapter(getContext(), StudentStorage.getTomorrowSource(getContext()));
-                break;
-        }
+        groupCollection = (GroupCollection) getArguments().getSerializable(ARG_GROUP_COLLECTION);
+        overviewAdapter = new OverviewAdapter(getContext(), groupCollection);
 
         this.container = container;
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -106,7 +97,7 @@ public class OverviewFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(overviewAdapter);
 
-        updateData();
+        updateData(groupCollection);
 
         if (groupCollection.getGroupArrayList().size() == 0) {
             if (groupCollection.getImmediacity() == null) {
@@ -123,24 +114,13 @@ public class OverviewFragment extends Fragment {
         return rootView;
     }
 
-    public void updateData() {
+    public void updateData(GroupCollection collection) {
         if (downloadingActivity.isDownloading()) {
             showSwipeRefreshLayout();
         } else {
             resetSwipeRefreshLayout();
         }
-
-
-
-        switch (source) {
-            case Today:
-                groupCollection = StudentStorage.getTodaySource(getContext());
-                break;
-            case Tomorrow:
-                groupCollection = StudentStorage.getTomorrowSource(getContext());
-                break;
-        }
-
+        groupCollection = collection;
         overviewAdapter.update(groupCollection);
     }
 

@@ -27,12 +27,12 @@ public class DetailAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bind(group.replacements[position]);
+        holder.bind(group.replacements.get(position));
     }
 
     @Override
     public int getItemViewType(int position) {
-        Entry entry = group.replacements[position];
+        Entry entry = group.replacements.get(position);
         if (entry instanceof TeacherEntry) {
             return TEACHER_VIEW_TYPE;
         } else {
@@ -42,14 +42,29 @@ public class DetailAdapter extends RecyclerView.Adapter<ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return group.replacements.length;
+        return group.replacements.size();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_detail_layout, parent, false);
-        ViewHolder vh = new ViewHolder(v, c, group);
+        ViewHolder vh;
+        switch (viewType) {
+            case TEACHER_VIEW_TYPE:
+                View v = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.recyclerview_detail_layout_teacher, parent, false);
+                vh = new TeacherViewHolder(v, c, group);
+                break;
+            case STUDENT_VIEW_TYPE:
+                View v2 = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.recyclerview_detail_layout, parent, false);
+                vh = new ViewHolder(v2, c, group);
+                break;
+            default:
+                View v3 = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.recyclerview_detail_layout, parent, false);
+                vh = new ViewHolder(v3, c, group);
+        }
+
         return vh;
     }
 }

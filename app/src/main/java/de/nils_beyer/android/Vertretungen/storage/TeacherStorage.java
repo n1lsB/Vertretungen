@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,8 +15,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
+import de.nils_beyer.android.Vertretungen.data.TeacherEntry;
 import de.nils_beyer.android.Vertretungen.data.TeacherGroup;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
@@ -42,18 +45,35 @@ public class TeacherStorage implements Serializable {
         editor.putLong(KEY_IMMEDIACY_TOMORROW, tomorrow.getImmediacity().getTime());
 
 
-        editor.putStringSet(KEY_DATASET_TODAY, parseSetToJson((ArrayList<TeacherGroup>) today.getGroupArrayList()));
+        editor.putStringSet(KEY_DATASET_TODAY, parseSetToJson(today.getGroupArrayList()));
 
-        editor.putStringSet(KEY_DATASET_TOMORROW, parseSetToJson((ArrayList<TeacherGroup>) tomorrow.getGroupArrayList()));
+        editor.putStringSet(KEY_DATASET_TOMORROW, parseSetToJson(tomorrow.getGroupArrayList()));
 
         editor.commit();
     }
 
-    private static Set<String> parseSetToJson(ArrayList<TeacherGroup>  groupArrayList) {
+    private static Gson getCustomGson() {
+        RuntimeTypeAdapterFactory<Group> adapter =
+                RuntimeTypeAdapterFactory
+                        .of(Group.class, "type")
+                        .registerSubtype(TeacherGroup.class);
+        RuntimeTypeAdapterFactory<Entry> adapter2 =
+                RuntimeTypeAdapterFactory
+                        .of(Entry.class, "type")
+                        .registerSubtype(TeacherEntry.class);
+
+        Gson gson2=new GsonBuilder()
+                .registerTypeAdapterFactory(adapter)
+                .registerTypeAdapterFactory(adapter2)
+                .create();
+        return gson2;
+    }
+
+    private static Set<String> parseSetToJson(ArrayList<? extends Group>  groupArrayList) {
         Set<String> klassesString = new HashSet<>();
 
         for (Group k : groupArrayList) {
-            klassesString.add(new Gson().toJson(k));
+            klassesString.add(getCustomGson().toJson(k));
         }
 
         return klassesString;
@@ -64,7 +84,7 @@ public class TeacherStorage implements Serializable {
         Set<String> input = sharedPreferences.getStringSet(KEY_DATASET_TODAY, new HashSet<String>());
         ArrayList<TeacherGroup> klasses = new ArrayList<TeacherGroup>();
         for (String s : input) {
-            TeacherGroup k = new Gson().fromJson(s, TeacherGroup.class);
+            TeacherGroup k = getCustomGson().fromJson(s, TeacherGroup.class);
             klasses.add(k);
         }
 
@@ -78,7 +98,7 @@ public class TeacherStorage implements Serializable {
         Set<String> input = sharedPreferences.getStringSet(KEY_DATASET_TOMORROW, new HashSet<String>());
         ArrayList<TeacherGroup> klasses = new ArrayList<TeacherGroup>();
         for (String s : input) {
-            TeacherGroup k = new Gson().fromJson(s, TeacherGroup.class);
+            TeacherGroup k = getCustomGson().fromJson(s, TeacherGroup.class);
             klasses.add(k);
         }
 
@@ -150,6 +170,7 @@ public class TeacherStorage implements Serializable {
         Collections.sort(list, new Comparator<Group>() {
             @Override
             public int compare(Group o1, Group o2) {
+
                 return o1.name.compareTo(o2.name);
             }
         });

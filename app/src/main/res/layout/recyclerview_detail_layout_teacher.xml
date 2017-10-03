@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/overview_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:clickable="false"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="1dp"
+        app:cardElevation="0dp"
+        app:contentPadding="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp">
+
+            <TextView
+                android:id="@+id/text_klasse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:paddingEnd="0dp"
+                android:text="Klasse 5abcd6abcd"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/text_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/icon_marked_courses"
+                android:text="1. Stunde"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_modified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/text_original"
+                android:text="Physik"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/text_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/text_teacher_new"
+                android:layout_marginTop="5dp"
+                android:text="Aufgabe"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                android:textStyle="normal|italic" />
+
+            <TextView
+                android:id="@+id/text_original"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/text_klasse"
+                android:layout_marginTop="8dp"
+                android:text="Informatik"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/text_teacher_new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/text_modified"
+                android:text="L2"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/text_teacher_old"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/text_arrow"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/text_original"
+                android:text="L1"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/text_room"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="10dp"
+                android:paddingEnd="0dp"
+                android:text="R125"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/text_teacher_new"
+                android:layout_alignTop="@+id/text_original"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="→"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/text_reference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/text_info"
+                android:layout_marginTop="5dp"
+                android:background="#cf002c4b"
+                android:paddingBottom="2dp"
+                android:paddingTop="2dp"
+                android:text="Gefunden in EPQ1"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:textStyle="normal|bold"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/text_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/icon_marked_courses"
+                android:text="Eigenverantworliches Arbeiten"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="16sp"
+                android:textStyle="normal|bold"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/icon_marked_courses"
+                android:layout_width="13sp"
+                android:layout_height="12sp"
+                android:layout_alignBottom="@id/text_time"
+                android:layout_alignTop="@id/text_time"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_star_black_24dp" />
+
+        </RelativeLayout>
+
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

@@ -1,14 +1,17 @@
 package de.nils_beyer.android.Vertretungen.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
  * Created by nbeye on 07.11.2016.
  */
-public class Entry implements Serializable{
+public class Entry implements Serializable, Parcelable {
     public String originalSubject;
     public String modifiedSubject;
-    public String type;
+    public String vertretungsart;
     public String time;
     public String information;
     public String room;
@@ -79,7 +82,7 @@ public class Entry implements Serializable{
             r.modifiedSubject = modifiedSubject;
             r.time = time;
             r.information = information;
-            r.type = type;
+            r.vertretungsart = type;
             r.room = room;
             r.oldRoom = oldRoom;
             r.reference = reference;
@@ -94,4 +97,38 @@ public class Entry implements Serializable{
             return !reference.isEmpty();
         }
     }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(originalSubject);
+        dest.writeString(modifiedSubject);
+        dest.writeString(vertretungsart);
+        dest.writeString(time);
+        dest.writeString(information);
+        dest.writeString(room);
+        dest.writeString(oldRoom);
+        dest.writeString(reference);
+    }
+
+    public static final Parcelable.Creator<Entry> CREATOR = new Parcelable.Creator<Entry>() {
+        public Entry[] newArray(int size) {
+            return new Entry[size];
+        }
+        public Entry createFromParcel(Parcel in) {
+            Entry k = new Entry();
+            k.originalSubject = in.readString();
+            k.modifiedSubject = in.readString();
+            k.vertretungsart = in.readString();
+            k.time = in.readString();
+            k.information = in.readString();
+            k.room = in.readString();
+            k.oldRoom = in.readString();
+            k.reference = in.readString();
+            return k;
+        }
+    };
 }

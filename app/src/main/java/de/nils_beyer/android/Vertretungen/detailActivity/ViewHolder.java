@@ -54,13 +54,15 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         text_time.setText(String.format(context.getString(R.string.placeholder_time), r.time));
         text_replacement.setText(r.modifiedSubject);
         text_info.setText(r.information);
-        text_type.setText(r.type);
+        text_type.setText(r.vertretungsart);
         text_room.setText(r.room);
 
-        if  (
-                MarkedCourses.isMarked(context, group.name, r.originalSubject) ||
-                        MarkedCourses.isMarked(context, group.name, r.modifiedSubject)
-                ) {
+        if (r.oldRoom != null && !r.oldRoom.equals("") && !r.oldRoom.equals(" ")) {
+            text_room.setText(String.format(context.getString(R.string.detail_placeholder_room), r.oldRoom, r.room));
+        }
+
+        if  (MarkedCourses.isMarked(context, group.name, r.originalSubject) ||
+             MarkedCourses.isMarked(context, group.name, r.modifiedSubject) ) {
             marked_cours.setVisibility(View.VISIBLE);
         } else {
             marked_cours.setVisibility(View.GONE);
@@ -70,8 +72,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             text_original.setVisibility(View.GONE);
             text_replacement.setVisibility(View.GONE);
             text_arrow.setVisibility(View.GONE);
-        } else {
-
         }
 
         if(r.information.equals(" ")) {

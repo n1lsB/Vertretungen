@@ -2,6 +2,7 @@ package de.nils_beyer.android.Vertretungen.mainActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -48,27 +49,25 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
 
         }
 
-        void bind(final Group group) {
+        void bind(final int position) {
+            Group group = groupCollection.getGroupArrayList().get(position);
             if (group instanceof TeacherGroup) {
                 className.setText(String.format(context.getString(R.string.overview_adapter_group_teacher), group.name));
             } else {
                 className.setText(String.format(context.getString(R.string.overview_adapter_group_student), group.name));
             }
 
-            if (group.replacements.length > 1)
-                replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_multiple), String.valueOf(group.replacements.length)));
+            if (group.replacements.size() > 1)
+                replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_multiple), String.valueOf(group.replacements.size())));
             else
-                replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_single), String.valueOf(group.replacements.length)));
+                replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_single), String.valueOf(group.replacements.size())));
 
             marked.setVisibility(MarkedKlasses.isMarked(context, group.name) ? View.VISIBLE : View.GONE);
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) group);
-                    intent.putExtra(DetailActivity.ARG_DATE_EXTRA, groupCollection.getDate());
-                    context.startActivity(intent);
+                    DetailActivity.startActivity(context, groupCollection, position);
                 }
             });
         }
@@ -99,7 +98,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
             holder.replacementCounter.setVisibility(View.VISIBLE);
             holder.marked.setVisibility(View.VISIBLE);
             holder.className.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-            holder.bind(groupCollection.getGroupArrayList().get(position - 1));
+            holder.bind(position - 1);
 
 
         }

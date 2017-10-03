@@ -43,6 +43,7 @@
 
     <!-- Detail Placeholders -->
     <string name="placeholder_time">%s. Stunde</string>
+    <string name="detail_placeholder_room">%1$s → %2$s</string>
     <string name="mark_class_menu_item_title">Markieren</string>
     <string name="placeholder_reference">Gefunden in "%s"</string>
 

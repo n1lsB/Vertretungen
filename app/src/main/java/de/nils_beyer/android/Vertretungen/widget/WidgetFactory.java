@@ -38,7 +38,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     public int getCount() {
         int count = 0;
         for (Group k : klasses) {
-            count += k.replacements.length;
+            count += k.replacements.size();
         }
 
         return count;
@@ -52,10 +52,10 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     private Entry getReplacement(int pos) {
         int count = 0;
         for (Group k : klasses) {
-            if (count + k.replacements.length > pos) {
-                return k.replacements[pos-count];
+            if (count + k.replacements.size() > pos) {
+                return k.replacements.get(pos-count);
             }
-            count += k.replacements.length;
+            count += k.replacements.size();
         }
         return null;
     }
@@ -63,10 +63,10 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     private Group getKlasseAt(int pos) {
         int count = 0;
         for (Group k : klasses) {
-            if (count + k.replacements.length > pos) {
+            if (count + k.replacements.size() > pos) {
                 return k;
             }
-            count += k.replacements.length;
+            count += k.replacements.size();
         }
         return null;
     }
@@ -84,7 +84,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
         Entry r = getReplacement(position);
 
-        remoteView.setTextViewText(R.id.widget_row_type, r.type);
+        remoteView.setTextViewText(R.id.widget_row_type, r.vertretungsart);
         remoteView.setTextViewText(R.id.widget_row_klasse, getKlasseAt(position).name);
         remoteView.setTextViewText(R.id.widget_row_original, r.originalSubject);
         remoteView.setTextViewText(R.id.widget_row_replacement, r.modifiedSubject);

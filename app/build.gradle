@@ -8,8 +8,8 @@ android {
         applicationId "de.nils_beyer.android.testapplication"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 6
-        versionName "1.5.15"
+        versionCode 7
+        versionName "1.6.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -29,7 +29,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('libs/jsoup-1.10.2.jar')
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.code.gson:gson:2.+'
     compile 'com.android.support:customtabs:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'

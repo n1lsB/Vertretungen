@@ -16,7 +16,6 @@ import de.nils_beyer.android.Vertretungen.data.Group;
 
 public class DetailFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private Group group;
 
@@ -37,27 +36,6 @@ public class DetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             group = (Group) getArguments().get(ARG_PARAM1);
-//            String klassName = getArguments().getString(ARG_PARAM1);
-//            int sourceOrdinal = getArguments().getInt(ARG_PARAM2);
-//            StudentStorage.source source = StudentStorage.source.values()[sourceOrdinal];
-//            ArrayList<Group> list;
-//
-//            switch (source) {
-//                case Today:
-//                        list = StudentStorage.getToday(getContext());
-//                    break;
-//                case Tomorrow:
-//                        list = StudentStorage.getTomorrow(getContext());
-//                    break;
-//            }
-//
-//            for (Group k : list) {
-//                if (k.name == klassName) {
-//                    group = k;
-//                    break;
-//                }
-//            }
-//
         }
 
 

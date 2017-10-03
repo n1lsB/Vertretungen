@@ -77,8 +77,6 @@ public class TeacherDownloadService extends IntentService {
                 String HTML_tomorrow = downloadHTMLFile(URL_TOMORROW);
                 ArrayList<? extends Group> dataSetTomorrow = parseHTMLFile(HTML_tomorrow);
 
-                result.putParcelableArrayListExtra(KLASSE_TODAY_KEY, dataSetToday);
-                result.putParcelableArrayListExtra(KLASSE_TOMORROW_KEY, dataSetTomorrow);
 
                 Date dateToday = readDate(HTML_today);
                 Date dateTomorrow = readDate(HTML_tomorrow);
@@ -182,7 +180,7 @@ public class TeacherDownloadService extends IntentService {
 
                 // Für Verteteten Lehrer
                 g = teacherMap.get(oldLehrer);
-                if (oldLehrer.equals("+") || oldLehrer.equals("---")) {
+                if (oldLehrer.equals("+") || oldLehrer.equals("---") || oldLehrer.equals(" ") || vertreter.equals(oldLehrer)) {
 
                 } else {
                     if (g == null) {

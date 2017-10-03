@@ -4,24 +4,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by nbeye on 07.11.2016.
  */
 
-public class Group implements Serializable, Parcelable {
+public class Group implements Serializable, Parcelable{
     public String name;
-    public Entry[] replacements = new Entry[0];
+    public ArrayList<Entry> replacements = new ArrayList<>();
 
     public void add(Entry r) {
-        Entry[] newReplacements = new Entry[replacements.length + 1];
-        for (int i = 0; i < replacements.length; i++) {
-            newReplacements[i] = replacements[i];
-        }
-
-        newReplacements[replacements.length] = r;
-
-        replacements = newReplacements;
+        replacements.add(r);
     }
 
     public int describeContents() {
@@ -30,7 +24,9 @@ public class Group implements Serializable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeSerializable(replacements);
+        Entry[] entry = new Entry[replacements.size()];
+        entry = replacements.toArray(entry);
+        dest.writeParcelableArray(entry, flags);
         dest.writeString(name);
     }
 
@@ -40,9 +36,12 @@ public class Group implements Serializable, Parcelable {
         }
         public Group createFromParcel(Parcel in) {
             Group k = new Group();
-            k.replacements = (Entry[]) in.readSerializable();
+            Parcelable[] parcelables = in.readParcelableArray(Entry.class.getClassLoader());
+            k.replacements = new ArrayList<>();
+            for (Parcelable p : parcelables) {
+                k.replacements.add((Entry) p);
+            }
             k.name = in.readString();
-
             return k;
         }
     };

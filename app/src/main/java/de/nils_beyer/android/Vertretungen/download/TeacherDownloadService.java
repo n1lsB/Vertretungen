@@ -194,7 +194,7 @@ public class TeacherDownloadService extends IntentService {
 
             }
             ArrayList<TeacherGroup> klassenArrayList = new ArrayList<TeacherGroup>(teacherMap.values());
-            TeacherStorage.sort(klassenArrayList);
+            TeacherStorage.sort(getApplicationContext(), klassenArrayList);
             return klassenArrayList;
         } catch (Exception e) {
             e.printStackTrace();

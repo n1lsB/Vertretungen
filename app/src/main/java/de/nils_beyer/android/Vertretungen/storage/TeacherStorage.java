@@ -24,8 +24,6 @@ import de.nils_beyer.android.Vertretungen.preferences.MarkedKlasses;
 
 
 public class TeacherStorage implements Serializable {
-    public enum source {Today, Tomorrow};
-
     private static final String KEY_PREFERENCE_STORAGE = "KEY_PREFERENCE_STORAGE_TEACHER";
 
     private static final String KEY_DATE_TODAY = "KEY_DATE_TODAY";
@@ -62,11 +60,10 @@ public class TeacherStorage implements Serializable {
                         .of(Entry.class, "type")
                         .registerSubtype(TeacherEntry.class);
 
-        Gson gson2=new GsonBuilder()
+        return new GsonBuilder()
                 .registerTypeAdapterFactory(adapter)
                 .registerTypeAdapterFactory(adapter2)
                 .create();
-        return gson2;
     }
 
     private static Set<String> parseSetToJson(ArrayList<? extends Group>  groupArrayList) {
@@ -88,7 +85,7 @@ public class TeacherStorage implements Serializable {
             klasses.add(k);
         }
 
-        sort(klasses);
+        sort(context, klasses);
 
         return klasses;
     }
@@ -102,7 +99,7 @@ public class TeacherStorage implements Serializable {
             klasses.add(k);
         }
 
-        sort(klasses);
+        sort(context, klasses);
 
         return klasses;
     }
@@ -166,12 +163,20 @@ public class TeacherStorage implements Serializable {
                 sharedPreferences.contains(KEY_DATASET_TOMORROW);
     }
 
-    public static void sort(ArrayList<TeacherGroup> list) {
+    public static void sort(final Context c, ArrayList<TeacherGroup> list) {
         Collections.sort(list, new Comparator<Group>() {
             @Override
             public int compare(Group o1, Group o2) {
+                boolean o1Marked = o1.isMarked(c);
+                boolean o2Marked = o2.isMarked(c);
 
-                return o1.name.compareTo(o2.name);
+                if (o1Marked && !o2Marked) {
+                    return -1;
+                } else if (!o1Marked && o2Marked) {
+                    return 1;
+                } else {
+                    return o1.name.compareTo(o2.name);
+                }
             }
         });
     }

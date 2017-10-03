@@ -62,7 +62,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.ViewHo
             else
                 replacementCounter.setText(String.format(context.getString(R.string.overview_adapter_entry_single), String.valueOf(group.replacements.size())));
 
-            marked.setVisibility(MarkedKlasses.isMarked(context, group.name) ? View.VISIBLE : View.GONE);
+            marked.setVisibility(group.isMarked(context) ? View.VISIBLE : View.GONE);
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override

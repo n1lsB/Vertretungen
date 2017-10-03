@@ -87,7 +87,7 @@ public class DetailActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_detail, menu);
 
-        if (MarkedKlasses.isMarked(getApplication(), group.name)) {
+        if (group.isMarked(getApplicationContext())) {
             menu.findItem(R.id.menu_detail_star).setIcon(R.drawable.ic_star_white_24dp);
         }
 
@@ -98,8 +98,9 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_detail_star:
-                MarkedKlasses.setMarked(getApplication(), group.name, !MarkedKlasses.isMarked(getApplication(), group.name));
-                if (MarkedKlasses.isMarked(getApplication(), group.name)) {
+                boolean marked = group.isMarked(getApplicationContext());
+                group.setMarked(getApplication(), !marked);
+                if (!marked) {
                     item.setIcon(R.drawable.ic_star_white_24dp);
                 } else {
                     item.setIcon(R.drawable.ic_star_border_white_24dp);

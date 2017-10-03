@@ -72,8 +72,8 @@ class OverviewSectionsAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        final Date dateToday = StudentStorage.getDateToday(context);
-        final Date dateTomorrow = StudentStorage.getDateTomorrow(context);
+        final Date dateToday = g1.getDate();
+        final Date dateTomorrow = g2.getDate();
 
         switch (position) {
             case 0:

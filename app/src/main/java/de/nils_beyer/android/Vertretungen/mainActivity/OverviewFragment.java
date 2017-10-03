@@ -99,6 +99,19 @@ public class OverviewFragment extends Fragment {
 
         updateData(groupCollection);
 
+
+
+        return rootView;
+    }
+
+    public void updateData(GroupCollection collection) {
+        if (downloadingActivity.isDownloading()) {
+            showSwipeRefreshLayout();
+        } else {
+            resetSwipeRefreshLayout();
+        }
+        groupCollection = collection;
+
         if (groupCollection.getGroupArrayList().size() == 0) {
             if (groupCollection.getImmediacity() == null) {
                 noReplcaements.setText(getString(R.string.no_data_downloaded));
@@ -111,16 +124,6 @@ public class OverviewFragment extends Fragment {
             noReplcaements.setVisibility(View.GONE);
         }
 
-        return rootView;
-    }
-
-    public void updateData(GroupCollection collection) {
-        if (downloadingActivity.isDownloading()) {
-            showSwipeRefreshLayout();
-        } else {
-            resetSwipeRefreshLayout();
-        }
-        groupCollection = collection;
         overviewAdapter.update(groupCollection);
     }
 

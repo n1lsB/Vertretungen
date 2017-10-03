@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.Date;
 
-import de.nils_beyer.android.Vertretungen.account.AccountManager;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
-import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.R;
 

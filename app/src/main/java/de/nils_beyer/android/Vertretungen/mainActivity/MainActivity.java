@@ -13,15 +13,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
 import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
-import de.nils_beyer.android.Vertretungen.download.TeacherDownloadService;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
-import de.nils_beyer.android.Vertretungen.storage.TeacherStorage;
 
 public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity, OverviewSectionsAdapter.DownloadingActivity, AccountSpinner.onAccountChangeListener{
 
@@ -56,10 +55,11 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(), getSupportFragmentManager(), this, StudentStorage.getTodaySource(getApplicationContext()), StudentStorage.getTomorrowSource(getApplicationContext()));
+
         accountSpinner = (AccountSpinner) findViewById(R.id.main_account_spinner);
         accountSpinner.setup(this);
-        update();
+
+        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(), getSupportFragmentManager(), this, accountSpinner.getToday(), accountSpinner.getTomorrow());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mOverviewSectionsAdapter);
@@ -75,6 +75,12 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     protected void onResume() {
         super.onResume();
 
+        // Update AccountSpinner in case the
+        // user added another account
+        accountSpinner.checkAccountAvaibility();
+
+        invalidateOptionsMenu();
+
         // NotifyDataSetChanged in order to refresh
         // order of Klasses (e.g. in case of a new marked item)
         update();
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     protected void onStart() {
         super.onStart();
 
-        if (!StudentAccount.isRegistered(this)) {
+        if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
             startActivity(new Intent(this, LoginActivity.class));
         }
 
@@ -99,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     }
 
     public boolean requestData() {
-        if (isDownloading || !StudentAccount.isRegistered(this)) {
+        if (isDownloading) {
             return false;
         }
 
@@ -144,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        if (AccountSpinner.hasOnlyRegistered(getApplicationContext())) {
+            menu.removeItem(R.id.menu_item_login);
+        }
         return true;
     }
 
@@ -157,7 +166,13 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                 startActivity(new Intent(this, MarkedCoursesActivity.class));
                 return true;
             case R.id.menu_item_logout:
-                StudentAccount.logout(this);
+                accountSpinner.logout();
+                if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
+                    startActivity(new Intent(this, LoginActivity.class));
+                }
+                accountSpinner.init();
+                return true;
+            case R.id.menu_item_login:
                 startActivity(new Intent(this, LoginActivity.class));
                 return true;
         }

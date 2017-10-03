@@ -18,6 +18,7 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 
@@ -27,16 +28,22 @@ public class LoginActivity extends AppCompatActivity {
     EditText password;
     Button btn_login;
     TextView text_error;
+    AccountSpinner accountSpinner;
     View contentView;
     ProgressBar progressbar;
 
-    public boolean canClose = false;
+    public boolean canClose;
     public static String KEY_REGISTERED = "REGISTERED_KEY_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Set canClose:
+        // If we have only unregistered Accounts
+        // we cannot close the activity
+        canClose = !AccountSpinner.hasOnlyUnregistered(getApplicationContext());
 
         if (Build.VERSION.SDK_INT >= 23)
             getWindow().setStatusBarColor(getResources().getColor(R.color.login_color, getTheme()));
@@ -46,8 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         btn_login = (Button) findViewById(R.id.login_btn_login);
         text_error = (TextView) findViewById(R.id.login_error);
         contentView = findViewById(R.id.activity_login);
+        accountSpinner = (AccountSpinner) findViewById(R.id.login_account_spinner);
+        accountSpinner.setViewConfig(AccountSpinner.ViewConfig.SHOW_UNREGISTERED);
         progressbar = (ProgressBar) findViewById(R.id.progressBar);
         progressbar.setVisibility(View.GONE);
+
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,8 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                         progressbar.setVisibility(View.GONE);
                         btn_login.setEnabled(true);
                         if (accepted) {
-                            StudentAccount.register(getApplicationContext(), username.getText().toString(), password.getText().toString());
-
                             canClose = true;
                             finish();
                         } else {
@@ -96,32 +104,20 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(StudentDownloadService.URL_TODAY).openConnection();
-                    urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(
-                            username.getText().toString(),
-                            password.getText().toString()
-                        )
-                    );
-
-
-                    final int responseCode = urlConnection.getResponseCode();
+                boolean result = accountSpinner.tryRegister(username.getText().toString(), password.getText().toString());
+                if (result) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (responseCode == 200) {
-                                checkPasswordCallback.onResult(true);
-                            } else {
-                                checkPasswordCallback.onResult(false);
-                            }
+                            checkPasswordCallback.onResult(true);
+
                         }
                     });
-
-
-                } catch (final IOException e) {
+                } else {
                     runOnUiThread(new Runnable() {
+                        @Override
                         public void run() {
-                            checkPasswordCallback.onError(e);
+                            checkPasswordCallback.onError(new Exception());
                         }
                     });
                 }

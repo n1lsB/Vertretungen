@@ -2,6 +2,7 @@ package de.nils_beyer.android.Vertretungen.download;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -95,13 +97,20 @@ public class StudentDownloadService extends IntentService {
         }
     }
 
+    protected String downloadHTMLFile(String url) throws Exception {
+        return downloadHTMLFile(getApplicationContext(), url, StudentAccount.getUserName(getApplicationContext()), StudentAccount.getPassword(getApplicationContext()));
+    }
 
-    protected String downloadHTMLFile(String url) throws  Exception{
+    public static String downloadHTMLFile(Context c, String url, String username, String password) throws Exception{
         HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
-        urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(getApplicationContext()));
+        urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(username, password));
 
         try {
-           StringBuilder stringBuilder = new StringBuilder();
+            final int responseCode = urlConnection.getResponseCode();
+            if (responseCode != 200) {
+                throw new IOException("HttpConection Response Code not 200");
+            }
+            StringBuilder stringBuilder = new StringBuilder();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "ISO-8859-1"));
             String line = "";

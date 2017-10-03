@@ -2,6 +2,7 @@ package de.nils_beyer.android.Vertretungen.download;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -26,6 +28,7 @@ import java.util.regex.Pattern;
 import javax.net.ssl.HttpsURLConnection;
 
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
+import de.nils_beyer.android.Vertretungen.account.TeacherAccount;
 import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
@@ -51,8 +54,8 @@ public class TeacherDownloadService extends IntentService {
     public static final String KLASSE_TOMORROW_KEY = "KLASSE_TOMORROW_KEY";
 
 
-    public static final String URL_TODAY = "https://www.burgaugymnasium.de/vertretungsplan/lul-dummy/heute/subst_001.htm";
-    public static final String URL_TOMORROW = "https://www.burgaugymnasium.de/vertretungsplan/lul-dummy/morgen/subst_001.htm";
+    public static final String URL_TODAY = "https://burgaugymnasium.de/vertretungsplan/lul-dummy/morgen/subst_001.htm";
+    public static final String URL_TOMORROW = "https://burgaugymnasium.de/vertretungsplan/lul-dummy/morgen/subst_001.htm";
 
     public static final int RESULT_CODE = 0;
     public static final int ERROR_CODE = 2;
@@ -77,6 +80,8 @@ public class TeacherDownloadService extends IntentService {
                 String HTML_tomorrow = downloadHTMLFile(URL_TOMORROW);
                 ArrayList<? extends Group> dataSetTomorrow = parseHTMLFile(HTML_tomorrow);
 
+                result.putParcelableArrayListExtra(KLASSE_TODAY_KEY, dataSetToday);
+                result.putParcelableArrayListExtra(KLASSE_TOMORROW_KEY, dataSetTomorrow);
 
                 Date dateToday = readDate(HTML_today);
                 Date dateTomorrow = readDate(HTML_tomorrow);
@@ -100,12 +105,19 @@ public class TeacherDownloadService extends IntentService {
         }
     }
 
+    protected String downloadHTMLFile(String url) throws Exception {
+        return downloadHTMLFile(getApplicationContext(), url, TeacherAccount.getUserName(getApplicationContext()), TeacherAccount.getPassword(getApplicationContext()));
+    }
 
-    protected String downloadHTMLFile(String url) throws  Exception{
+    public static String downloadHTMLFile(Context c, String url, String username, String password) throws  Exception{
         HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
-        urlConnection.setRequestProperty("Authorization", StudentAccount.generateHTTPHeaderAuthorization(getApplicationContext()));
+        urlConnection.setRequestProperty("Authorization", TeacherAccount.generateHTTPHeaderAuthorization(username, password));
 
         try {
+            final int responseCode = urlConnection.getResponseCode();
+            if (responseCode != 200) {
+                throw new IOException("HttpConection Response Code not 200");
+            }
             StringBuilder stringBuilder = new StringBuilder();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "ISO-8859-1"));

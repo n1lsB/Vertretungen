@@ -115,18 +115,27 @@ public class AccountSpinner extends AppCompatSpinner {
         ArrayList<String> accountList = new ArrayList<>();
         final String student_account_name = getContext().getString(R.string.account_name_student);
         final String teacher_account_name = getContext().getString(R.string.account_name_teacher);
+        final boolean studentReg = StudentAccount.isRegistered(getContext());
+        final boolean teacherReg = TeacherAccount.isRegistered(getContext());
 
 
-        boolean studentReg = StudentAccount.isRegistered(getContext());
-        if (studentReg && viewConfig == ViewConfig.SHOW_REGISTERED ||
-                !studentReg && viewConfig == ViewConfig.SHOW_UNREGISTERED) {
-            accountList.add(student_account_name);
-        }
 
-        boolean teacherReg = TeacherAccount.isRegistered(getContext());
-        if (teacherReg && viewConfig == ViewConfig.SHOW_REGISTERED ||
-                !teacherReg && viewConfig == ViewConfig.SHOW_UNREGISTERED) {
-            accountList.add(teacher_account_name);
+        if (viewConfig == ViewConfig.SHOW_REGISTERED) {
+            if (teacherReg) {
+                accountList.add(teacher_account_name);
+            }
+            if (studentReg) {
+                accountList.add(student_account_name);
+            }
+        } else if (viewConfig == ViewConfig.SHOW_UNREGISTERED) {
+            if (!studentReg) {
+                accountList.add(student_account_name);
+            }
+            if (!teacherReg) {
+                accountList.add(teacher_account_name);
+            }
+        } else {
+            throw new RuntimeException("not yet implemented");
         }
 
         return accountList;

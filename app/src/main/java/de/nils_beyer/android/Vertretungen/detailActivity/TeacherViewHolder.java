@@ -49,6 +49,10 @@ class TeacherViewHolder extends ViewHolder {
                 text_teacher_old.setTextColor(Color.BLACK);
                 text_teacher_new.setTextColor(Color.BLACK);
             }
+
+            text_original.setVisibility(View.VISIBLE);
+            text_replacement.setVisibility(View.VISIBLE);
+            text_arrow.setVisibility(View.VISIBLE);
         }
 
     }

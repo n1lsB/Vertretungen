@@ -20,16 +20,16 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private Group group;
 
-    private TextView text_original;
-    private TextView text_time;
-    private TextView text_replacement;
-    private TextView text_info;
-    private TextView text_type;
-    private TextView text_room;
-    private TextView text_arrow;
-    private CardView overview_card;
-    private TextView text_reference;
-    private ImageView marked_cours;
+    protected TextView text_original;
+    protected TextView text_time;
+    protected TextView text_replacement;
+    protected TextView text_info;
+    protected TextView text_type;
+    protected TextView text_room;
+    protected TextView text_arrow;
+    protected CardView overview_card;
+    protected TextView text_reference;
+    protected ImageView marked_cours;
 
     public ViewHolder(View v, Context context, Group group) {
         super(v);

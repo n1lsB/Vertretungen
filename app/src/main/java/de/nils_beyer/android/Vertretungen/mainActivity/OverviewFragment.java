@@ -71,7 +71,11 @@ public class OverviewFragment extends Fragment {
             downloadingActivity = (OverviewSectionsAdapter.DownloadingActivity) getActivity();
         }
 
-        groupCollection = (GroupCollection) getArguments().getSerializable(ARG_GROUP_COLLECTION);
+        if (savedInstanceState == null) {
+            groupCollection = (GroupCollection) getArguments().getSerializable(ARG_GROUP_COLLECTION);
+        } else {
+            groupCollection = (GroupCollection) savedInstanceState.getSerializable(ARG_GROUP_COLLECTION);
+        }
         overviewAdapter = new OverviewAdapter(getContext(), groupCollection);
 
         this.container = container;
@@ -102,6 +106,12 @@ public class OverviewFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(ARG_GROUP_COLLECTION, groupCollection);
     }
 
     public void updateData(GroupCollection collection) {

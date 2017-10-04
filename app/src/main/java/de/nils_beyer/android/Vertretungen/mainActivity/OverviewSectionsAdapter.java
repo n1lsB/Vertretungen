@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.R;
 
 
-class OverviewSectionsAdapter extends FragmentPagerAdapter {
+class OverviewSectionsAdapter extends FragmentStatePagerAdapter {
 
     private OverviewFragment f0;
     private OverviewFragment f1;
@@ -33,14 +34,11 @@ class OverviewSectionsAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
         switch (position) {
             case 0:
-                f0 = OverviewFragment.getIntance(context, g1);
-                return f0;
+                return OverviewFragment.getIntance(context, g1);
             case 1:
-                f1 = OverviewFragment.getIntance(context, g2);
-                return f1;
+                return OverviewFragment.getIntance(context, g2);
         }
         return null;
     }

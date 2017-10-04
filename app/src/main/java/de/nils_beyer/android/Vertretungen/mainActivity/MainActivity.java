@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                     startActivity(new Intent(this, LoginActivity.class));
                 }
                 accountSpinner.init();
+                invalidateOptionsMenu();
                 return true;
             case R.id.menu_item_login:
                 startActivity(new Intent(this, LoginActivity.class));

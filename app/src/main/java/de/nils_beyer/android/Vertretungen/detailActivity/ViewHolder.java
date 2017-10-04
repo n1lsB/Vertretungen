@@ -62,7 +62,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         }
 
         if  (MarkedCourses.isMarked(context, group.name, r.originalSubject) ||
-             MarkedCourses.isMarked(context, group.name, r.modifiedSubject) ) {
+             MarkedCourses.isMarked(context, group.name, r.modifiedSubject) ||
+             MarkedCourses.isKlausurMarked(context, group.name, r.information)) {
             marked_cours.setVisibility(View.VISIBLE);
         } else {
             marked_cours.setVisibility(View.GONE);

@@ -20,6 +20,27 @@ public class MarkedCourses {
         return sharedPreferences.getBoolean(handleInputString(klasse) + "\\" + handleInputString(kurs), false);
     }
 
+    public static boolean isKlausurMarked(Context application, String klasse, String info_klausur) {
+        info_klausur = info_klausur.toLowerCase();
+        if (info_klausur.startsWith("gk ")) {
+            String kurse = info_klausur.replaceFirst("gk ", "");
+            String[] kursList = kurse.split("\\+");
+            for (String kurs : kursList) {
+                kurs = kurs.trim();
+                String kursname;
+                if (kurs.matches("[a-z]+\\d$")) {
+                    kursname = kurs.substring(0, kurs.length() - 1) + "gk" + kurs.substring(kurs.length() - 1);
+                } else {
+                    kursname = kurs + "gk1";
+                }
+                if (isMarked(application, klasse, kursname)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void setMarked(Context application, String klasse, String kurs, boolean marked) {
         SharedPreferences sharedPreferences = application.getSharedPreferences(KEY_MARKED_COURSES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

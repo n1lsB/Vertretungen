@@ -54,7 +54,7 @@ public class TeacherDownloadService extends IntentService {
     public static final String KLASSE_TOMORROW_KEY = "KLASSE_TOMORROW_KEY";
 
 
-    public static final String URL_TODAY = "https://burgaugymnasium.de/vertretungsplan/lul-dummy/morgen/subst_001.htm";
+    public static final String URL_TODAY = "https://burgaugymnasium.de/vertretungsplan/lul-dummy/heute/subst_001.htm";
     public static final String URL_TOMORROW = "https://burgaugymnasium.de/vertretungsplan/lul-dummy/morgen/subst_001.htm";
 
     public static final int RESULT_CODE = 0;
@@ -204,6 +204,19 @@ public class TeacherDownloadService extends IntentService {
                     g.add(entry);
                 }
 
+                ArrayList<String> info_names = findTeacherNames(info);
+                for (String name : info_names) {
+                    if (!name.equals(vertreter) && !name.equals(oldLehrer)) {
+                        Group group = teacherMap.get(name);
+                        if (group == null) {
+                            TeacherGroup tg = new TeacherGroup();
+                            tg.name = name;
+                            teacherMap.put(name, tg);
+                            group = tg;
+                        }
+                        group.add(entry);
+                    }
+                }
             }
             ArrayList<TeacherGroup> klassenArrayList = new ArrayList<TeacherGroup>(teacherMap.values());
             TeacherStorage.sort(getApplicationContext(), klassenArrayList);
@@ -259,5 +272,17 @@ public class TeacherDownloadService extends IntentService {
             }
         }
         return null;
+    }
+
+    public static ArrayList<String> findTeacherNames(String _input) {
+        ArrayList<String> names = new ArrayList<>();
+        Pattern pattern = Pattern.compile("(?<=\\s|^)[A-ZÄÖÜ]{2,4}(?=\\s|$)");
+        Matcher matcher = pattern.matcher(_input);
+        while (matcher.find()) {
+            String otherClass = matcher.group(0);
+            names.add(otherClass);
+        }
+
+        return names;
     }
 }

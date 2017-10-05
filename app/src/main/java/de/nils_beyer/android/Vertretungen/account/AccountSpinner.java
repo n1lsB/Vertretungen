@@ -57,7 +57,15 @@ public class AccountSpinner extends AppCompatSpinner {
         setAdapter(arrayAdapter);
 
         setSelection(0);
-        selectedAccount = Account.Student;
+        if (accountList.size() > 0) {
+            if ((accountList.get(0)).equals(getContext().getString(R.string.account_name_student))) {
+                selectedAccount = Account.Student;
+            } else {
+                selectedAccount = Account.Teacher;
+            }
+        } else {
+            selectedAccount = Account.Student;
+        }
 
         setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -159,6 +167,16 @@ public class AccountSpinner extends AppCompatSpinner {
                 return StudentStorage.getTomorrowSource(getContext());
         }
         return null;
+    }
+
+    public boolean containsData() {
+        switch(selectedAccount) {
+            case Teacher:
+                return TeacherStorage.containsData(getContext());
+            case Student:
+                return StudentStorage.containsData(getContext());
+        }
+        return false;
     }
 
     public void startDownload(PendingIntent pendingIntent) {

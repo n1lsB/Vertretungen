@@ -92,14 +92,19 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
         if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
             startActivity(new Intent(this, LoginActivity.class));
+            return;
         }
+
+        // Update AccountSpinner in case the
+        // user added another account
+        accountSpinner.checkAccountAvaibility();
 
         if (getIntent().hasExtra(RefreshKey) && getIntent().getBooleanExtra(RefreshKey, false)) {
             getIntent().removeExtra(RefreshKey);
             requestData();
         }
 
-        if (!StudentStorage.containsData(getApplicationContext())) {
+        if (!accountSpinner.containsData()) {
             requestData();
         }
     }
@@ -216,6 +221,9 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
     @Override
     public void onAccountChanged() {
+        if (!accountSpinner.containsData()) {
+            requestData();
+        }
         update();
     }
 }

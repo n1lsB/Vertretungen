@@ -10,6 +10,7 @@ import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.Entry;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.TeacherEntry;
+import de.nils_beyer.android.Vertretungen.download.TeacherDownloadService;
 
 /**
  * Created by nbeye on 02. Okt. 2017.
@@ -53,6 +54,12 @@ class TeacherViewHolder extends ViewHolder {
             text_original.setVisibility(View.VISIBLE);
             text_replacement.setVisibility(View.VISIBLE);
             text_arrow.setVisibility(View.VISIBLE);
+
+            if (TeacherDownloadService.findTeacherNames(r.information).contains(name)) {
+                text_info.setTextColor(Color.RED);
+            } else {
+                text_info.setTextColor(Color.BLACK);
+            }
         }
 
     }

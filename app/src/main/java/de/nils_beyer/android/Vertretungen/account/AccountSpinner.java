@@ -57,11 +57,7 @@ public class AccountSpinner extends AppCompatSpinner {
         setAdapter(arrayAdapter);
 
         setSelection(0);
-        if (((String) getSelectedItem()).equals(getContext().getString(R.string.account_name_student))) {
-            selectedAccount = Account.Student;
-        } else {
-            selectedAccount = Account.Teacher;
-        }
+        selectedAccount = Account.Student;
 
         setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override

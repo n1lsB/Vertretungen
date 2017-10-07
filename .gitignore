@@ -8,6 +8,7 @@
 /captures
 .externalNativeBuild
 .idea/misc.xml
+.idea/shelf/
 .idea/vcs.xml
 app/app-debug.apk
 app/app-release.apk

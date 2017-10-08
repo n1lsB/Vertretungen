@@ -280,7 +280,11 @@ public class TeacherDownloadService extends IntentService {
         Matcher matcher = pattern.matcher(_input);
         while (matcher.find()) {
             String otherClass = matcher.group(0);
-            names.add(otherClass);
+            if (otherClass.equalsIgnoreCase("GK") || otherClass.equalsIgnoreCase("LK")) {
+                continue;
+            } else {
+                names.add(otherClass);
+            }
         }
 
         return names;

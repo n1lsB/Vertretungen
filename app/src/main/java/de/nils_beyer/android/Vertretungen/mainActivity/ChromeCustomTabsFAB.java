@@ -16,6 +16,8 @@ import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 
+import static java.security.AccessController.getContext;
+
 
 public final class ChromeCustomTabsFAB extends FloatingActionButton {
     TabActivity tabActivity;
@@ -46,15 +48,15 @@ public final class ChromeCustomTabsFAB extends FloatingActionButton {
 
 
                 Bundle headerArgs = new Bundle();
-                headerArgs.putString("Authorization", StudentAccount.generateHTTPHeaderAuthorization(getContext()));
+                headerArgs.putString("Authorization", tabActivity.getHTTPHeaderAuthorization());
 
                 customtabintent.build().intent.putExtra(Browser.EXTRA_HEADERS, headerArgs);
 
                 try {
                     if (tabActivity.getSelectedSource() == StudentStorage.source.Today) {
-                        customtabintent.build().launchUrl(getContext(), Uri.parse(StudentDownloadService.URL_TODAY));
+                        customtabintent.build().launchUrl(getContext(), Uri.parse(tabActivity.getURlToday()));
                     } else {
-                        customtabintent.build().launchUrl(getContext(), Uri.parse(StudentDownloadService.URL_TOMORROW));
+                        customtabintent.build().launchUrl(getContext(), Uri.parse(tabActivity.getURLTomorrow()));
                     }
                 } catch(Exception e) {
                     Toast.makeText(getContext(), "Kein Browser installiert", Toast.LENGTH_SHORT).show();
@@ -66,5 +68,8 @@ public final class ChromeCustomTabsFAB extends FloatingActionButton {
 
     public interface TabActivity {
         StudentStorage.source getSelectedSource();
+        String getURlToday();
+        String getURLTomorrow();
+        String getHTTPHeaderAuthorization();
     }
 }

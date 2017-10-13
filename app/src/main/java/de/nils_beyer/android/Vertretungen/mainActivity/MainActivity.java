@@ -210,6 +210,21 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         }
     }
 
+    @Override
+    public String getURlToday() {
+        return accountSpinner.getUrlToday();
+    }
+
+    @Override
+    public String getURLTomorrow() {
+        return accountSpinner.getUrlTomorrow();
+    }
+
+    @Override
+    public String getHTTPHeaderAuthorization() {
+        return accountSpinner.getHTTPHeaderAuthorization();
+    }
+
     public void update() {
         mOverviewSectionsAdapter.update(accountSpinner.getToday(), accountSpinner.getTomorrow());
     }

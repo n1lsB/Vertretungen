@@ -241,4 +241,37 @@ public class AccountSpinner extends AppCompatSpinner {
                 break;
         }
     }
+
+    public String getUrlToday() {
+        switch(selectedAccount) {
+            case Student:
+                return StudentDownloadService.URL_TODAY;
+            case Teacher:
+                return TeacherDownloadService.URL_TODAY;
+            default:
+                return "https://burgaugymnasium.de";
+        }
+    }
+
+    public String getUrlTomorrow() {
+        switch(selectedAccount) {
+            case Student:
+                return StudentDownloadService.URL_TOMORROW;
+            case Teacher:
+                return TeacherDownloadService.URL_TOMORROW;
+            default:
+                return "https://burgaugymnasium.de";
+        }
+    }
+
+    public String getHTTPHeaderAuthorization() {
+        switch(selectedAccount) {
+            case Student:
+                return StudentAccount.generateHTTPHeaderAuthorization(getContext());
+            case Teacher:
+                return TeacherAccount.generateHTTPHeaderAuthorization(getContext());
+            default:
+                return "";
+        }
+    }
 }

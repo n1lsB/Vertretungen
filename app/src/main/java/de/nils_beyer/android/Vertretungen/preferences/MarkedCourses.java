@@ -28,10 +28,18 @@ public class MarkedCourses {
             for (String kurs : kursList) {
                 kurs = kurs.trim();
                 String kursname;
-                if (kurs.matches("[a-z]+\\d$")) {
-                    kursname = kurs.substring(0, kurs.length() - 1) + "gk" + kurs.substring(kurs.length() - 1);
+                if (kurs.matches("^f\\d")) {
+                    if (kurs.matches("gk\\d$")) {
+                        kursname = kurs;
+                    } else {
+                        kursname = kurs + "gk1";
+                    }
                 } else {
-                    kursname = kurs + "gk1";
+                    if (kurs.matches("[a-zäöü]+\\d$")) {
+                        kursname = kurs.substring(0, kurs.length() - 1) + "gk" + kurs.substring(kurs.length() - 1);
+                    } else {
+                        kursname = kurs + "gk1";
+                    }
                 }
                 if (isMarked(application, klasse, kursname)) {
                     return true;

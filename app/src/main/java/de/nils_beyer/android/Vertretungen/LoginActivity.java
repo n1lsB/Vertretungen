@@ -104,20 +104,44 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean result = accountSpinner.tryRegister(username.getText().toString(), password.getText().toString());
-                if (result) {
+                try {
+                    boolean result = accountSpinner.tryRegister(username.getText().toString(), password.getText().toString());
+                    if (result) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkPasswordCallback.onResult(true);
+
+                            }
+                        });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkPasswordCallback.onError(new Exception());
+                            }
+                        });
+                    }
+                } catch (SecurityException e) {
+                    // In case that the authorization
+                    // credentials are wrong
+                    // a security Exception is thrown by the
+                    // DownloadService
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            checkPasswordCallback.onResult(true);
-
+                            checkPasswordCallback.onResult(false);
                         }
                     });
-                } else {
+                } catch (final Exception e) {
+                    // If there is an IOException
+                    // the onError method will show a
+                    // Snackbar with further information
+                    // for the user.
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            checkPasswordCallback.onError(new Exception());
+                            checkPasswordCallback.onError(e);
                         }
                     });
                 }

@@ -107,6 +107,10 @@ public class StudentDownloadService extends IntentService {
 
         try {
             final int responseCode = urlConnection.getResponseCode();
+
+            if (responseCode == 401) {
+                throw new SecurityException("Authorization error");
+            }
             if (responseCode != 200) {
                 throw new IOException("HttpConection Response Code not 200");
             }

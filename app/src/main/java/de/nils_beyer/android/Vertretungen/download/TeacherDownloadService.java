@@ -96,6 +96,8 @@ public class TeacherDownloadService extends IntentService {
 
 
                 reply.send(this, RESULT_CODE, result);
+            } catch (SecurityException exc) {
+                reply.send(ERROR_CODE);
             } catch (Exception exc) {
                 // could do better by treating the different sax/xml exceptions individually
                 reply.send(ERROR_CODE);
@@ -115,6 +117,10 @@ public class TeacherDownloadService extends IntentService {
 
         try {
             final int responseCode = urlConnection.getResponseCode();
+
+            if (responseCode == 401) {
+                throw new SecurityException("Authorization error");
+            }
             if (responseCode != 200) {
                 throw new IOException("HttpConection Response Code not 200");
             }

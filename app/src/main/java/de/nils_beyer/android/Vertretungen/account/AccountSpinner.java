@@ -207,25 +207,17 @@ public class AccountSpinner extends AppCompatSpinner {
         return StudentAccount.isRegistered(c) && TeacherAccount.isRegistered(c);
     }
 
-    public boolean tryRegister(final String username, final String password) {
+    public boolean tryRegister(final String username, final String password) throws Exception{
         final Account account = this.selectedAccount;
         switch (account) {
             case Student:
-                try {
-                    StudentDownloadService.downloadHTMLFile(getContext(), StudentDownloadService.URL_TODAY, username, password);
-                    StudentAccount.register(getContext(), username, password);
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
+                StudentDownloadService.downloadHTMLFile(getContext(), StudentDownloadService.URL_TODAY, username, password);
+                StudentAccount.register(getContext(), username, password);
+                return true;
             case Teacher:
-                try {
-                    TeacherDownloadService.downloadHTMLFile(getContext(), TeacherDownloadService.URL_TODAY, username, password);
-                    TeacherAccount.register(getContext(), username, password);
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
+                TeacherDownloadService.downloadHTMLFile(getContext(), TeacherDownloadService.URL_TODAY, username, password);
+                TeacherAccount.register(getContext(), username, password);
+                return true;
             default:
                 return false;
         }

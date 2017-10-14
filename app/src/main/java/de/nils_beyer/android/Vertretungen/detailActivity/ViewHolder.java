@@ -16,22 +16,21 @@ import de.nils_beyer.android.Vertretungen.preferences.MarkedCourses;
  * Created by nbeye on 02. Okt. 2017.
  */
 
-public class ViewHolder extends RecyclerView.ViewHolder {
+class ViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private Group group;
 
-    protected TextView text_original;
-    protected TextView text_time;
-    protected TextView text_replacement;
-    protected TextView text_info;
-    protected TextView text_type;
-    protected TextView text_room;
-    protected TextView text_arrow;
-    protected CardView overview_card;
-    protected TextView text_reference;
-    protected ImageView marked_cours;
+    private TextView text_original;
+    private TextView text_time;
+    private TextView text_replacement;
+    private TextView text_info;
+    private TextView text_type;
+    private TextView text_room;
+    private TextView text_arrow;
+    private TextView text_reference;
+    private ImageView marked_cours;
 
-    public ViewHolder(View v, Context context, Group group) {
+    ViewHolder(View v, Context context, Group group) {
         super(v);
 
         this.context = context;
@@ -45,7 +44,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         text_room = (TextView) v.findViewById(R.id.text_room);
         text_arrow = (TextView) v.findViewById(R.id.text_arrow);
         text_reference = (TextView) v.findViewById(R.id.text_reference);
-        overview_card = (CardView) v.findViewById(R.id.overview_card);
         marked_cours = (ImageView) v.findViewById(R.id.icon_marked_courses);
     }
 

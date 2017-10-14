@@ -47,6 +47,12 @@
     <string name="mark_class_menu_item_title">Markieren</string>
     <string name="placeholder_reference">Gefunden in "%s"</string>
 
+    <!-- Widget Configure -->
+    <string name="widget_configure_toolbar_titel">Neues Widget</string>
+    <string name="widget_configure_button_text">Widget erstellen</string>
+    <string name="widget_configure_info_text">Bitte wählen Sie aus, welcher Vertretungsplan im Widget angezeigt werden soll.</string>
+
+
     <!-- Information -->
     <string name="info_menuitem_title">Informationen</string>
     <string name="info_title">Informationen</string>
@@ -85,7 +91,7 @@ limitations under the License.\n\
     <string name="info_title_libraries">Lizenzen</string>
 
     <!-- Login -->
-    <string name="login_infotext">Bitte melde dich mit den Benutzerdaten für den Vertretungsplan an</string>
+    <string name="login_infotext">Bitte melden Sie sich mit Ihren Benutzerdaten für den Vertretungsplan an</string>
     <string name="login_button">Anmelden</string>
     <string name="login_username">Benutzername</string>
     <string name="login_password">Passwort</string>
@@ -98,4 +104,5 @@ limitations under the License.\n\
     <string name="marked_courses_remove_all">Alle entfernen</string>
     <string name="marked_courses_info">Hier kannst du Kurse definieren, die besonders hervorgehoben werden sollen. Bitte gibt den vollständigen und offiziellen Namen deiner Kurse an.</string>
     <string name="marked_courses_delete">Löschen</string>
+    <string name="title_activity_widget_configure">WidgetConfigureActivity</string>
 </resources>

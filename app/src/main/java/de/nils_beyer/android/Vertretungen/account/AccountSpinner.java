@@ -23,7 +23,7 @@ import de.nils_beyer.android.Vertretungen.storage.TeacherStorage;
  */
 
 public class AccountSpinner extends AppCompatSpinner {
-    private enum Account {Teacher, Student}
+    public enum Account {Teacher, Student}
     public enum ViewConfig {SHOW_REGISTERED, SHOW_UNREGISTERED}
 
     private AccountSpinner.Account selectedAccount;
@@ -150,31 +150,47 @@ public class AccountSpinner extends AppCompatSpinner {
     }
 
     public GroupCollection getToday() {
+        return getToday(getContext(), selectedAccount);
+    }
+
+    public static GroupCollection getToday(Context c, Account selectedAccount) {
         switch(selectedAccount) {
             case Teacher:
-                return TeacherStorage.getTodaySource(getContext());
+                return TeacherStorage.getTodaySource(c);
             case Student:
-                return StudentStorage.getTodaySource(getContext());
+                return StudentStorage.getTodaySource(c);
         }
         return null;
     }
 
     public GroupCollection getTomorrow() {
-        switch(selectedAccount) {
+        return getTomorrow(getContext(), selectedAccount);
+    }
+
+    public static GroupCollection getTomorrow(Context c, Account account) {
+        switch(account) {
             case Teacher:
-                return TeacherStorage.getTomorrowSource(getContext());
+                return TeacherStorage.getTomorrowSource(c);
             case Student:
-                return StudentStorage.getTomorrowSource(getContext());
+                return StudentStorage.getTomorrowSource(c);
         }
         return null;
     }
 
+    public Account getSelectedAccount() {
+        return selectedAccount;
+    }
+
     public boolean containsData() {
+        return containsData(getContext(), selectedAccount);
+    }
+
+    public static boolean containsData(Context c, Account selectedAccount) {
         switch(selectedAccount) {
             case Teacher:
-                return TeacherStorage.containsData(getContext());
+                return TeacherStorage.containsData(c);
             case Student:
-                return StudentStorage.containsData(getContext());
+                return StudentStorage.containsData(c);
         }
         return false;
     }

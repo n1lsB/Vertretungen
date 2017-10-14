@@ -10,7 +10,10 @@ import android.widget.RemoteViewsService;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
+import de.nils_beyer.android.Vertretungen.data.TeacherEntry;
+import de.nils_beyer.android.Vertretungen.preferences.MarkedTeacher;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
@@ -25,13 +28,17 @@ import de.nils_beyer.android.Vertretungen.data.Entry;
  */
 
 class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
+    public static final String EXTRA_ACCOUNT_ORDINAL = "WidgetFactory.EXTRA_ACCOUNT_ORDINAL";
+
     private ArrayList<Group> klasses = new ArrayList<>();
     private GroupCollection groupCollection;
     private Context context = null;
+    private int accountOrdinal;
 
 
     public WidgetFactory(Context context, Intent intent) {
         this.context = context;
+        accountOrdinal = intent.getIntExtra(EXTRA_ACCOUNT_ORDINAL, -1);
     }
 
 
@@ -83,26 +90,47 @@ class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
         Entry r = getReplacement(position);
 
-        remoteView.setTextViewText(R.id.widget_row_type, r.vertretungsart);
-        remoteView.setTextViewText(R.id.widget_row_klasse, getKlasseAt(position).name);
-        remoteView.setTextViewText(R.id.widget_row_original, r.originalSubject);
-        remoteView.setTextViewText(R.id.widget_row_replacement, r.modifiedSubject);
-        remoteView.setTextViewText(R.id.widget_row_information, r.information);
-        remoteView.setTextViewText(R.id.widget_row_time, String.format("%s. Stunde, %s", r.time, r.room));
-        remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, new Intent());
+        if (r instanceof TeacherEntry) {
+            TeacherEntry tr = (TeacherEntry) r;
+            remoteView.setTextViewText(R.id.widget_row_type, r.vertretungsart);
+            remoteView.setTextViewText(R.id.widget_row_group_name, getKlasseAt(position).name);
+            remoteView.setTextViewText(R.id.widget_row_original, r.originalSubject);
+            remoteView.setTextViewText(R.id.widget_row_replacement, r.modifiedSubject);
+            remoteView.setTextViewText(R.id.widget_row_information, r.information);
+            remoteView.setTextViewText(R.id.widget_row_time, String.format("%s. Stunde, %s", r.time, r.room));
+            remoteView.setTextViewText(R.id.widget_row_klasse, tr.klasse);
+            remoteView.setTextViewText(R.id.widget_row_old_teacher, tr.teacherOld);
+            remoteView.setTextViewText(R.id.widget_row_new_teacher, tr.teacherOld);
 
-
-        if (r.originalSubject.equals(" ") && r.modifiedSubject.equals(" ")) {
-            remoteView.setViewVisibility(R.id.widget_row_original, View.GONE);
-            remoteView.setViewVisibility(R.id.widget_row_replacement, View.GONE);
-            remoteView.setViewVisibility(R.id.widget_row_arrow, View.GONE);
+            remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, new Intent());
         } else {
-            remoteView.setViewVisibility(R.id.widget_row_original, View.VISIBLE);
-            remoteView.setViewVisibility(R.id.widget_row_replacement, View.VISIBLE);
-            remoteView.setViewVisibility(R.id.widget_row_arrow, View.VISIBLE);
+            remoteView.setTextViewText(R.id.widget_row_type, r.vertretungsart);
+            remoteView.setTextViewText(R.id.widget_row_group_name, getKlasseAt(position).name);
+            remoteView.setTextViewText(R.id.widget_row_original, r.originalSubject);
+            remoteView.setTextViewText(R.id.widget_row_replacement, r.modifiedSubject);
+            remoteView.setTextViewText(R.id.widget_row_information, r.information);
+            remoteView.setTextViewText(R.id.widget_row_time, String.format("%s. Stunde, %s", r.time, r.room));
+            remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, new Intent());
+
+            remoteView.setViewVisibility(R.id.widget_row_klasse, View.GONE);
+            remoteView.setViewVisibility(R.id.widget_row_new_teacher, View.GONE);
+            remoteView.setViewVisibility(R.id.widget_row_old_teacher, View.GONE);
+
+            if (r.originalSubject.equals(" ") && r.modifiedSubject.equals(" ")) {
+                remoteView.setViewVisibility(R.id.widget_row_original, View.GONE);
+                remoteView.setViewVisibility(R.id.widget_row_replacement, View.GONE);
+                remoteView.setViewVisibility(R.id.widget_row_arrow, View.GONE);
+            } else {
+                remoteView.setViewVisibility(R.id.widget_row_original, View.VISIBLE);
+                remoteView.setViewVisibility(R.id.widget_row_replacement, View.VISIBLE);
+                remoteView.setViewVisibility(R.id.widget_row_arrow, View.VISIBLE);
+            }
         }
 
-        Intent onClickIntent = DetailActivity.getStartIntent(context, groupCollection, position);
+        // Determinate the position of the Group inside the GroupCollection
+        int gcposition = groupCollection.getGroupArrayList().indexOf(getKlasseAt(position));
+
+        Intent onClickIntent = DetailActivity.getStartIntent(context, groupCollection, gcposition);
 
 
         remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, onClickIntent);
@@ -133,21 +161,31 @@ class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         Log.d("Factory", "onDataSetChanged: ");
-        if (!StudentStorage.containsData(context)) {
-            return;
-        }
-        if (DateParser.sameDay(StudentStorage.getDateToday(context), new Date())) {
-            groupCollection = StudentStorage.getTodaySource(context);
+
+        AccountSpinner.Account account = AccountSpinner.Account.values()[accountOrdinal];
+        Date dateToday = AccountSpinner.getToday(context, account).getDate();
+        if (DateParser.sameDay(dateToday, new Date())) {
+            groupCollection = AccountSpinner.getToday(context, account);
         } else {
-            groupCollection = StudentStorage.getTomorrowSource(context);
+            groupCollection = AccountSpinner.getTomorrow(context, account);
         }
 
         StudentStorage.sort(context, groupCollection.getGroupArrayList());
 
+
         klasses = new ArrayList<>();
-        if (MarkedKlasses.hasMarked(context)) {
+        boolean hasMarked = false;
+        switch (account) {
+            case Student:
+                hasMarked = MarkedKlasses.hasMarked(context);
+                break;
+            case Teacher:
+                hasMarked = MarkedTeacher.hasMarked(context);
+                break;
+        }
+        if (hasMarked) {
             for (Group k : groupCollection.getGroupArrayList()) {
-                if (MarkedKlasses.isMarked(context, k.name)) {
+                if (MarkedKlasses.isMarked(context, k.name) || MarkedTeacher.isMarked(context, k.name)) {
                     klasses.add(k);
                 }
             }

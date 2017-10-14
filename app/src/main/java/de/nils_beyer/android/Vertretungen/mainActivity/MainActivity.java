@@ -21,6 +21,7 @@ import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
+import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
 
 public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity, OverviewSectionsAdapter.DownloadingActivity, AccountSpinner.onAccountChangeListener{
 
@@ -89,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     @Override
     protected void onStart() {
         super.onStart();
+
+        // Update the Widget in case the
+        // date changed
+        VertretungenWidgetProvider.updateWidgetData(getApplicationContext());
 
         if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
             startActivity(new Intent(this, LoginActivity.class));

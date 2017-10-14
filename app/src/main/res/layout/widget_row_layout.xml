@@ -9,14 +9,14 @@
         android:id="@+id/widget_row_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/widget_row_klasse"
+        android:layout_toStartOf="@+id/widget_row_group_name"
         android:text="Vertretung"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/widget_row_klasse"
+        android:id="@+id/widget_row_group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="false"
@@ -24,6 +24,16 @@
         android:text="EP"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/widget_row_klasse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="EP"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/widget_row_time"
@@ -41,7 +51,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/widget_row_information"
+        android:layout_below="@+id/widget_row_group_name"
+        android:layout_marginTop="5dp"
+        android:text="D"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/widget_row_old_teacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/widget_row_original"
+        android:text="D"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/widget_row_new_teacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/widget_row_replacement"
         android:text="D"
         android:textColor="@android:color/white" />
 
@@ -50,16 +79,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/widget_row_information"
+        android:layout_below="@+id/widget_row_group_name"
+        android:layout_marginTop="5dp"
         android:text="D"
         android:textColor="@android:color/white" />
 
     <TextView
+        android:id="@+id/widget_row_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/widget_row_replacement"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/widget_row_arrow"
+        android:layout_alignEnd="@+id/widget_row_klasse"
+        android:layout_below="@+id/widget_row_group_name"
+        android:layout_marginTop="5dp"
         android:text="→"
         android:textColor="@android:color/white" />
 
@@ -67,10 +98,8 @@
         android:id="@+id/widget_row_information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="false"
-        android:layout_below="@+id/widget_row_klasse"
-        android:layout_centerInParent="true"
-        android:layout_centerVertical="false"
         android:text="Aufgabe"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/widget_row_arrow"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

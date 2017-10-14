@@ -32,12 +32,17 @@ public class DetailActivity extends AppCompatActivity {
     private FrameLayout fragmentContainer;
 
     public static void startActivity(Context c, GroupCollection gc, int pos) {
+        Intent startActivity = getStartIntent(c, gc, pos);
+        c.startActivity(startActivity);
+    }
+
+    public static Intent getStartIntent(Context c, GroupCollection gc, int pos) {
         Intent startActivity = new Intent(c, DetailActivity.class);
         Bundle b = new Bundle();
         b.putSerializable(ARG_GROUPCOLLECTION, gc);
         b.putInt(ARG_POSITION_INDEX, pos);
         startActivity.putExtras(b);
-        c.startActivity(startActivity);
+        return startActivity;
     }
 
     @Override

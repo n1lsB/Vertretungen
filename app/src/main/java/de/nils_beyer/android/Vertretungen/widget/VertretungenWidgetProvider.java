@@ -19,26 +19,12 @@ import de.nils_beyer.android.Vertretungen.R;
 
 public class VertretungenWidgetProvider extends AppWidgetProvider {
 
-    public static final String DATA_SET_KEY = "DATA_SET_KEY";
-
-
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        RemoteViews remoteViews = createWidget(context);
-
-        updateWidgetNow(context, remoteViews);
-        super.onReceive(context, intent);
-    }
-
-
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        RemoteViews remoteViews = createWidget(context);
-
-        updateWidgetNow(context, remoteViews);
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+        for (int appWidgetId : appWidgetIds) {
+            RemoteViews remoteViews = createWidget(context);
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+        }
     }
 
     public RemoteViews createWidget(Context context) {
@@ -76,19 +62,12 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
         return remoteViews;
     }
 
-    public void updateWidgetNow (Context context, RemoteViews remoteViews){
-        ComponentName widgetComponent = new ComponentName(context, VertretungenWidgetProvider.class);
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
-
-        manager.updateAppWidget(widgetComponent, remoteViews);
-        int[] ids = manager.getAppWidgetIds(widgetComponent);
-        manager.notifyAppWidgetViewDataChanged(ids, R.id.widget_listview);
-
-    }
-
     public static void updateWidgetData(Context context) {
         // Notify Widget
         Intent intent = new Intent(context, VertretungenWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, VertretungenWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         context.sendBroadcast(intent);
     }
 }

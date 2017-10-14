@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
@@ -20,12 +20,13 @@ import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.data.Entry;
 
 /**
- * Created by nbeye on 03. Feb. 2017.
+ * WidgetFactory used to create ListView for Vertretungen-Entries.
+ * Created by nbeyer on 03. Feb. 2017.
  */
 
-public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
-    private StudentStorage.source selectedSource;
+class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     private ArrayList<Group> klasses = new ArrayList<>();
+    private GroupCollection groupCollection;
     private Context context = null;
 
 
@@ -40,7 +41,6 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         for (Group k : klasses) {
             count += k.replacements.size();
         }
-
         return count;
     }
 
@@ -72,9 +72,8 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     /*
-     *Similar to getView of Adapter where instead of View
-     *we return RemoteViews
-     *
+     * Similar to getView of Adapter where instead of View
+     * we return RemoteViews
      */
     @Override
     public RemoteViews getViewAt(int position) {
@@ -103,16 +102,8 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
             remoteView.setViewVisibility(R.id.widget_row_arrow, View.VISIBLE);
         }
 
-        Intent onClickIntent = new Intent(context, DetailActivity.class);
-        switch (selectedSource) {
-            case Today:
-                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, StudentStorage.getDateToday(context));
-                break;
-            case Tomorrow:
-                onClickIntent.putExtra(DetailActivity.ARG_DATE_EXTRA, StudentStorage.getDateTomorrow(context));
-                break;
-        }
-        onClickIntent.putExtra(DetailActivity.ARG_KLASSE_EXTRA, (Serializable) getKlasseAt(position));
+        Intent onClickIntent = DetailActivity.getStartIntent(context, groupCollection, position);
+
 
         remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, onClickIntent);
 
@@ -142,29 +133,28 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         Log.d("Factory", "onDataSetChanged: ");
-        ArrayList<Group> input = new ArrayList<>();
         if (!StudentStorage.containsData(context)) {
             return;
         }
         if (DateParser.sameDay(StudentStorage.getDateToday(context), new Date())) {
-            input = StudentStorage.getToday(context);
-            selectedSource = StudentStorage.source.Today;
+            groupCollection = StudentStorage.getTodaySource(context);
         } else {
-            input = StudentStorage.getTomorrow(context);
-            selectedSource = StudentStorage.source.Tomorrow;
+            groupCollection = StudentStorage.getTomorrowSource(context);
         }
 
-        StudentStorage.sort(context, input);
+        StudentStorage.sort(context, groupCollection.getGroupArrayList());
 
+        klasses = new ArrayList<>();
         if (MarkedKlasses.hasMarked(context)) {
-            klasses = new ArrayList<Group>();
-            for (Group k : input) {
+            for (Group k : groupCollection.getGroupArrayList()) {
                 if (MarkedKlasses.isMarked(context, k.name)) {
                     klasses.add(k);
                 }
             }
         } else {
-            klasses = input;
+            for (Group g : groupCollection.getGroupArrayList()) {
+                klasses.add(g);
+            }
         }
     }
 

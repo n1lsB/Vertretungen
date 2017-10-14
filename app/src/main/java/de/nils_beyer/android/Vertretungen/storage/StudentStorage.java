@@ -145,7 +145,7 @@ public class StudentStorage implements Serializable{
                 sharedPreferences.contains(KEY_DATASET_TOMORROW);
     }
 
-    public static void sort(final Context c, ArrayList<Group> list) {
+    public static void sort(final Context c, ArrayList<? extends Group> list) {
         Collections.sort(list, new Comparator<Group>() {
             @Override
             public int compare(Group o1, Group o2) {

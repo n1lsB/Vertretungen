@@ -20,13 +20,13 @@ class ViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private Group group;
 
-    private TextView text_original;
+    TextView text_original;
     private TextView text_time;
-    private TextView text_replacement;
-    private TextView text_info;
+    TextView text_replacement;
+    TextView text_info;
     private TextView text_type;
     private TextView text_room;
-    private TextView text_arrow;
+    TextView text_arrow;
     private TextView text_reference;
     private ImageView marked_cours;
 

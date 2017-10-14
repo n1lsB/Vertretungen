@@ -10,10 +10,17 @@ import java.util.GregorianCalendar;
 import de.nils_beyer.android.Vertretungen.R;
 
 /**
+ * Util class for parsing Date object and comparing them
  * Created by nbeyer on 25. Feb. 2017.
  */
 
 public class DateParser {
+    /**
+     * Checks if two date object are referencing to the same day
+     * @param date1 first date object to compare
+     * @param date2 second date object to compare
+     * @return true, when date1 and date2 are referencing to the same day, otherwise false
+     */
     public static boolean sameDay(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
@@ -25,13 +32,20 @@ public class DateParser {
 
     }
 
-    public static String parseDateToString(Date date) {
+    /**
+     * Parses a date object to a String
+     * @param date the date object to be parsed
+     * @return parsed Date
+     */
+    private static String parseDateToString(Date date) {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM");
-
-
         return format.format(date);
     }
 
+    /**
+     * Returns the a date object referring to tomorrow
+     * @return date object referring to tomorrow
+     */
     public static Date getTomorrowDate() {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
@@ -39,6 +53,12 @@ public class DateParser {
         return calendar.getTime();
     }
 
+    /**
+     * Converts a date object to a more natural String. It uses weekday names, "Today", "Tomorrow" and otherwise the format specified in @link{parseDateToString}
+     * @param context Context used for String Resources
+     * @param date The date object to be converted
+     * @return date object parsed into a String
+     */
     public static String parseDateToShortString(Context context, Date date) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
@@ -55,6 +75,7 @@ public class DateParser {
                 return parseDateToString(date);
         }
 
+        // Calculate the difference between now and the date object in days.
         int dayDifference = 0;
         while (!sameDay(date, calendar.getTime())) {
             dayDifference++;

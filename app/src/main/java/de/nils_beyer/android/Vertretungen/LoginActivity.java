@@ -59,12 +59,17 @@ public class LoginActivity extends AppCompatActivity {
         progressbar.setVisibility(View.GONE);
 
 
+        // Setup Login Button
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                text_error.setVisibility(View.GONE);
                 hideKeyboard();
+
                 progressbar.setVisibility(View.VISIBLE);
                 btn_login.setEnabled(false);
+
+                // Try to login
                 checkPassword(new CheckPasswordCallback() {
                     @Override
                     public void onResult(boolean accepted) {
@@ -92,6 +97,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void finish() {
+        // When the User should not return to the MainActivity
+        // because he is not logged in,
+        // we close the App.
         if (!canClose) {
             finishAffinity();
         } else {
@@ -100,6 +108,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Makes an Request to the Server to check Username/Password
+     * @param checkPasswordCallback Callback for Success/Error/Failure
+     */
     protected void checkPassword(final CheckPasswordCallback checkPasswordCallback) {
         new Thread(new Runnable() {
             @Override
@@ -111,7 +123,6 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 checkPasswordCallback.onResult(true);
-
                             }
                         });
                     } else {
@@ -149,6 +160,9 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
+    /**
+     * Hides the On-board Keyboard
+     */
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -157,8 +171,20 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Interface as Callback for Server Response
+     */
     private interface CheckPasswordCallback {
+        /**
+         * onResult is called when the client received an answer from the Server
+         * @param accepted true, when User/Password is correct, otherwise false
+         */
         void onResult(boolean accepted);
+
+        /**
+         * onError is called when an IOException occurred
+         * @param e the exception thrown
+         */
         void onError(Exception e);
     }
 }

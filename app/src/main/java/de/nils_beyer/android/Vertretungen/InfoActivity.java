@@ -18,11 +18,13 @@ public class InfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
+        // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.info_title));
 
-
+        // Setup back icon
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_white_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +36,7 @@ public class InfoActivity extends AppCompatActivity {
         toolbar.setContentInsetStartWithNavigation(0);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        // Setup App Titel with Version
         TextView appName = (TextView) findViewById(R.id.info_app_name);
         String version = "";
         try {
@@ -57,6 +60,7 @@ public class InfoActivity extends AppCompatActivity {
             buildVariant.setVisibility(View.GONE);
         }
 
+        // Link to license Activity
         Button btn_license = (Button) findViewById(R.id.info_button_license);
         btn_license.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -14,10 +14,12 @@ public class LicenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_license);
 
+        // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.info_title_libraries));
 
+        // Setup navigation button
         toolbar.setNavigationIcon(R.drawable.ic_keyboard_arrow_left_white_48dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

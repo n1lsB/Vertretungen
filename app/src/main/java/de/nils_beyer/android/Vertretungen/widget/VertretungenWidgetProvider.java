@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
+import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
 import de.nils_beyer.android.Vertretungen.detailActivity.DetailActivity;
@@ -29,9 +31,20 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             Bundle widgetOptions = appWidgetManager.getAppWidgetOptions(appWidgetId);
             AccountSpinner.Account account = AccountSpinner.Account.values()[widgetOptions.getInt(EXTRA_ACCOUNT_ORDINAL)];
-            RemoteViews remoteViews = createWidget(context, account, appWidgetId);
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_listview);
+
+            // Check if Stored Data is not null
+            if (!AccountSpinner.containsData(context, account)) {
+                // When we don't have Data to present
+                // Show an error to the user
+                // because we cannot delete the AppWidget
+                // programmatically
+                RemoteViews errorViews = new RemoteViews(context.getPackageName(), R.layout.widget_error_layout);
+                appWidgetManager.updateAppWidget(appWidgetId, errorViews);
+            } else {
+                RemoteViews remoteViews = createWidget(context, account, appWidgetId);
+                appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_listview);
+            }
         }
     }
 

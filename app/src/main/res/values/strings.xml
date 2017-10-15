@@ -51,7 +51,10 @@
     <string name="widget_configure_toolbar_titel">Neues Widget</string>
     <string name="widget_configure_button_text">Widget erstellen</string>
     <string name="widget_configure_info_text">Bitte wählen Sie aus, welcher Vertretungsplan im Widget angezeigt werden soll.</string>
+    <string name="widget_configure_no_account">Bitte melden Sie sich zunächst in der App an.</string>
 
+    <!-- Widget Error -->
+    <string name="widget_error_text">Es konnten keine Daten abgerufen werden. Versuchen Sie, dieses Widget neu zu erstellen.</string>
 
     <!-- Information -->
     <string name="info_menuitem_title">Informationen</string>

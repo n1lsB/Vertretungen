@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
@@ -35,6 +36,7 @@ public class WidgetConfigureActivity extends AppCompatActivity  implements View.
         accountSpinner.setViewConfig(AccountSpinner.ViewConfig.SHOW_REGISTERED);
 
         if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
+            Toast.makeText(this, getString(R.string.widget_configure_no_account), Toast.LENGTH_LONG).show();
             finish();
         }
 

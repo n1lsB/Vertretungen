@@ -128,7 +128,7 @@ public class DownloadIntentService extends IntentService {
             document.outputSettings().charset("UTF-8");
             Elements rows = document.getElementsByTag("tr");
             for (Element row : rows) {
-                if (row.children().size() != 7) {
+                if (row.children().size() != 8) {
                     continue;
                 }
 
@@ -136,13 +136,13 @@ public class DownloadIntentService extends IntentService {
                     continue;
                 }
 
-                String name = row.child(0).text();
-                String time = row.child(1).text();
-                String original = row.child(2).text();
-                String modified = row.child(3).text();
-                String room = row.child(4).text();
+                String name = row.child(1).text();
+                String time = row.child(0).text();
+                String original = "";
+                String modified = row.child(4).text();
+                String room = row.child(5).text();
                 String type = "";
-                String info = row.child(5).text();
+                String info = row.child(6).text();
 
                 ArrayList<String> klassenNames = parseKlassenName(name);
                 for (String klasse : klassenNames) {

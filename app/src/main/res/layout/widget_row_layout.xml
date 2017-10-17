@@ -88,11 +88,10 @@
         android:id="@+id/widget_row_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/widget_row_klasse"
-        android:layout_below="@+id/widget_row_group_name"
-        android:layout_marginTop="5dp"
         android:text="→"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_alignBaseline="@+id/widget_row_replacement"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/widget_row_information"

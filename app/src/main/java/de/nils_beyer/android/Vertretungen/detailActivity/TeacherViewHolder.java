@@ -18,16 +18,12 @@ import de.nils_beyer.android.Vertretungen.download.TeacherDownloadService;
 
 class TeacherViewHolder extends ViewHolder {
     private TextView text_klasse;
-    private TextView text_teacher_old;
-    private TextView text_teacher_new;
     private String name;
 
     TeacherViewHolder(View v, Context context, Group group) {
         super(v, context, group);
         name = group.name;
         text_klasse = (TextView) v.findViewById(R.id.text_klasse);
-        text_teacher_new = (TextView) v.findViewById(R.id.text_teacher_new);
-        text_teacher_old = (TextView) v.findViewById(R.id.text_teacher_old);
     }
 
     @Override
@@ -38,8 +34,6 @@ class TeacherViewHolder extends ViewHolder {
             TeacherEntry teacherEntry = (TeacherEntry) r;
 
             text_klasse.setText(teacherEntry.klasse);
-            text_teacher_old.setText(teacherEntry.teacherOld);
-            text_teacher_new.setText(teacherEntry.teacherNew);
             if (teacherEntry.teacherNew.equals(name)) {
                 text_teacher_new.setTextColor(Color.RED);
                 text_teacher_old.setTextColor(Color.BLACK);

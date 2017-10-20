@@ -110,11 +110,11 @@ class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
             remoteView.setTextViewText(R.id.widget_row_replacement, r.modifiedSubject);
             remoteView.setTextViewText(R.id.widget_row_information, r.information);
             remoteView.setTextViewText(R.id.widget_row_time, String.format("%s. Stunde, %s", r.time, r.room));
+            remoteView.setTextViewText(R.id.widget_row_old_teacher, r.teacherOld);
+            remoteView.setTextViewText(R.id.widget_row_new_teacher, r.teacherOld);
             remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, new Intent());
 
             remoteView.setViewVisibility(R.id.widget_row_klasse, View.GONE);
-            remoteView.setViewVisibility(R.id.widget_row_new_teacher, View.GONE);
-            remoteView.setViewVisibility(R.id.widget_row_old_teacher, View.GONE);
 
             if (r.originalSubject.equals(" ") && r.modifiedSubject.equals(" ")) {
                 remoteView.setViewVisibility(R.id.widget_row_original, View.GONE);

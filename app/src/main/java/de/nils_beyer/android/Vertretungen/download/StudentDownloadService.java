@@ -149,6 +149,8 @@ public class StudentDownloadService extends IntentService {
                 String name = row.child(1).text();
                 String time = row.child(0).text();
                 String original = "";
+                String old_teacher = row.child(2).text();
+                String new_teacher = row.child(3).text();
                 String modified = row.child(4).text();
                 String room = row.child(5).text();
                 String type = "";
@@ -173,7 +175,9 @@ public class StudentDownloadService extends IntentService {
                         .setOriginalSubject(original)
                         .setModifiedSubject(modified)
                         .setRoom(room)
-                        .setInformation(info);
+                        .setInformation(info)
+                        .setTeacherOld(old_teacher)
+                        .setTeacherNew(new_teacher);
 
                     if (!klasse.equals(name)) {
                         builder.setReference(name);

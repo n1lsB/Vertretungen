@@ -26,6 +26,8 @@ class ViewHolder extends RecyclerView.ViewHolder {
     TextView text_info;
     private TextView text_type;
     private TextView text_room;
+    TextView text_teacher_old;
+    TextView text_teacher_new;
     TextView text_arrow;
     private TextView text_reference;
     private ImageView marked_cours;
@@ -45,6 +47,8 @@ class ViewHolder extends RecyclerView.ViewHolder {
         text_arrow = (TextView) v.findViewById(R.id.text_arrow);
         text_reference = (TextView) v.findViewById(R.id.text_reference);
         marked_cours = (ImageView) v.findViewById(R.id.icon_marked_courses);
+        text_teacher_new = (TextView) v.findViewById(R.id.text_teacher_new);
+        text_teacher_old = (TextView) v.findViewById(R.id.text_teacher_old);
     }
 
     public void bind(Entry r) {
@@ -54,6 +58,8 @@ class ViewHolder extends RecyclerView.ViewHolder {
         text_info.setText(r.information);
         text_type.setText(r.vertretungsart);
         text_room.setText(r.room);
+        text_teacher_new.setText(r.teacherNew);
+        text_teacher_old.setText(r.teacherOld);
 
         if (r.oldRoom != null && !r.oldRoom.equals("") && !r.oldRoom.equals(" ")) {
             text_room.setText(String.format(context.getString(R.string.detail_placeholder_room), r.oldRoom, r.room));

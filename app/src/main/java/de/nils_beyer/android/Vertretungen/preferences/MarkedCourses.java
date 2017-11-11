@@ -22,9 +22,9 @@ public class MarkedCourses {
 
     public static boolean isKlausurMarked(Context application, String klasse, String info_klausur) {
         info_klausur = info_klausur.toLowerCase();
-        if (info_klausur.startsWith("gk ") || info_klausur.startsWith("klausur gk ")) {
+        if (info_klausur.startsWith("gk ")) {
             String kurse = info_klausur.replaceFirst("gk ", "");
-            String[] kursList = kurse.split(" ");
+            String[] kursList = kurse.split("\\+");
             for (String kurs : kursList) {
                 kurs = kurs.trim();
                 String kursname;

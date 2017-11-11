@@ -8,11 +8,32 @@ import android.os.Parcelable;
  */
 
 public class TeacherEntry extends Entry implements Parcelable {
+    public String teacherOld;
+    public String teacherNew;
     public String klasse;
 
+    public String getTeacherOld() {
+        return teacherOld;
+    }
+
+    public String getTeacherNew() {
+        return teacherNew;
+    }
+
     public static class Builder extends Entry.Builder {
+        String teacherOld;
+        String teacherNew;
         String klasse;
 
+        public TeacherEntry.Builder setTeacherOld(String teacherOld) {
+            this.teacherOld = teacherOld;
+            return this;
+        }
+
+        public TeacherEntry.Builder setTeacherNew(String teacherNew) {
+            this.teacherNew = teacherNew;
+            return this;
+        }
 
         public TeacherEntry.Builder setKla(String klasse) {
             this.klasse = klasse;

@@ -17,14 +17,10 @@ public class Entry implements Serializable, Parcelable {
     public String room;
     public String oldRoom;
     public String reference;
-    public String teacherOld;
-    public String teacherNew;
 
     public static class Builder {
         String originalSubject;
         String modifiedSubject;
-        String teacherOld;
-        String teacherNew;
         String type;
         String time;
         String information;
@@ -80,16 +76,6 @@ public class Entry implements Serializable, Parcelable {
             return this;
         }
 
-        public Builder setTeacherOld(String teacherOld) {
-            this.teacherOld = teacherOld;
-            return this;
-        }
-
-        public Builder setTeacherNew(String teacherNew) {
-            this.teacherNew = teacherNew;
-            return this;
-        }
-
         public Entry build() {
             Entry r = new Entry();
             r.originalSubject = originalSubject;
@@ -100,8 +86,6 @@ public class Entry implements Serializable, Parcelable {
             r.room = room;
             r.oldRoom = oldRoom;
             r.reference = reference;
-            r.teacherNew = teacherNew;
-            r.teacherOld = teacherOld;
             return r;
         }
     }

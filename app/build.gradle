@@ -8,7 +8,7 @@ android {
         applicationId "de.nils_beyer.android.testapplication"
         minSdkVersion 17
         targetSdkVersion 24
-        versionCode 7
+        versionCode 8
         versionName "1.6.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

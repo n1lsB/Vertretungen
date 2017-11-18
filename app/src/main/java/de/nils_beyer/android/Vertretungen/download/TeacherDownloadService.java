@@ -54,8 +54,8 @@ public class TeacherDownloadService extends IntentService {
     public static final String KLASSE_TOMORROW_KEY = "KLASSE_TOMORROW_KEY";
 
 
-    public static final String URL_TODAY = "https://burgaugymnasium.de/vertretungsplan/lul-dummy/heute/subst_001.htm";
-    public static final String URL_TOMORROW = "https://burgaugymnasium.de/vertretungsplan/lul-dummy/morgen/subst_001.htm";
+    public static final String URL_TODAY = "https://burgaugymnasium.de/vertretungsplan/lul/heute/subst_001.htm";
+    public static final String URL_TOMORROW = "https://burgaugymnasium.de/vertretungsplan/lul/morgen/subst_001.htm";
 
     public static final int RESULT_CODE = 0;
     public static final int ERROR_CODE = 2;

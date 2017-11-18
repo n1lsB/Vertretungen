@@ -198,7 +198,7 @@ public class TeacherDownloadService extends IntentService {
 
                 // Für Verteteten Lehrer
                 g = teacherMap.get(oldLehrer);
-                if (oldLehrer.equals("+") || oldLehrer.equals("---") || oldLehrer.equals(" ") || vertreter.equals(oldLehrer)) {
+                if (oldLehrer.equals("+") || oldLehrer.equals("---") || oldLehrer.equals(" ") || oldLehrer.trim().isEmpty() || vertreter.equals(oldLehrer)) {
 
                 } else {
                     if (g == null) {

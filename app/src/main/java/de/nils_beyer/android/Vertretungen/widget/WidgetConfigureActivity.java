@@ -60,8 +60,13 @@ public class WidgetConfigureActivity extends AppCompatActivity  implements View.
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
 
             Bundle widget_extras = new Bundle();
-            widget_extras.putInt(VertretungenWidgetProvider.EXTRA_ACCOUNT_ORDINAL, accountSpinner.getSelectedAccount().ordinal());
+            final int selectedAccountId = accountSpinner.getSelectedAccount().ordinal();
+            widget_extras.putInt(VertretungenWidgetProvider.EXTRA_ACCOUNT_ORDINAL, selectedAccountId);
             appWidgetManager.updateAppWidgetOptions(mAppWidgetId, widget_extras);
+
+            // Store Configuration to WidgetStorage, because AppWidgetManager is
+            // reset after a System reboot
+            WidgetConfigurationStorage.setConfig(getApplicationContext(), mAppWidgetId, selectedAccountId);
 
             VertretungenWidgetProvider.updateWidgetData(getApplicationContext());
 

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -30,10 +31,24 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             Bundle widgetOptions = appWidgetManager.getAppWidgetOptions(appWidgetId);
-            AccountSpinner.Account account = AccountSpinner.Account.values()[widgetOptions.getInt(EXTRA_ACCOUNT_ORDINAL)];
 
-            // Check if Stored Data is not null
-            if (!AccountSpinner.containsData(context, account)) {
+            // Use a special WidgetConfigurationStorage, because
+            // AppWidgetManager cannot store persistently the configuration
+            // a device reboot will delete the configuration
+            int accountId = WidgetConfigurationStorage.getConfig(context, appWidgetId);
+
+            AccountSpinner.Account account;
+            // WidgetConfigurationStorage will return -1 if there is no configuration stored.
+            if (accountId == -1) {
+                account = null;
+            } else {
+                account = AccountSpinner.Account.values()[accountId];
+            }
+
+
+            // Check if Stored Data is not null or account is not set
+            // e.g. because there is no configuration stored
+            if (account == null || !AccountSpinner.containsData(context, account)) {
                 // When we don't have Data to present
                 // Show an error to the user
                 // because we cannot delete the AppWidget

@@ -105,7 +105,7 @@ limitations under the License.\n\
     <string name="marked_courses_title">Markierte Kurse</string>
     <string name="marked_courses_menu_entry">Markierte Kurse</string>
     <string name="marked_courses_remove_all">Alle entfernen</string>
-    <string name="marked_courses_info">Hier kannst du Kurse definieren, die besonders hervorgehoben werden sollen. Bitte gibt den vollständigen und offiziellen Namen deiner Kurse an.</string>
+    <string name="marked_courses_info">Hier können Sie Kurse definieren, die besonders hervorgehoben werden sollen. Bitte geben Sie den vollständigen und offiziellen Namen Ihrer Kurse an.</string>
     <string name="marked_courses_delete">Löschen</string>
     <string name="title_activity_widget_configure">WidgetConfigureActivity</string>
 </resources>

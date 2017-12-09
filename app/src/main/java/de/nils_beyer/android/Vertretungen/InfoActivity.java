@@ -49,10 +49,6 @@ public class InfoActivity extends AppCompatActivity {
         // Setup BuildVariant Label
         TextView buildVariant = (TextView) findViewById(R.id.info_build_variant);
         if (version.endsWith("D")) {
-            if (Build.VERSION.SDK_INT >= 21)
-                getWindow().setStatusBarColor(Color.RED);
-
-            toolbar.setBackgroundColor(Color.RED);
             buildVariant.setText(String.format(getString(R.string.info_warning_debug), "DEBUG"));
         } else if (version.endsWith("R")) {
             buildVariant.setText(String.format(getString(R.string.info_warning_debug), "RELEASE"));

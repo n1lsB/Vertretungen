@@ -25,7 +25,7 @@ android {
 }
 
 dependencies {
-    compile files('libs/jsoup-1.11.1.jar')
+    compile files('libs/jsoup-1.11.2.jar')
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.android.support:customtabs:25.4.0'
     compile 'com.android.support:appcompat-v7:25.4.0'

@@ -77,7 +77,7 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
         if (AccountSpinner.containsData(context, account)) {
             Date dateToday = AccountSpinner.getToday(context, account).getDate();
             Date dateTomorrow = AccountSpinner.getTomorrow(context, account).getDate();
-            if (DateParser.sameDay(dateToday, new Date())) {
+            if (DateParser.after(dateToday, new Date()) || DateParser.sameDay(dateToday, new Date())) {
                 remoteViews.setTextViewText(R.id.widget_title_text, "Vertretungen (" + DateParser.parseDateToShortString(context, dateToday) + ")");
             } else {
                 remoteViews.setTextViewText(R.id.widget_title_text, "Vertretungen (" + DateParser.parseDateToShortString(context, dateTomorrow) + ")");

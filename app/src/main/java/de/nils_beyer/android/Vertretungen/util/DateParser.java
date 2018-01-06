@@ -33,6 +33,20 @@ public class DateParser {
     }
 
     /**
+     * Checks if date1 is after date2
+     * @return true, if date1 is after date2, else false.
+     */
+    public static boolean after(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+
+        cal1.setTime(date1);
+        cal2.setTime(date2);
+
+        return cal1.after(cal2);
+    }
+
+    /**
      * Parses a date object to a String
      * @param date the date object to be parsed
      * @return parsed Date

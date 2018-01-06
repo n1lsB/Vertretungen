@@ -164,7 +164,7 @@ class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
         AccountSpinner.Account account = AccountSpinner.Account.values()[accountOrdinal];
         Date dateToday = AccountSpinner.getToday(context, account).getDate();
-        if (DateParser.sameDay(dateToday, new Date())) {
+        if (DateParser.after(dateToday, new Date()) || DateParser.sameDay(dateToday, new Date())) {
             groupCollection = AccountSpinner.getToday(context, account);
         } else {
             groupCollection = AccountSpinner.getTomorrow(context, account);

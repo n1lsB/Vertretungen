@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     useLibrary 'org.apache.http.legacy'
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "de.nils_beyer.android.testapplication"
         minSdkVersion 17
-        targetSdkVersion 24
+        targetSdkVersion 26
         versionCode 12
         versionName "1.6.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -25,13 +25,13 @@ android {
 }
 
 dependencies {
-    compile files('libs/jsoup-1.11.2.jar')
-    compile 'com.google.code.gson:gson:2.8.2'
-    compile 'com.android.support:customtabs:25.4.0'
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support:design:25.4.0'
-    compile 'com.android.support:support-v4:25.4.0'
-    compile 'com.android.support:cardview-v7:25.4.0'
-    compile 'com.android.support:recyclerview-v7:25.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation files('libs/jsoup-1.11.2.jar')
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.android.support:customtabs:26.1.0'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }

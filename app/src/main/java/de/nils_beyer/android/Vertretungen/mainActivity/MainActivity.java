@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         tabLayout.setupWithViewPager(mViewPager);
 
         fab = (ChromeCustomTabsFAB) findViewById(R.id.floatingActionButton);
-        fab.setup(this);
+        fab.init(this);
     }
 
     @Override
@@ -204,31 +204,30 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     }
 
     @Override
-    public StudentStorage.source getSelectedSource() {
-        switch(tabLayout.getSelectedTabPosition()) {
+    /**
+     * Returns the origin URL of the selected tab. Used for the chrome custom tab button
+     */
+    public String getSelectedURL() {
+        switch (tabLayout.getSelectedTabPosition()) {
             case 0:
-                return StudentStorage.source.Today;
+                // Today
+                return accountSpinner.getUrlToday();
             case 1:
-                return StudentStorage.source.Tomorrow;
+                // Tomorrow
+                return accountSpinner.getUrlTomorrow();
             default:
                 return null;
         }
     }
 
     @Override
-    public String getURlToday() {
-        return accountSpinner.getUrlToday();
-    }
-
-    @Override
-    public String getURLTomorrow() {
-        return accountSpinner.getUrlTomorrow();
-    }
-
-    @Override
-    public String getHTTPHeaderAuthorization() {
+    /**
+     * Returns the HTTP Header authorization property for login. Used for the chrome custom tab button.
+     */
+    public String getHttpHeaderAuthorization() {
         return accountSpinner.getHTTPHeaderAuthorization();
     }
+
 
     public void update() {
         mOverviewSectionsAdapter.update(accountSpinner.getToday(), accountSpinner.getTomorrow());

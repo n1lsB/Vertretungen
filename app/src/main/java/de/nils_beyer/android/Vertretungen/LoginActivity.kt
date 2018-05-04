@@ -11,8 +11,8 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner
+
 
 class LoginActivity : AppCompatActivity() {
     var canClose: Boolean = false
@@ -21,10 +21,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        login_account_spinner.setViewConfig(AccountSpinner.ViewConfig.SHOW_UNREGISTERED)
+
         // Set canClose:
         // If we have only unregistered Accounts
         // we cannot close the activity
-        canClose = !AccountSpinner.hasOnlyUnregistered(applicationContext)
+        canClose = !login_account_spinner.hasOnlyUnregistered(applicationContext)
 
 
         if (Build.VERSION.SDK_INT >= 23) {
@@ -98,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
     private fun checkPassword(callback: (Boolean)->(Unit), error : (Exception) -> Unit) {
         Thread(Runnable {
             try {
-                val result = login_account_spinner.tryRegister(login_username.text.toString(), login_password.text.toString())
+                val result = login_account_spinner.getSelectedAccount()!!.tryRegister(this, login_username.text.toString(), login_password.text.toString())
                 if (result) {
                     runOnUiThread { callback(true) }
                 } else {

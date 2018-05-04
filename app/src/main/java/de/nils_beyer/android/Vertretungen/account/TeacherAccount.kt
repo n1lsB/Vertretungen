@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.util.Base64
 import de.nils_beyer.android.Vertretungen.R
 import de.nils_beyer.android.Vertretungen.data.GroupCollection
-import de.nils_beyer.android.Vertretungen.download.StudentDownloadService
 import de.nils_beyer.android.Vertretungen.download.TeacherDownloadService
 import de.nils_beyer.android.Vertretungen.download.downloadHTMLFileWithCredientials
 import de.nils_beyer.android.Vertretungen.storage.TeacherStorage

@@ -30,15 +30,11 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
     public static final String isDownloadingKey = "IS_DOWNLOADING_KEY";
 
-
     private OverviewSectionsAdapter mOverviewSectionsAdapter;
-
     private boolean isDownloading = false;
-
     private TabLayout tabLayout;
     private ChromeCustomTabsFAB fab;
     private AccountSpinner accountSpinner;
-
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -61,8 +57,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(),
                 getSupportFragmentManager(),
                 this,
-                accountSpinner.getSelectedAccount().getAvailableDatasets()[0].getData(this),
-                accountSpinner.getSelectedAccount().getAvailableDatasets()[1].getData(this));
+                accountSpinner.getSelectedAccount());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mOverviewSectionsAdapter);
@@ -137,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == KlasseRequestCode ) {
             if (resultCode == StudentDownloadService.RESULT_CODE) {
+                mOverviewSectionsAdapter.hideDownloading();
                 update();
                 isDownloading = false;
 
@@ -144,14 +140,13 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.download_success), Snackbar.LENGTH_SHORT);
                 snackbar.show();
-                mOverviewSectionsAdapter.hideDownloading();
             } else if (resultCode == StudentDownloadService.ERROR_CODE) {
+                mOverviewSectionsAdapter.hideDownloading();
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.io_error), Snackbar.LENGTH_LONG);
 
                 isDownloading = false;
-                mOverviewSectionsAdapter.hideDownloading();
                 snackbar.show();
             }
         }
@@ -210,16 +205,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
      * Returns the origin URL of the selected tab. Used for the chrome custom tab button
      */
     public String getSelectedURL() {
-        switch (tabLayout.getSelectedTabPosition()) {
-            case 0:
-                // Today
-                return accountSpinner.getSelectedAccount().getAvailableDatasets()[0].getURL();
-            case 1:
-                // Tomorrow
-                return accountSpinner.getSelectedAccount().getAvailableDatasets()[1].getURL();
-            default:
-                return null;
-        }
+        return mOverviewSectionsAdapter.getDataset(tabLayout.getSelectedTabPosition()).getURL();
     }
 
     @Override
@@ -233,8 +219,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
     public void update() {
         mOverviewSectionsAdapter.update(
-                accountSpinner.getSelectedAccount().getAvailableDatasets()[0].getData(this),
-                accountSpinner.getSelectedAccount().getAvailableDatasets()[1].getData(this));
+                accountSpinner.getSelectedAccount());
     }
 
     @Override

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
+import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
 
 
 public class WidgetConfigureActivity extends AppCompatActivity  implements View.OnClickListener{
@@ -35,7 +36,7 @@ public class WidgetConfigureActivity extends AppCompatActivity  implements View.
         accountSpinner = (AccountSpinner) findViewById(R.id.widget_config_accountSpinner);
         accountSpinner.setViewConfig(AccountSpinner.ViewConfig.SHOW_REGISTERED);
 
-        if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
+        if (accountSpinner.hasOnlyUnregistered(getApplicationContext())) {
             Toast.makeText(this, getString(R.string.widget_configure_no_account), Toast.LENGTH_LONG).show();
             finish();
         }
@@ -60,7 +61,7 @@ public class WidgetConfigureActivity extends AppCompatActivity  implements View.
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
 
             Bundle widget_extras = new Bundle();
-            final int selectedAccountId = accountSpinner.getSelectedAccount().ordinal();
+            final int selectedAccountId = AvailableAccountsKt.getAccountID(accountSpinner.getSelectedAccount());
             widget_extras.putInt(VertretungenWidgetProvider.EXTRA_ACCOUNT_ORDINAL, selectedAccountId);
             appWidgetManager.updateAppWidgetOptions(mAppWidgetId, widget_extras);
 

@@ -18,8 +18,6 @@ import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
 import de.nils_beyer.android.Vertretungen.R;
-import de.nils_beyer.android.Vertretungen.account.StudentAccount;
-import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
 
@@ -60,7 +58,11 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         accountSpinner = (AccountSpinner) findViewById(R.id.main_account_spinner);
         accountSpinner.setup(this);
 
-        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(), getSupportFragmentManager(), this, accountSpinner.getToday(), accountSpinner.getTomorrow());
+        mOverviewSectionsAdapter = new OverviewSectionsAdapter(getApplication(),
+                getSupportFragmentManager(),
+                this,
+                accountSpinner.getSelectedAccount().getAvailableDatasets()[0].getData(this),
+                accountSpinner.getSelectedAccount().getAvailableDatasets()[1].getData(this));
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mOverviewSectionsAdapter);
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
         // Update AccountSpinner in case the
         // user added another account
-        accountSpinner.checkAccountAvaibility();
+        accountSpinner.updateAccountSpinner();
 
         invalidateOptionsMenu();
 
@@ -95,21 +97,21 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         // date changed
         VertretungenWidgetProvider.updateWidgetData(getApplicationContext());
 
-        if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
+        if (accountSpinner.hasOnlyUnregistered(getApplicationContext())) {
             startActivity(new Intent(this, LoginActivity.class));
             return;
         }
 
         // Update AccountSpinner in case the
         // user added another account
-        accountSpinner.checkAccountAvaibility();
+        accountSpinner.updateAccountSpinner();
 
         if (getIntent().hasExtra(RefreshKey) && getIntent().getBooleanExtra(RefreshKey, false)) {
             getIntent().removeExtra(RefreshKey);
             requestData();
         }
 
-        if (!accountSpinner.containsData()) {
+        if (!accountSpinner.getSelectedAccount().containsData(this)) {
             requestData();
         }
     }
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         // Start Downloading Service
         PendingIntent pendingResult = createPendingResult(
                 KlasseRequestCode, new Intent(), 0);
-        accountSpinner.startDownload(pendingResult);
+        accountSpinner.getSelectedAccount().startDownload(this, pendingResult);
 
         return true;
     }
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        if (AccountSpinner.hasOnlyRegistered(getApplicationContext())) {
+        if (accountSpinner.hasOnlyRegistered(this)) {
             menu.removeItem(R.id.menu_item_login);
         }
         return true;
@@ -176,11 +178,11 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                 startActivity(new Intent(this, MarkedCoursesActivity.class));
                 return true;
             case R.id.menu_item_logout:
-                accountSpinner.logout();
-                if (AccountSpinner.hasOnlyUnregistered(getApplicationContext())) {
+                accountSpinner.getSelectedAccount().logout(this);
+                accountSpinner.updateAccountSpinner();
+                if (accountSpinner.hasOnlyUnregistered(getApplicationContext())) {
                     startActivity(new Intent(this, LoginActivity.class));
                 }
-                accountSpinner.init();
                 invalidateOptionsMenu();
                 return true;
             case R.id.menu_item_login:
@@ -211,10 +213,10 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         switch (tabLayout.getSelectedTabPosition()) {
             case 0:
                 // Today
-                return accountSpinner.getUrlToday();
+                return accountSpinner.getSelectedAccount().getAvailableDatasets()[0].getURL();
             case 1:
                 // Tomorrow
-                return accountSpinner.getUrlTomorrow();
+                return accountSpinner.getSelectedAccount().getAvailableDatasets()[1].getURL();
             default:
                 return null;
         }
@@ -225,12 +227,14 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
      * Returns the HTTP Header authorization property for login. Used for the chrome custom tab button.
      */
     public String getHttpHeaderAuthorization() {
-        return accountSpinner.getHTTPHeaderAuthorization();
+        return accountSpinner.getSelectedAccount().generateHTTPHeaderAuthorization(this);
     }
 
 
     public void update() {
-        mOverviewSectionsAdapter.update(accountSpinner.getToday(), accountSpinner.getTomorrow());
+        mOverviewSectionsAdapter.update(
+                accountSpinner.getSelectedAccount().getAvailableDatasets()[0].getData(this),
+                accountSpinner.getSelectedAccount().getAvailableDatasets()[1].getData(this));
     }
 
     @Override
@@ -240,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
     @Override
     public void onAccountChanged() {
-        if (!accountSpinner.containsData()) {
+        if (!accountSpinner.getSelectedAccount().containsData(this)) {
             requestData();
         }
         update();

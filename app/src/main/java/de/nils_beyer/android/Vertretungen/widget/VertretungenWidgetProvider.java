@@ -14,7 +14,10 @@ import android.widget.Toast;
 
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.account.Account;
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
+import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
+import de.nils_beyer.android.Vertretungen.account.Dataset;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.util.DateParser;
@@ -37,25 +40,26 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
             // a device reboot will delete the configuration
             int accountId = WidgetConfigurationStorage.getConfig(context, appWidgetId);
 
-            AccountSpinner.Account account;
+            Account<? extends Dataset> account;
             // WidgetConfigurationStorage will return -1 if there is no configuration stored.
             if (accountId == -1) {
                 account = null;
             } else {
-                account = AccountSpinner.Account.values()[accountId];
+                account = AvailableAccountsKt.getAvailableAccounts()[accountId];
             }
-
 
             // Check if Stored Data is not null or account is not set
             // e.g. because there is no configuration stored
-            if (account == null || !AccountSpinner.containsData(context, account)) {
+            if (account == null || !account.containsData(context)) {
                 // When we don't have Data to present
                 // Show an error to the user
                 // because we cannot delete the AppWidget
                 // programmatically
+                Log.d("VWP", "showing error for ID " + appWidgetId);
                 RemoteViews errorViews = new RemoteViews(context.getPackageName(), R.layout.widget_error_layout);
                 appWidgetManager.updateAppWidget(appWidgetId, errorViews);
             } else {
+                Log.d("VWP", "createWidget with ID " + appWidgetId);
                 RemoteViews remoteViews = createWidget(context, account, appWidgetId);
                 appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_listview);
@@ -63,20 +67,20 @@ public class VertretungenWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    public RemoteViews createWidget(Context context, AccountSpinner.Account account, int appWidgetId) {
+    public RemoteViews createWidget(Context context, Account account, int appWidgetId) {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         Intent serviceIntent =  new Intent(context, WidgetService.class);
         serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        serviceIntent.putExtra(WidgetFactory.EXTRA_ACCOUNT_ORDINAL, account.ordinal());
+        serviceIntent.putExtra(WidgetFactory.EXTRA_ACCOUNT_ORDINAL, AvailableAccountsKt.getAccountID(account));
         // when intents are compared, the extras are ignored, so we need to
         // embed the extras into the data so that the extras will not be ignored
         serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
         remoteViews.setRemoteAdapter(R.id.widget_listview, serviceIntent);
 
-        if (AccountSpinner.containsData(context, account)) {
-            Date dateToday = AccountSpinner.getToday(context, account).getDate();
-            Date dateTomorrow = AccountSpinner.getTomorrow(context, account).getDate();
+        if (account.containsData(context)) {
+            Date dateToday = account.getAvailableDatasets()[0].getData(context).getDate();
+            Date dateTomorrow = account.getAvailableDatasets()[1].getData(context).getDate();
             if (DateParser.after(dateToday, new Date()) || DateParser.sameDay(dateToday, new Date())) {
                 remoteViews.setTextViewText(R.id.widget_title_text, "Vertretungen (" + DateParser.parseDateToShortString(context, dateToday) + ")");
             } else {

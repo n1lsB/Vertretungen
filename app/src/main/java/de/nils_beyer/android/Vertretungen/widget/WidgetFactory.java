@@ -10,7 +10,11 @@ import android.widget.RemoteViewsService;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.nils_beyer.android.Vertretungen.account.Account;
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
+import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
+import de.nils_beyer.android.Vertretungen.account.StudentAccount;
+import de.nils_beyer.android.Vertretungen.account.TeacherAccount;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.data.TeacherEntry;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedTeacher;
@@ -162,12 +166,12 @@ class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     public void onDataSetChanged() {
         Log.d("Factory", "onDataSetChanged: ");
 
-        AccountSpinner.Account account = AccountSpinner.Account.values()[accountOrdinal];
-        Date dateToday = AccountSpinner.getToday(context, account).getDate();
+        Account account = AvailableAccountsKt.getAvailableAccounts()[accountOrdinal];
+        Date dateToday = account.getAvailableDatasets()[0].getData(context).getDate();
         if (DateParser.after(dateToday, new Date()) || DateParser.sameDay(dateToday, new Date())) {
-            groupCollection = AccountSpinner.getToday(context, account);
+            groupCollection = account.getAvailableDatasets()[0].getData(context);
         } else {
-            groupCollection = AccountSpinner.getTomorrow(context, account);
+            groupCollection = account.getAvailableDatasets()[1].getData(context);
         }
 
         StudentStorage.sort(context, groupCollection.getGroupArrayList());
@@ -175,13 +179,11 @@ class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
         klasses = new ArrayList<>();
         boolean hasMarked = false;
-        switch (account) {
-            case Student:
-                hasMarked = MarkedKlasses.hasMarked(context);
-                break;
-            case Teacher:
-                hasMarked = MarkedTeacher.hasMarked(context);
-                break;
+        // TODO Implement marking classes/teachers inside account
+        if (account == StudentAccount.INSTANCE) {
+            hasMarked = MarkedKlasses.hasMarked(context);
+        } else if (account == TeacherAccount.INSTANCE) {
+            hasMarked = MarkedTeacher.hasMarked(context);
         }
         if (hasMarked) {
             for (Group k : groupCollection.getGroupArrayList()) {

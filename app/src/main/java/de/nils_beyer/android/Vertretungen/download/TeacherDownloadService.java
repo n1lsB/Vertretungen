@@ -108,36 +108,11 @@ public class TeacherDownloadService extends IntentService {
     }
 
     protected String downloadHTMLFile(String url) throws Exception {
-        return downloadHTMLFile(getApplicationContext(), url, TeacherAccount.getUserName(getApplicationContext()), TeacherAccount.getPassword(getApplicationContext()));
+        return downloadHTMLFile(url, TeacherAccount.getUserName(getApplicationContext()), TeacherAccount.getPassword(getApplicationContext()));
     }
 
-    public static String downloadHTMLFile(Context c, String url, String username, String password) throws  Exception{
-        HttpsURLConnection urlConnection = (HttpsURLConnection) new URL(url).openConnection();
-        urlConnection.setRequestProperty("Authorization", TeacherAccount.generateHTTPHeaderAuthorization(username, password));
-
-        try {
-            final int responseCode = urlConnection.getResponseCode();
-
-            if (responseCode == 401) {
-                throw new SecurityException("Authorization error");
-            }
-            if (responseCode != 200) {
-                throw new IOException("HttpConection Response Code not 200");
-            }
-            StringBuilder stringBuilder = new StringBuilder();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "ISO-8859-1"));
-            String line = "";
-            while ((line = br.readLine()) != null) {
-                stringBuilder.append(line + '\n');
-            }
-
-            return stringBuilder.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-
+    public static String downloadHTMLFile(String url, String username, String password) throws IllegalStateException, SecurityException {
+        return DownloadHTMLKt.downloadHTMLFileWithCredientials(url, username, password);
     }
 
     protected ArrayList<? extends Group> parseHTMLFile(String html) {

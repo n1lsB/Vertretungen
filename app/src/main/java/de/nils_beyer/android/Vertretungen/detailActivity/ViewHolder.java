@@ -16,7 +16,7 @@ import de.nils_beyer.android.Vertretungen.preferences.MarkedCourses;
  * Created by nbeye on 02. Okt. 2017.
  */
 
-class ViewHolder extends RecyclerView.ViewHolder {
+public class ViewHolder extends RecyclerView.ViewHolder {
     private Context context;
     private Group group;
 

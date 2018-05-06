@@ -39,7 +39,7 @@
                 android:textStyle="italic" />
 
             <TextView
-                android:id="@+id/text_time"
+                android:id="@+id/text_event_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -154,8 +154,8 @@
                 android:id="@+id/icon_marked_courses"
                 android:layout_width="13sp"
                 android:layout_height="12sp"
-                android:layout_alignBottom="@id/text_time"
-                android:layout_alignTop="@id/text_time"
+                android:layout_alignBottom="@id/text_event_time"
+                android:layout_alignTop="@id/text_event_time"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_star_black_24dp" />
 

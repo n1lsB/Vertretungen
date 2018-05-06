@@ -1,7 +1,6 @@
 package de.nils_beyer.android.Vertretungen.detailActivity;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,7 +36,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         this.group = group;
 
         text_original = (TextView) v.findViewById(R.id.text_original);
-        text_time = (TextView) v.findViewById(R.id.text_time);
+        text_time = (TextView) v.findViewById(R.id.text_event_time);
         text_replacement = (TextView) v.findViewById(R.id.text_modified);
         text_type = (TextView) v.findViewById(R.id.text_type);
         text_info = (TextView) v.findViewById(R.id.text_info);

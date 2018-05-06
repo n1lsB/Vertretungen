@@ -3,6 +3,7 @@ package de.nils_beyer.android.Vertretungen.download
 import de.nils_beyer.android.Vertretungen.account.TeacherAccount
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
@@ -21,7 +22,7 @@ fun downloadHTMLFileWithCredientials(url : String, username : String, password :
     }
 
     if (httpStatusCode != 200) {
-        throw IllegalStateException("HTTP respoonse code not 200, but not 401")
+        throw IllegalStateException("HTTP respoonse code not 200")
     }
 
     // Read the content of the HTML file
@@ -33,9 +34,9 @@ fun downloadHTMLFileWithCredientials(url : String, username : String, password :
 }
 
 @Throws(IllegalStateException::class)
-fun downloadHTMLFile(url : String) : String {
+fun downloadHTMLFileViaHTTP(url : String) : String {
     // Setup HTTP connection
-    val urlConnection = URL(url).openConnection() as HttpsURLConnection
+    val urlConnection = URL(url).openConnection() as HttpURLConnection
 
     // Get the server-side response code of the http request
     val httpStatusCode = urlConnection.responseCode

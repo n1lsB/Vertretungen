@@ -31,3 +31,22 @@ fun downloadHTMLFileWithCredientials(url : String, username : String, password :
 
     return html;
 }
+
+@Throws(IllegalStateException::class)
+fun downloadHTMLFile(url : String) : String {
+    // Setup HTTP connection
+    val urlConnection = URL(url).openConnection() as HttpsURLConnection
+
+    // Get the server-side response code of the http request
+    val httpStatusCode = urlConnection.responseCode
+
+    if (httpStatusCode != 200) {
+        throw IllegalStateException("HTTP respoonse code not 200, but not 401")
+    }
+
+    // Read the content of the HTML file
+    val br = BufferedReader(InputStreamReader(urlConnection.inputStream, "ISO-8859-1"))
+    val html = br.use(BufferedReader::readText)
+
+    return html;
+}

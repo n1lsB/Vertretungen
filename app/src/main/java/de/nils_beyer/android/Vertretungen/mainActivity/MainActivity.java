@@ -21,6 +21,7 @@ import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
 import de.nils_beyer.android.Vertretungen.R;
+import de.nils_beyer.android.Vertretungen.events.EventsDownloadService;
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
 
@@ -118,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         if (isDownloading) {
             return false;
         }
+
+        // Download new events
+        EventsDownloadService.startDownload(this);
 
         isDownloading = true;
         mOverviewSectionsAdapter.showDownloading();

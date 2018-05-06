@@ -3,6 +3,7 @@ package de.nils_beyer.android.Vertretungen.events
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import java.util.*
 
 private const val KEY_PREFERENCE_STORAGE = "KEY_PREFERENCE_STORAGE"
 private const val EVENTS_KEY = "STORAGE_KEY_FOR_EVENTS"
@@ -20,6 +21,12 @@ object EventStorage {
             return stringSet.map {
                 Gson().fromJson(it, Event::class.java)
             }
+        }
+    }
+
+    fun getEventsAt(context : Context, date: Date) : List<Event> {
+        return get(context).filter {
+            it.intersects(date)
         }
     }
 }

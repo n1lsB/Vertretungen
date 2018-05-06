@@ -9,6 +9,9 @@
     <string name="overview_adapter_entry_multiple">%s Vertretungen</string>
     <string name="overview_adapter_immediacity">Stand: %1$s %2$s</string>
 
+    <!-- Overview: Events -->
+    <string name="overview_events_info">Heutige Veranstaltung</string>
+
     <!-- Account Names -->
     <string name="account_name_student">Schülervertretungsplan</string>
     <string name="account_name_teacher">Lehrervertretungsplan</string>

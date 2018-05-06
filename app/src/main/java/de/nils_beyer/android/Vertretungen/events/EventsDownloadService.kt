@@ -28,8 +28,12 @@ class EventsDownloadService : IntentService(EventsDownloadService::class.simpleN
             val dateDescription = it.child(0).text()
             val dates = parseDateDescription(dateDescription)
 
-            val timeDescription = it.child(1).text()
+            var timeDescription = it.child(1).text()
+            if (timeDescription.trim().isEmpty()) {
+                timeDescription = null
+            }
             val title = it.child(2).text()
+
 
             Event(dates.first, dates.second, timeDescription, title)
         }

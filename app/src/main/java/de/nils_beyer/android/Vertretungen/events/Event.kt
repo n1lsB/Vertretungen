@@ -22,12 +22,8 @@ fun Date.sameDay(otherDay : Date) : Boolean {
     val c2 = Calendar.getInstance()
 
     c1.time = this
-    c2.time = this
+    c2.time = otherDay
 
-    if (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
-            c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)) {
-        return true
-    } else {
-        return false
-    }
+    return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+            c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR)
 }

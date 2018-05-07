@@ -18,7 +18,8 @@ class GroupViewHolder(v: View, val context : Context) : RecyclerView.ViewHolder(
     var cardView = v.findViewById<View>(R.id.overview_card) as CardView
     var marked = v.findViewById<View>(R.id.image_class_marked) as ImageView
 
-    fun bind(groupCollection : GroupCollection, group : Group) {
+    fun bind(groupCollection : GroupCollection, position : Int) {
+        val group = groupCollection.groupArrayList[position]
         if (group is TeacherGroup) {
             className.text = String.format(context.getString(R.string.overview_adapter_group_teacher), group.name)
         } else {

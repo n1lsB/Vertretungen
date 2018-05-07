@@ -21,7 +21,7 @@ class OverviewAdapter(private val context: Context, private var groupCollection:
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is GroupViewHolder) {
-            holder.bind(groupCollection, groupCollection.groupArrayList[position - events!!.size - 1])
+            holder.bind(groupCollection, position - events!!.size - 1)
         } else if (holder is ImmediacityViewHolder) {
             holder.bind(groupCollection.immediacity)
         } else if (holder is EventViewHolder) {

@@ -30,6 +30,7 @@ object TeacherAccount : Account<TeacherAccount.TeacherDatasets>() {
     private const val KEY_PREFERENCE_ACCOUNT = "KEY_PREFERENCE_ACCOUNT_TEACHER"
     private const val KEY_USER_NAME = "KEY_USER_NAME"
     private const val KEY_PASSWORD = "KEY_PASSWORD"
+    private const val KEY_VALID = "KEY_VALID"
 
     override fun getTitle(context: Context): String {
         return context.getString(R.string.account_name_teacher)
@@ -54,7 +55,9 @@ object TeacherAccount : Account<TeacherAccount.TeacherDatasets>() {
     }
 
     @JvmStatic
-    fun register(c: Context, _username: String, _password: String) {
+    // DO not make this function public!
+    // Registration attemps should be performed by tryRegister
+    private fun register(c: Context, _username: String, _password: String) {
         sharedPreferences(c) {
             it.edit()
                 .putString(KEY_PASSWORD, _password)
@@ -65,15 +68,30 @@ object TeacherAccount : Account<TeacherAccount.TeacherDatasets>() {
 
 
 
-    override fun isRegistered(c: Context): Boolean {
-        return sharedPreferences(c) {
+    override fun isRegistered(context: Context): Boolean {
+        return sharedPreferences(context) {
             it.contains(KEY_USER_NAME) && it.contains(KEY_PASSWORD)
         }
     }
 
-    override fun logout(c: Context) {
-        sharedPreferences(c) {
+    override fun logout(context: Context) {
+        sharedPreferences(context) {
             it.edit().clear().apply()
+        }
+    }
+
+    override fun setLoginValid(context: Context, valid: Boolean) {
+        sharedPreferences(context) {
+            it.edit().putBoolean(KEY_VALID, valid).apply()
+        }
+    }
+
+    override fun isLoginValid(context: Context): Boolean {
+        if (!isRegistered(context)) {
+            return false
+        }
+        return sharedPreferences(context) {
+            it.getBoolean(KEY_VALID, true)
         }
     }
 
@@ -83,8 +101,8 @@ object TeacherAccount : Account<TeacherAccount.TeacherDatasets>() {
                 "$username:$password".toByteArray(), Base64.DEFAULT)
     }
 
-    override fun generateHTTPHeaderAuthorization(c: Context): String {
-        return generateHTTPHeaderAuthorization(getUserName(c), getPassword(c))
+    override fun generateHTTPHeaderAuthorization(context: Context): String {
+        return generateHTTPHeaderAuthorization(getUserName(context), getPassword(context))
     }
 
     private inline fun <T> sharedPreferences(context : Context, body: (sharedPreferences : SharedPreferences) -> (T)) : T {
@@ -92,14 +110,12 @@ object TeacherAccount : Account<TeacherAccount.TeacherDatasets>() {
         return body(sharedPreferences)
     }
 
-    override fun tryRegister(context: Context, username: String, password: String): Boolean {
-        return try {
-            downloadHTMLFileWithCredientials(TeacherDatasets.Today.getURL(), username, password)
-            register(context, username, password)
-            true
-        } catch(e : Exception) {
-            false
-        }
+    @Throws(SecurityException::class, IllegalStateException::class)
+    override fun tryRegister(context: Context, username: String, password: String): Boolean  {
+        downloadHTMLFileWithCredientials(TeacherDatasets.Today.getURL(), username, password)
+        register(context, username, password)
+        setLoginValid(context, true)
+        return true
     }
 
     override fun getAvailableDatasets(): Array<TeacherDatasets> {

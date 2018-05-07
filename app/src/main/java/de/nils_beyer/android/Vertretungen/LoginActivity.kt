@@ -100,12 +100,8 @@ class LoginActivity : AppCompatActivity() {
     private fun checkPassword(callback: (Boolean)->(Unit), error : (Exception) -> Unit) {
         Thread(Runnable {
             try {
-                val result = login_account_spinner.getSelectedAccount()!!.tryRegister(this, login_username.text.toString(), login_password.text.toString())
-                if (result) {
-                    runOnUiThread { callback(true) }
-                } else {
-                    runOnUiThread { error(Exception()) }
-                }
+                login_account_spinner.getSelectedAccount()!!.tryRegister(this, login_username.text.toString(), login_password.text.toString())
+                runOnUiThread { callback(true) }
             } catch (e: SecurityException) {
                 // In case that the authorization
                 // credentials are wrong

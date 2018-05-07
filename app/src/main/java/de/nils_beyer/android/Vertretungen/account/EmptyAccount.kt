@@ -40,6 +40,14 @@ class EmptyAccount : Account<EmptyAccount.EmptyDataset>() {
         return arrayOf(EmptyDataset(), EmptyDataset())
     }
 
+    override fun setLoginValid(context: Context, valid: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun isLoginValid(context: Context): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun containsData(context: Context): Boolean = false
 
     override fun startDownload(context: Context, returnIntent: PendingIntent) {

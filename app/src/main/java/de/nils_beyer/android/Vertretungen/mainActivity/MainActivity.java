@@ -12,8 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
+import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
+import de.nils_beyer.android.Vertretungen.download.DownloadResultCodes;
 import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
@@ -129,9 +132,9 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == KlasseRequestCode ) {
-            if (resultCode == StudentDownloadService.RESULT_CODE) {
+            if (resultCode == DownloadResultCodes.RESULT_SUCCESS.ordinal()) {
                 mOverviewSectionsAdapter.hideDownloading();
                 update();
                 isDownloading = false;
@@ -140,12 +143,31 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.download_success), Snackbar.LENGTH_SHORT);
                 snackbar.show();
-            } else if (resultCode == StudentDownloadService.ERROR_CODE) {
+            } else if (resultCode == DownloadResultCodes.RESULT_ERROR.ordinal()) {
                 mOverviewSectionsAdapter.hideDownloading();
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
                 Snackbar snackbar = Snackbar
                         .make(coordinatorLayout, getString(R.string.io_error), Snackbar.LENGTH_LONG);
 
+                isDownloading = false;
+                snackbar.show();
+            } else if (resultCode == DownloadResultCodes.RESULT_AUTHENTICATION_ERROR.ordinal()) {
+                mOverviewSectionsAdapter.hideDownloading();
+                CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, getString(R.string.authentication_error), Snackbar.LENGTH_LONG);
+
+                final int accountId = data.getIntExtra(DownloadResultCodes.RESULT_AUTHENTICATION_ERROR.getAdditionalDataKey(), -1);
+                if (accountId != -1) {
+                    snackbar.setAction(getString(R.string.authentication_error_reregister), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            AvailableAccountsKt.getAvailableAccounts()[accountId].logout(getApplicationContext());
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            invalidateOptionsMenu();
+                        }
+                    });
+                }
                 isDownloading = false;
                 snackbar.show();
             }

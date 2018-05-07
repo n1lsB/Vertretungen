@@ -1,7 +1,6 @@
 package de.nils_beyer.android.Vertretungen.mainActivity
 
 import android.content.Context
-import android.provider.CalendarContract
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,29 +14,24 @@ import de.nils_beyer.android.Vertretungen.mainActivity.viewholder.GroupViewHolde
 import de.nils_beyer.android.Vertretungen.mainActivity.viewholder.ImmediacityViewHolder
 
 class OverviewAdapter(private val context: Context, private var groupCollection: GroupCollection) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    public enum class ViewTypes { GroupViewHolder, ImmediacityViewHolder, EventsViewHolder }
+    enum class ViewTypes { GroupViewHolder, ImmediacityViewHolder, EventsViewHolder }
 
     private var events : List<Event>? = null
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is GroupViewHolder) {
-            holder.bind(groupCollection, position - events!!.size - 1)
-        } else if (holder is ImmediacityViewHolder) {
-            holder.bind(groupCollection.immediacity)
-        } else if (holder is EventViewHolder) {
-            holder.bind(events!![position])
-
+        when (holder) {
+            is GroupViewHolder -> holder.bind(groupCollection, position - events!!.size - 1)
+            is ImmediacityViewHolder -> holder.bind(groupCollection.immediacity)
+            is EventViewHolder -> holder.bind(events!![position])
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         val eventsCount = events!!.size
-        if (position < eventsCount) {
-            return ViewTypes.EventsViewHolder.ordinal
-        } else if (position == eventsCount) {
-            return ViewTypes.ImmediacityViewHolder.ordinal
-        } else {
-            return ViewTypes.GroupViewHolder.ordinal
+        return when {
+            position < eventsCount -> ViewTypes.EventsViewHolder.ordinal
+            position == eventsCount -> ViewTypes.ImmediacityViewHolder.ordinal
+            else -> ViewTypes.GroupViewHolder.ordinal
         }
     }
 
@@ -50,23 +44,23 @@ class OverviewAdapter(private val context: Context, private var groupCollection:
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == ViewTypes.ImmediacityViewHolder.ordinal) {
-            val v = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.recyclerview_overview_immediacity, parent, false)
-            val vh = ImmediacityViewHolder(v, context)
-            return vh
-        } else if (viewType == ViewTypes.GroupViewHolder.ordinal) {
-            val v = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.recyclerview_overview_layout, parent, false)
-            val vh = GroupViewHolder(v, context)
-            return vh
-        } else if (viewType == ViewTypes.EventsViewHolder.ordinal) {
-            val v = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.recyclerview_overview_event, parent, false)
-            val vh = EventViewHolder(v, context)
-            return vh
-        } else {
-            TODO("not yet implemented?!")
+        when (viewType) {
+            ViewTypes.ImmediacityViewHolder.ordinal -> {
+                val v = LayoutInflater.from(parent.context)
+                        .inflate(R.layout.recyclerview_overview_immediacity, parent, false)
+                return ImmediacityViewHolder(v, context)
+            }
+            ViewTypes.GroupViewHolder.ordinal -> {
+                val v = LayoutInflater.from(parent.context)
+                        .inflate(R.layout.recyclerview_overview_layout, parent, false)
+                return GroupViewHolder(v, context)
+            }
+            ViewTypes.EventsViewHolder.ordinal -> {
+                val v = LayoutInflater.from(parent.context)
+                        .inflate(R.layout.recyclerview_overview_event, parent, false)
+                return EventViewHolder(v, context)
+            }
+            else -> TODO("not yet implemented?!")
         }
     }
 

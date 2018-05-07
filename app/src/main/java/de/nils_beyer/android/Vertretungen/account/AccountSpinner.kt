@@ -61,7 +61,7 @@ class AccountSpinner(context: Context, attrs: AttributeSet) : AppCompatSpinner(c
         selectedAccount = if (accountList.size > 0) accountList[0] else null
 
         onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 // TODO: could do better by using the array adapter with the account objects
                 selectedAccount = accountList.filter { it.getTitle(context) == selectedItem as String }[0]
 

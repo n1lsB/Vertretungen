@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.account.TeacherAccount;
 import de.nils_beyer.android.Vertretungen.data.Entry;
@@ -57,8 +58,6 @@ public class TeacherDownloadService extends IntentService {
     public static final String URL_TODAY = "https://burgaugymnasium.de/vertretungsplan/lul/heute/subst_001.htm";
     public static final String URL_TOMORROW = "https://burgaugymnasium.de/vertretungsplan/lul/morgen/subst_001.htm";
 
-    public static final int RESULT_CODE = 0;
-    public static final int ERROR_CODE = 2;
 
     public TeacherDownloadService() {
         super(TAG);
@@ -92,15 +91,25 @@ public class TeacherDownloadService extends IntentService {
                 GroupCollection tomorrow = new GroupCollection(dateTomorrow, immediacyTomorrow, dataSetTomorrow);
 
                 TeacherStorage.save(getApplicationContext(), today, tomorrow);
+
+                // If we pass until here, the download was successful and we can
+                // store that the login is still valid.
+                StudentAccount.INSTANCE.setLoginValid(getApplicationContext(), true);
+
+
                 VertretungenWidgetProvider.updateWidgetData(this);
-
-
-                reply.send(this, RESULT_CODE, result);
+                reply.send(this, DownloadResultCodes.RESULT_SUCCESS.ordinal(), result);
             } catch (SecurityException exc) {
-                reply.send(ERROR_CODE);
+                // The given username/password are incorrect
+                StudentAccount.INSTANCE.setLoginValid(getApplicationContext(), false);
+                Intent data = new Intent();
+                data.putExtra(DownloadResultCodes.RESULT_AUTHENTICATION_ERROR.getAdditionalDataKey(),
+                        AvailableAccountsKt.getAccountID(TeacherAccount.INSTANCE));
+                reply.send(getApplicationContext(), DownloadResultCodes.RESULT_AUTHENTICATION_ERROR.ordinal(), data);
             } catch (Exception exc) {
                 // could do better by treating the different sax/xml exceptions individually
-                reply.send(ERROR_CODE);
+                Log.e("TeacherDownload", exc.getMessage());
+                reply.send(DownloadResultCodes.RESULT_ERROR.ordinal());
             }
         } catch (PendingIntent.CanceledException exc) {
             Log.i(TAG, "reply cancelled", exc);

@@ -3,7 +3,6 @@ package de.nils_beyer.android.Vertretungen.account
 import android.app.PendingIntent
 import android.content.Context
 import de.nils_beyer.android.Vertretungen.data.GroupCollection
-import java.util.*
 
 abstract class Account<T : Dataset> {
     // General
@@ -14,6 +13,10 @@ abstract class Account<T : Dataset> {
     abstract fun isRegistered(context : Context) : Boolean
     abstract fun logout(context : Context)
     abstract fun generateHTTPHeaderAuthorization(context : Context) : String
+
+    abstract fun setLoginValid(context: Context, valid: Boolean)
+    abstract fun isLoginValid(context: Context): Boolean
+
 
     // Datasets
     abstract fun getAvailableDatasets() : Array<T>

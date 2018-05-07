@@ -23,6 +23,8 @@
 
     <!-- Connection Info Texts -->
     <string name="io_error">Verbindungsfehler \nBitte überprüfen Sie Ihre Internetverbindung</string>
+    <string name="authentication_error">Anmeldedaten fehlerhaft.</string>
+    <string name="authentication_error_reregister">Neu anmelden</string>
     <string name="download_success">Daten erfolgreich heruntergeladen</string>
 
     <!-- Date Format -->

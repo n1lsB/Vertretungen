@@ -2,7 +2,6 @@ package de.nils_beyer.android.Vertretungen.download;
 
 import android.app.IntentService;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -11,10 +10,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,8 +20,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
 import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.data.Group;
@@ -52,8 +46,6 @@ public class StudentDownloadService extends IntentService {
     public static final String URL_TODAY = "https://www.burgaugymnasium.de/vertretungsplan/sus/heute/subst_001.htm";
     public static final String URL_TOMORROW = "https://www.burgaugymnasium.de/vertretungsplan/sus/morgen/subst_001.htm";
 
-    public static final int RESULT_CODE = 0;
-    public static final int ERROR_CODE = 2;
 
     public StudentDownloadService() {
         super(TAG);
@@ -84,13 +76,25 @@ public class StudentDownloadService extends IntentService {
                 Date immediacyTomorrow = readImmediacy(HTML_tomorrow);
 
                 StudentStorage.save(getApplicationContext(), dataSetToday, dataSetTomorrow, dateToday, dateTomorrow, immediacyToday, immediacyTomorrow);
+
+                // If we pass until here, the download was successful and we can
+                // store that the login is still valid.
+                StudentAccount.INSTANCE.setLoginValid(getApplicationContext(), true);
+
                 VertretungenWidgetProvider.updateWidgetData(this);
 
 
-                reply.send(this, RESULT_CODE, result);
+                reply.send(this, DownloadResultCodes.RESULT_SUCCESS.ordinal(), result);
+            } catch (SecurityException exc) {
+                // The given username/password are incorrect
+                StudentAccount.INSTANCE.setLoginValid(getApplicationContext(), false);
+                Intent data = new Intent();
+                data.putExtra(DownloadResultCodes.RESULT_AUTHENTICATION_ERROR.getAdditionalDataKey(),
+                        AvailableAccountsKt.getAccountID(StudentAccount.INSTANCE));
+                reply.send(getApplicationContext(), DownloadResultCodes.RESULT_AUTHENTICATION_ERROR.ordinal(), data);
             } catch (Exception exc) {
                 // could do better by treating the different sax/xml exceptions individually
-                reply.send(ERROR_CODE);
+                reply.send(DownloadResultCodes.RESULT_ERROR.ordinal());
             }
         } catch (PendingIntent.CanceledException exc) {
             Log.i(TAG, "reply cancelled", exc);

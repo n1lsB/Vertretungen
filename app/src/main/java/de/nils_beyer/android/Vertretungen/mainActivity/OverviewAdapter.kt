@@ -69,7 +69,13 @@ class OverviewAdapter(private val context: Context, private var groupCollection:
             return
         }
         this.groupCollection = collection
-        this.events = EventStorage.getEventsAt(context, collection.date)
+        // collection.date can be null, for instance when using EmptyAccount (no account is registered!)
+        // TODO Handle this better. Remove empty account
+        if (collection.date != null) {
+            this.events = EventStorage.getEventsAt(context, collection.date)
+        } else {
+            this.events = ArrayList<Event>()
+        }
         notifyDataSetChanged()
     }
 }

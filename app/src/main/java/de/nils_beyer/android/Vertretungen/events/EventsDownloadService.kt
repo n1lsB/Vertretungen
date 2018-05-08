@@ -15,9 +15,14 @@ private val eventsURL = "http://api.burgaugymnasium.de/calendar/index.php?format
 class EventsDownloadService : IntentService(EventsDownloadService::class.simpleName) {
 
     override fun onHandleIntent(intent: Intent?) {
-        val htmlContent = downloadHTMLFileViaHTTP(eventsURL)
-        val events = parseHTML(htmlContent)
-        EventStorage.save(applicationContext, events)
+        try {
+            val htmlContent = downloadHTMLFileViaHTTP(eventsURL)
+            val events = parseHTML(htmlContent)
+            EventStorage.save(applicationContext, events)
+        } catch (e : Exception) {
+            Log.e("EventDownload", "could not download new events")
+            Log.e("EventDownload", e.message)
+        }
     }
 
     private fun parseHTML(htmlContent : String) : List<Event> {

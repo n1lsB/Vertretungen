@@ -34,7 +34,7 @@ fun downloadHTMLFileWithCredientials(url : String, username : String, password :
 }
 
 @Throws(IllegalStateException::class)
-fun downloadHTMLFileViaHTTP(url : String) : String {
+fun downloadHTMLFileViaHTTP(url : String, encoding : String) : String {
     // Setup HTTP connection
     val urlConnection = URL(url).openConnection() as HttpURLConnection
 
@@ -46,7 +46,7 @@ fun downloadHTMLFileViaHTTP(url : String) : String {
     }
 
     // Read the content of the HTML file
-    val br = BufferedReader(InputStreamReader(urlConnection.inputStream, "ISO-8859-1"))
+    val br = BufferedReader(InputStreamReader(urlConnection.inputStream, encoding))
     val html = br.use(BufferedReader::readText)
 
     return html;

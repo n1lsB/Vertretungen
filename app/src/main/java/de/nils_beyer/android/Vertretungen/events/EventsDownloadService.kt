@@ -16,7 +16,7 @@ class EventsDownloadService : IntentService(EventsDownloadService::class.simpleN
 
     override fun onHandleIntent(intent: Intent?) {
         try {
-            val htmlContent = downloadHTMLFileViaHTTP(eventsURL)
+            val htmlContent = downloadHTMLFileViaHTTP(eventsURL, "UTF-8")
             val events = parseHTML(htmlContent)
             EventStorage.save(applicationContext, events)
         } catch (e : Exception) {

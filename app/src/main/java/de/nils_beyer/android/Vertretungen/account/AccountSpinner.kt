@@ -82,12 +82,12 @@ class AccountSpinner(context: Context, attrs: AttributeSet) : AppCompatSpinner(c
     fun updateAccountSpinner() {
         val accountList = filterAccounts(viewConfig)
         // check if update is needed
-        for (i in accountList.indices) {
-            if (adapter.count < i) {
-                init()
-                break
-            }
+        if (accountList.size != adapter.count) {
+            init()
+            return
+        }
 
+        for (i in accountList.indices) {
             if (accountList[i].getTitle(context) != adapter.getItem(i)) {
                 init()
                 break

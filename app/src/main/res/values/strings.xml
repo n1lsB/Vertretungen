@@ -2,6 +2,10 @@
     <string name="app_name">Vertretungsplan</string>
     <string name="app_name_short">Vertretungen</string>
 
+    <!-- OverviewSectionsAdapter -->
+    <string name="tab_events_name">Termine</string>
+    <string name="tab_substitutions_name">Ansicht %d</string>
+
     <!-- OverviewAdapter -->
     <string name="overview_adapter_group_student">Klasse %s</string>
     <string name="overview_adapter_group_teacher">Lehrer %s</string>
@@ -95,4 +99,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
     <string name="marked_courses_info">Hier können Sie Kurse definieren, die besonders hervorgehoben werden sollen. Bitte geben Sie den vollständigen und offiziellen Namen Ihrer Kurse an.</string>
     <string name="marked_courses_delete">Löschen</string>
     <string name="title_activity_widget_configure">WidgetConfigureActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

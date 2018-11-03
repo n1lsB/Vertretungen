@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        // automatically go to the second tab
+        tabLayout.getTabAt(1).select();
 
         fab = (ChromeCustomTabsFAB) findViewById(R.id.floatingActionButton);
         fab.init(this);
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         if (requestCode == KlasseRequestCode ) {
             if (resultCode == DownloadResultCodes.RESULT_SUCCESS.ordinal()) {
                 mOverviewSectionsAdapter.hideDownloading();
-                update();
+                //update(); we don't need to update here, because onStart() automatically calls update
                 isDownloading = false;
 
                 CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.main_content);

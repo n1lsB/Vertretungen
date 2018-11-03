@@ -16,18 +16,18 @@ import de.nils_beyer.android.Vertretungen.mainActivity.viewholder.ImmediacityVie
 class OverviewAdapter(private val context: Context, private var groupCollection: GroupCollection) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     enum class ViewTypes { GroupViewHolder, ImmediacityViewHolder, EventsViewHolder }
 
-    private var events : List<Event>? = null
+    private var events : List<Event> = loadEvents()
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is GroupViewHolder -> holder.bind(groupCollection, position - events!!.size - 1)
+            is GroupViewHolder -> holder.bind(groupCollection, position - events.size - 1)
             is ImmediacityViewHolder -> holder.bind(groupCollection.immediacity)
-            is EventViewHolder -> holder.bind(events!![position])
+            is EventViewHolder -> holder.bind(events[position])
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        val eventsCount = events!!.size
+        val eventsCount = events.size
         return when {
             position < eventsCount -> ViewTypes.EventsViewHolder.ordinal
             position == eventsCount -> ViewTypes.ImmediacityViewHolder.ordinal
@@ -37,9 +37,9 @@ class OverviewAdapter(private val context: Context, private var groupCollection:
 
     override fun getItemCount(): Int {
         return if (groupCollection.groupArrayList.size == 0) {
-            0 + events!!.size
+            events.size
         } else {
-            groupCollection.groupArrayList.size + 1 + events!!.size
+            groupCollection.groupArrayList.size + 1 + events.size
         }
     }
 
@@ -69,13 +69,19 @@ class OverviewAdapter(private val context: Context, private var groupCollection:
             return
         }
         this.groupCollection = collection
+        loadEvents()
+
+        notifyDataSetChanged()
+    }
+
+    private fun loadEvents() : List<Event> {
         // collection.date can be null, for instance when using EmptyAccount (no account is registered!)
         // TODO Handle this better. Remove empty account
-        if (collection.date != null) {
-            this.events = EventStorage.getEventsAt(context, collection.date)
+        if (groupCollection.date != null) {
+            this.events = EventStorage.getEventsAt(context, groupCollection.date)
         } else {
             this.events = ArrayList<Event>()
         }
-        notifyDataSetChanged()
+        return this.events
     }
 }

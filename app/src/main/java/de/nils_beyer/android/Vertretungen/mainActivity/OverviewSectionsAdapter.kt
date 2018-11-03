@@ -5,9 +5,8 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
-import android.support.v4.view.PagerAdapter
 import android.view.ViewGroup
-
+import de.nils_beyer.android.Vertretungen.R
 
 
 import de.nils_beyer.android.Vertretungen.util.DateParser
@@ -17,42 +16,56 @@ import de.nils_beyer.android.Vertretungen.account.Account
 
 internal class OverviewSectionsAdapter(private val context: Context, fm: FragmentManager, private val downloadingActivity: DownloadingActivity, private var account : Account<out Dataset>) : FragmentStatePagerAdapter(fm) {
 
-    private var fragments = arrayOfNulls<OverviewFragment>(count)
+    //private var fragments = arrayOfNulls<Fragment>(count);
+    private var datasets = account.getAvailableDatasets().map { it.getData(context) }
 
     override fun getItem(position: Int): Fragment? {
-        return OverviewFragment.getIntance(context, account.getAvailableDatasets()[position].getData(context))
+        if (position == 0) {
+            return EventListFragment();
+        } else {
+            return OverviewFragment.getIntance(context, datasets[position - 1], position)
+        }
     }
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
-        val of = super.instantiateItem(container, position) as OverviewFragment
-        fragments[position] = of
-
-        checkIfDownloading()
-
+        val of = super.instantiateItem(container, position)
+        if (of is OverviewFragment) {
+            checkIfDownloading()
+        }
         return of
     }
 
-    override fun getCount(): Int = account.getAvailableDatasets().size
+    override fun getCount(): Int = account.getAvailableDatasets().size + 1 // plus one for the calendar view
 
     override fun getPageTitle(position: Int): CharSequence? {
-        val date = account.getAvailableDatasets()[position].getData(context).date
-
-        if (date == null) {
-            return "Ansicht " + position
+        if (position == 0) {
+            // calendar view
+            return context.getString(R.string.tab_events_name)
         } else {
-            return DateParser.parseDateToShortString(context, date)
+            // substitutions view
+            val date = datasets[position - 1].date
+
+            if (date == null) {
+                return String.format(context.getString(R.string.tab_substitutions_name),
+                        position - 1)
+            } else {
+                return DateParser.parseDateToShortString(context, date)
+            }
         }
     }
 
-
-    override fun notifyDataSetChanged() {
-        // Update Fragments
-        fragments.forEachIndexed { index, overviewFragment ->
-            overviewFragment?.updateData(account.getAvailableDatasets()[index].getData(context))
+    override fun getItemPosition(pFragment: Any): Int {
+        if (pFragment is OverviewFragment) {
+            val position = pFragment.position;
+            pFragment.updateData(datasets[position - 1])
+            return position
+        } else if (pFragment is EventListFragment) {
+            pFragment.update()
+            return 0
         }
-
-        super.notifyDataSetChanged()
+        return FragmentStatePagerAdapter.POSITION_NONE
     }
+
 
     /**
      * Apply the Adapter to a new account and enforce a complete reload of the fragments
@@ -60,41 +73,46 @@ internal class OverviewSectionsAdapter(private val context: Context, fm: Fragmen
      */
     fun update(account: Account<*>) {
         this.account = account;
+        datasets = account.getAvailableDatasets().map { it.getData(context) }
         // When the new account has the same amount of tabs as the previous one,
         // we can update each tab so that the fragment stays in place.
-        if (fragments.size == account.getAvailableDatasets().size) {
-            fragments.forEachIndexed { index, overviewFragment ->
-                overviewFragment?.updateData(account.getAvailableDatasets()[index].getData(context))
-            }
+        /*if (fragments.size == count) {
+
         } else {
             // if not, we have to create a new array of fragments where we store
             // the fragments
-            val fragmentsCopy = arrayOfNulls<OverviewFragment>(account.getAvailableDatasets().size)
+            val fragmentsCopy = arrayOfNulls<Fragment>(count)
             fragments.forEachIndexed { index, overviewFragment ->
-                if (index < account.getAvailableDatasets().size)
+                if (overviewFragment is OverviewFragment && index < account.getAvailableDatasets().size)
                     fragmentsCopy[index] = overviewFragment
             }
             fragments = fragmentsCopy
-        }
+        }*/
 
         notifyDataSetChanged()
     }
 
     fun getDataset(position : Int) : Dataset {
-        if (position < 0 || position >= account.getAvailableDatasets().size) {
+        if (position - 1 < 0 || position - 1 >= account.getAvailableDatasets().size) {
             throw RuntimeException("no groupcollection at index ${position} available.")
         }
-        return account.getAvailableDatasets()[position]
+        return account.getAvailableDatasets()[position - 1]
     }
 
     fun hideDownloading() {
         // Hide Spinning Button
-        fragments.forEach { it?.resetSwipeRefreshLayout() }
+        /*fragments.forEach {
+            if (it is OverviewFragment)
+                it?.resetSwipeRefreshLayout()
+        }*/
     }
 
     fun showDownloading() {
         // Enable Spinning Button
-        fragments.forEach { it?.showSwipeRefreshLayout() }
+        /*fragments.forEach {
+            if (it is OverviewFragment)
+                it?.showSwipeRefreshLayout()
+        }*/
     }
 
     private fun checkIfDownloading() {

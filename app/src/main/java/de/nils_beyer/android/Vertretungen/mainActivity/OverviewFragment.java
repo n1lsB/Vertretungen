@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.R;
+import de.nils_beyer.android.Vertretungen.account.Dataset;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.data.Group;
@@ -28,9 +29,11 @@ public class OverviewFragment extends Fragment {
      */
     // Bundle String for Datamodel.source
     public static final String ARG_GROUP_COLLECTION = "GROUP_COLLECTION";
+    public static final String ARG_POSITION = "ARG_POSITION";
 
     // Data Model
     private GroupCollection groupCollection;
+    private int position;
 
     // View References
     private TextView noReplcaements;
@@ -45,11 +48,12 @@ public class OverviewFragment extends Fragment {
         super();
     }
 
-    public static OverviewFragment getIntance(Context c, GroupCollection collection) {
+    public static OverviewFragment getIntance(Context c, GroupCollection collection, int pos) {
 
         // Put StudentStorage.source in the bundle
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARG_GROUP_COLLECTION, collection);
+        bundle.putInt(ARG_POSITION, pos);
 
         // Create the Fragment and return it.
         OverviewFragment fragment = new OverviewFragment();
@@ -72,8 +76,10 @@ public class OverviewFragment extends Fragment {
         }
 
         if (savedInstanceState == null) {
+            position = getArguments().getInt(ARG_POSITION);
             groupCollection = (GroupCollection) getArguments().getSerializable(ARG_GROUP_COLLECTION);
         } else {
+            position = savedInstanceState.getInt(ARG_POSITION);
             groupCollection = (GroupCollection) savedInstanceState.getSerializable(ARG_GROUP_COLLECTION);
         }
         overviewAdapter = new OverviewAdapter(getContext(), groupCollection);
@@ -101,8 +107,6 @@ public class OverviewFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(overviewAdapter);
 
-        updateData(groupCollection);
-
 
 
         return rootView;
@@ -112,6 +116,11 @@ public class OverviewFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(ARG_GROUP_COLLECTION, groupCollection);
+        outState.putInt(ARG_POSITION, position);
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public void updateData(GroupCollection collection) {
@@ -134,7 +143,7 @@ public class OverviewFragment extends Fragment {
             noReplcaements.setVisibility(View.GONE);
         }
 
-        overviewAdapter.update(groupCollection);
+        overviewAdapter.update(collection);
     }
 
     void resetSwipeRefreshLayout() {

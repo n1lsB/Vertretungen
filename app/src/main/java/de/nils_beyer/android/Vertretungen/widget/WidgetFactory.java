@@ -134,7 +134,7 @@ class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         // Determinate the position of the Group inside the GroupCollection
         int gcposition = groupCollection.getGroupArrayList().indexOf(getKlasseAt(position));
 
-        Intent onClickIntent = DetailActivity.getStartIntent(context, groupCollection, gcposition);
+        Intent onClickIntent = DetailActivity.Companion.getStartIntent(context, groupCollection, gcposition);
 
 
         remoteView.setOnClickFillInIntent(R.id.widget_row_rootlayout, onClickIntent);

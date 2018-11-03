@@ -4,23 +4,31 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import java.util.*
+import com.google.gson.reflect.TypeToken
+
+
 
 private const val KEY_PREFERENCE_STORAGE = "KEY_PREFERENCE_STORAGE"
-private const val EVENTS_KEY = "STORAGE_KEY_FOR_EVENTS"
+private const val EVENTS_KEY = "STORAGE_KEY_FOR_EVENTS2"
 
 object EventStorage {
     fun save(context: Context, events: List<Event>) {
         sharedPreferences(context) {
-            it.edit().putStringSet(EVENTS_KEY, events.parseToJsonSet()).apply()
+            it.edit().putString(EVENTS_KEY, Gson().toJson(events)).apply()
         }
     }
 
     fun get(context: Context): List<Event> {
         sharedPreferences(context) {
-            val stringSet = it.getStringSet(EVENTS_KEY, HashSet<String>())
-            return stringSet.map {
-                Gson().fromJson(it, Event::class.java)
+            val string = it.getString(EVENTS_KEY, "")
+            val listType = object : TypeToken<List<Event>>() {}.type
+            val res : List<Event>? = Gson().fromJson(string, listType)
+            if (res == null) {
+                return ArrayList<Event>()
+            } else {
+                return res
             }
+
         }
     }
 

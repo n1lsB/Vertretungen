@@ -29,9 +29,25 @@ class AccountSpinner(context: Context, attrs: AttributeSet) : AppCompatSpinner(c
         SHOW_REGISTERED, SHOW_UNREGISTERED
     }
 
+    /**
+     * Defines how the entries of the AccountSpinner can be ordered
+     */
+    enum class ViewOrder {
+        NORMAL {
+            override fun order(list: List<Account<out Dataset>>) = list
+        },
+        INVERSE {
+            override fun order(list: List<Account<out Dataset>>) = list.reversed()
+        };
+
+        abstract fun order(list : List<Account<out Dataset>>) : List<Account<out Dataset>>
+    }
+
     private var selectedAccount: Account<out Dataset>? = null
     private var accountChangeListener: onAccountChangeListener? = null
     private var viewConfig = ViewConfig.SHOW_REGISTERED
+
+    var viewOrder = ViewOrder.NORMAL
 
 
     init {
@@ -48,8 +64,7 @@ class AccountSpinner(context: Context, attrs: AttributeSet) : AppCompatSpinner(c
     }
 
     fun init() {
-        val accountList = filterAccounts(viewConfig)
-
+        val accountList = viewOrder.order(filterAccounts(viewConfig))
 
         val arrayAdapter = ArrayAdapter(
                 context,

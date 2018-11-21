@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        login_account_spinner.viewOrder = AccountSpinner.ViewOrder.INVERSE
         login_account_spinner.setViewConfig(AccountSpinner.ViewConfig.SHOW_UNREGISTERED)
 
         // Set canClose:

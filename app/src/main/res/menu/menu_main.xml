@@ -1,17 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="de.nils_beyer.android.Vertretungen.mainActivity.MainActivity">
     <item
         android:id="@+id/menu_item_info"
-        android:title="@string/info_menuitem_title" />
-    <item
-        android:id="@+id/menu_item_marked_courses"
-        android:title="@string/marked_courses_menu_entry"
-        />
-    <item
-        android:id="@+id/menu_item_logout"
-        android:title="Abmelden" />
-    <item
-        android:id="@+id/menu_item_login"
-        android:title="Anmelden" />
+        android:icon="@drawable/baseline_settings_white_48"
+        android:title="@string/info_menuitem_title"
+        app:showAsAction="always" />
 </menu>

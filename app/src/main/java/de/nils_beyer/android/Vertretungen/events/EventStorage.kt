@@ -10,11 +10,40 @@ import com.google.gson.reflect.TypeToken
 
 private const val KEY_PREFERENCE_STORAGE = "KEY_PREFERENCE_STORAGE"
 private const val EVENTS_KEY = "STORAGE_KEY_FOR_EVENTS2"
+private const val EVENT_PARAM_NAME = "EVENT_PARAM_NAME"
+private const val EVENT_PARAM_VALUE = "EVENT_PARAM_VALUE"
 
 object EventStorage {
     fun save(context: Context, events: List<Event>) {
         sharedPreferences(context) {
             it.edit().putString(EVENTS_KEY, Gson().toJson(events)).apply()
+        }
+    }
+
+    fun saveConfigParamName(context : Context, paramName : String) {
+        sharedPreferences(context) {
+            it.edit().putString(EVENT_PARAM_NAME, paramName)
+                    .apply()
+
+        }
+    }
+    fun saveConfigParamValue(context : Context, paramValue : String) {
+        sharedPreferences(context) {
+            it.edit().putString(EVENT_PARAM_VALUE, paramValue)
+                    .apply()
+
+        }
+    }
+
+    fun getConfigParamName(context : Context) : String {
+        return sharedPreferences(context) {
+            it.getString(EVENT_PARAM_NAME, "") ?: ""
+        }
+    }
+
+    fun getConfigParamValue(context : Context) : String {
+        return sharedPreferences(context) {
+            it.getString(EVENT_PARAM_VALUE, "") ?: ""
         }
     }
 

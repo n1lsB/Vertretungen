@@ -14,6 +14,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.jetbrains.annotations.NotNull;
+
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
 import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
 import de.nils_beyer.android.Vertretungen.download.DownloadResultCodes;
@@ -123,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         }
 
         // Download new events
-        EventsDownloadService.startDownload(this);
+        EventsDownloadService.startDownload(this, createPendingResult(0, new Intent(), 0));
 
         isDownloading = true;
         mOverviewSectionsAdapter.showDownloading();
@@ -185,9 +187,6 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        if (accountSpinner.hasOnlyRegistered(this)) {
-            menu.removeItem(R.id.menu_item_login);
-        }
         return true;
     }
 
@@ -196,20 +195,6 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         switch (item.getItemId()) {
             case R.id.menu_item_info:
                 startActivity(new Intent(this, InfoActivity.class));
-                return true;
-            case R.id.menu_item_marked_courses:
-                startActivity(new Intent(this, MarkedCoursesActivity.class));
-                return true;
-            case R.id.menu_item_logout:
-                accountSpinner.getSelectedAccount().logout(this);
-                accountSpinner.updateAccountSpinner();
-                if (accountSpinner.hasOnlyUnregistered(getApplicationContext())) {
-                    startActivity(new Intent(this, LoginActivity.class));
-                }
-                invalidateOptionsMenu();
-                return true;
-            case R.id.menu_item_login:
-                startActivity(new Intent(this, LoginActivity.class));
                 return true;
         }
         return false;
@@ -236,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
         return mOverviewSectionsAdapter.getDataset(tabLayout.getSelectedTabPosition()).getURL();
     }
 
-    @Override
+    @Override @NotNull
     /**
      * Returns the HTTP Header authorization property for login. Used for the chrome custom tab button.
      */

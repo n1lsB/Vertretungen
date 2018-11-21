@@ -107,7 +107,7 @@ public class OverviewFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(overviewAdapter);
 
-
+        updateData(groupCollection);
 
         return rootView;
     }

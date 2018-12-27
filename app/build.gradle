@@ -11,8 +11,8 @@ android {
         applicationId "de.nils_beyer.android.testapplication"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 16
-        versionName "1.7.2"
+        versionCode 19
+        versionName "1.7.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,13 +30,13 @@ android {
 dependencies {
     implementation files('libs/jsoup-1.11.3.jar')
     implementation 'com.google.code.gson:gson:2.8.2'
-    implementation 'com.android.support:customtabs:28.+'
-    implementation 'com.android.support:appcompat-v7:28.+'
-    implementation 'com.android.support:design:28.+'
-    implementation 'com.android.support:support-v4:28.+'
-    implementation 'com.android.support:cardview-v7:28.+'
-    implementation 'com.android.support:recyclerview-v7:28.+'
-    implementation 'com.android.support.constraint:constraint-layout:1.+'
+    implementation 'com.android.support:customtabs:28.0.0'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }

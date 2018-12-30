@@ -19,6 +19,7 @@ import android.widget.TextView
 import android.widget.Toast
 import de.nils_beyer.android.Vertretungen.account.Account
 import de.nils_beyer.android.Vertretungen.account.Dataset
+import de.nils_beyer.android.Vertretungen.account.TeacherAccount
 import de.nils_beyer.android.Vertretungen.account.availableAccounts
 import de.nils_beyer.android.Vertretungen.events.EventStorage
 import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity
@@ -106,6 +107,13 @@ class InfoActivity : AppCompatActivity() {
             info_button_login.visibility = View.VISIBLE
         } else {
             info_button_login.visibility = View.GONE
+        }
+
+        // Disable calendar config if not logged in as teacher
+        if (TeacherAccount.isRegistered(applicationContext)) {
+            info_layout_calendar_config.visibility = View.VISIBLE
+        } else {
+            info_layout_calendar_config.visibility = View.GONE
         }
     }
 

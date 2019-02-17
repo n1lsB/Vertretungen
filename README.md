@@ -4,19 +4,20 @@ An android app designed to display published substitutions at the [Burgau-Gymnas
 
 ## Installation
 
-This application is available in the Google Play Store. You can download it by searching for "Vertretungen am Burgau" or by clicking [here](https://play.google.com/store/apps/details?id=de.nils_beyer.android.testapplication).
+This application is available on the Google Play Store. You can download it by searching for "Vertretungen am Burgau" or by clicking [here](https://play.google.com/store/apps/details?id=de.nils_beyer.android.testapplication).
 
 Currently, the app requires Android 4.2 or higher.
 
-In order to access the substitution system, you have to be able to login to the substitution system. Use the credentials you also use for checking the substitution table on the website.
+In order to access the substitution system, you have to login to the substitution system. Use the credentials you also use for checking the substitution table on the website.
 
 ## Features
 
-- Display substitutions ordered by classes
-- Mark classes/courses
-- Login to the student and/or the teachers substitution system
-- Offline approach: The downloaded information are stored locally. You can simple open the app without internet connection in order to see the substitutions.
-- Offers one Android widget.
+- Display substitutions ordered by classes.
+- Mark classes/courses.
+- Login to the student and/or the teacher substitution system.
+- Offline approach: The downloaded information are stored locally. You can open the app without an internet connection.
+- By using an Android Widget, you can see important information on your homescreen.
+- Display upcoming events at the Burgau-Gymnasium Düren.
 
 ## Libraries
 
@@ -27,6 +28,8 @@ This project uses external libraries, including:
 - [Android support libraries](https://developer.android.com/topic/libraries/support-library/packages.html)
 
 ## Screenshots
+
+Currently, the application is not translated to English or another language except German.
 
 Main screen: Display all available classes listed online.
 

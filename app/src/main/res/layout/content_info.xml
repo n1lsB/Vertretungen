@@ -87,52 +87,6 @@
             android:visibility="visible" />
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/info_layout_calendar_config">
-
-            <TextView
-                android:id="@+id/textview10"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingStart="12dp"
-                android:text="Kalender-Konfiguration"
-                android:textAllCaps="true" />
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingEnd="12dp"
-                android:paddingStart="12dp">
-
-                <EditText
-                    android:id="@+id/editText_events_config_param"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Parameter"
-                    android:inputType="textPersonName"
-                    app:layout_constraintEnd_toStartOf="@+id/editText_events_config_value"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <EditText
-                    android:id="@+id/editText_events_config_value"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Wert"
-                    android:inputType="textPersonName"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editText_events_config_param" />
-            </android.support.constraint.ConstraintLayout>
-
-        </LinearLayout>
-
-
         <Button
             android:id="@+id/info_button_license"
             android:layout_width="match_parent"

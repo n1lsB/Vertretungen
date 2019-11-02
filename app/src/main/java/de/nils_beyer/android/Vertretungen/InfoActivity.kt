@@ -80,16 +80,6 @@ class InfoActivity : AppCompatActivity() {
             startActivity(Intent(this, MarkedCoursesActivity::class.java))
         }
 
-        // Setup event config edit texts
-        editText_events_config_param.text = EventStorage.getConfigParamName(applicationContext).toEditable()
-        editText_events_config_value.text = EventStorage.getConfigParamValue(applicationContext).toEditable()
-
-        editText_events_config_param.afterTextChanged {
-            EventStorage.saveConfigParamName(applicationContext, it)
-        }
-        editText_events_config_value.afterTextChanged {
-            EventStorage.saveConfigParamValue(applicationContext, it)
-        }
     }
 
     override fun onResume() {
@@ -107,13 +97,6 @@ class InfoActivity : AppCompatActivity() {
             info_button_login.visibility = View.VISIBLE
         } else {
             info_button_login.visibility = View.GONE
-        }
-
-        // Disable calendar config if not logged in as teacher
-        if (TeacherAccount.isRegistered(applicationContext)) {
-            info_layout_calendar_config.visibility = View.VISIBLE
-        } else {
-            info_layout_calendar_config.visibility = View.GONE
         }
     }
 

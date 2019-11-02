@@ -11,37 +11,21 @@ import org.jsoup.Jsoup
 import java.text.SimpleDateFormat
 import java.util.*
 
-private val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY).format(Date())
-private val eventsURL = "http://api.burgaugymnasium.de/calendar/index.php?format=html&startDate=$currentDate"
-private val PENDING_INTENT_EXTRA_NAME = "PENDING_INTENT_EXTRA_NAME"
+private const val eventsURL = "https://termine.burgaugymnasium.de/burgau.html"
+private const val PENDING_INTENT_EXTRA_NAME = "PENDING_INTENT_EXTRA_NAME"
 
 class EventsDownloadService : IntentService(EventsDownloadService::class.simpleName) {
 
     override fun onHandleIntent(intent: Intent?) {
         val pendingIntent = intent?.getParcelableExtra<PendingIntent>(PENDING_INTENT_EXTRA_NAME)
         try {
-            val htmlContent = downloadHTMLFileViaHTTP(composeURL(applicationContext), "UTF-8")
+            val htmlContent = downloadHTMLFileViaHTTP(eventsURL, "UTF-8")
             val events = parseHTML(htmlContent)
             EventStorage.save(applicationContext, events)
             pendingIntent?.send() // send a reply to enforce a refresh of MainActivity
         } catch (e : Exception) {
             Log.e("EventDownload", "could not download new events")
             Log.e("EventDownload", e.message)
-        }
-    }
-
-    /**
-     * Construct the URL used to fetch new events
-     */
-    private fun composeURL(context : Context) : String {
-        val paramName = EventStorage.getConfigParamName(context)
-        if (paramName != "" && paramName != "format" && paramName != "startDate") {
-            return Uri.parse(eventsURL)
-                    .buildUpon()
-                    .appendQueryParameter(paramName, EventStorage.getConfigParamValue(context))
-                    .build().toString()
-        } else {
-            return eventsURL
         }
     }
 

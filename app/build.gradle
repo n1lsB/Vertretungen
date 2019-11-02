@@ -6,13 +6,12 @@ apply plugin: 'kotlin-android-extensions'
 android {
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion 28
-    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "de.nils_beyer.android.testapplication"
         minSdkVersion 17
         targetSdkVersion 28
-        versionCode 19
-        versionName "1.7.3"
+        versionCode 20
+        versionName "1.7.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

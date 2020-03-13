@@ -45,6 +45,13 @@ class EventsDownloadService : IntentService(EventsDownloadService::class.simpleN
 
 
             Event(dates.first, dates.second, timeDescription, title)
+        }.filter {
+            val now = Date()
+            if (it.end != null) {
+                it.end.after(now)
+            } else {
+                it.start.after(now)
+            }
         }
     }
 

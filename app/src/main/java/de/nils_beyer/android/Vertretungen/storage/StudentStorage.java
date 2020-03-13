@@ -31,8 +31,10 @@ public class StudentStorage implements Serializable{
     private static final String KEY_IMMEDIACY_TOMORROW = "KEY_IMMEDIACY_TOMORROW";
     private static final String KEY_DATASET_TODAY = "KEY_DATASET_TODAY";
     private static final String KEY_DATASET_TOMORROW = "KEY_DATASET_TOMORROW";
+    private static final String KEY_MOTD_TODAY = "KEY_MOTD_TODAY";
+    private static final String KEY_MOTD_TOMORROW = "KEY_MOTD_TOMORROW";
 
-    public static void save(Context context, ArrayList<Group> today, ArrayList<Group> tomorrow, Date dateToday, Date dateTomorrow, Date immediacityToday, Date immediacitryTomorrow) {
+    public static void save(Context context, ArrayList<Group> today, ArrayList<Group> tomorrow, Date dateToday, Date dateTomorrow, Date immediacityToday, Date immediacitryTomorrow, String motd_today, String motd_tomorrow) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -44,6 +46,9 @@ public class StudentStorage implements Serializable{
         editor.putStringSet(KEY_DATASET_TODAY, parseSetToJson(today));
 
         editor.putStringSet(KEY_DATASET_TOMORROW, parseSetToJson(tomorrow));
+
+        editor.putString(KEY_MOTD_TODAY, motd_today);
+        editor.putString(KEY_MOTD_TOMORROW, motd_tomorrow);
 
         editor.commit();
     }
@@ -132,6 +137,24 @@ public class StudentStorage implements Serializable{
             return new Date(sharedPreferences.getLong(KEY_IMMEDIACY_TOMORROW, 0));
         else
             return null;
+    }
+
+    public static String getMOTDToday(final Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(KEY_MOTD_TODAY)) {
+            return sharedPreferences.getString(KEY_MOTD_TODAY, null);
+        } else {
+            return null;
+        }
+    }
+
+    public static String getMOTDTomorrow(final Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(KEY_PREFERENCE_STORAGE, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(KEY_MOTD_TOMORROW)) {
+            return sharedPreferences.getString(KEY_MOTD_TOMORROW, null);
+        } else {
+            return null;
+        }
     }
 
     public static boolean containsData(Context context) {

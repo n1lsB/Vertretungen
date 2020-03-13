@@ -17,6 +17,7 @@ import java.util.Date;
 
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.account.Dataset;
+import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.data.GroupCollection;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.data.Group;
@@ -82,14 +83,28 @@ public class OverviewFragment extends Fragment {
             position = savedInstanceState.getInt(ARG_POSITION);
             groupCollection = (GroupCollection) savedInstanceState.getSerializable(ARG_GROUP_COLLECTION);
         }
-        overviewAdapter = new OverviewAdapter(getContext(), groupCollection);
+
+
+        // TODO handle motd better
+        Dataset dataset;
+        switch (position) {
+            case 1:
+                dataset = StudentAccount.StudentDatasets.Today;
+                break;
+            case 2:
+                dataset = StudentAccount.StudentDatasets.Tomorrow;
+                break;
+            default:
+                throw new UnsupportedOperationException("Position unknown");
+        }
+
+        overviewAdapter = new OverviewAdapter(getContext(), groupCollection, dataset);
 
         this.container = container;
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         noReplcaements = (TextView) rootView.findViewById(R.id.text_noreplacemants);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

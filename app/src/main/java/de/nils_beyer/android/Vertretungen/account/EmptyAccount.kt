@@ -7,6 +7,10 @@ import de.nils_beyer.android.Vertretungen.data.GroupCollection
 
 class EmptyAccount : Account<EmptyAccount.EmptyDataset>() {
     class EmptyDataset : Dataset {
+        override fun getMOTD(context: Context): String? {
+            return null
+        }
+
         override fun getURL(): String {
             return "about:blank"
         }

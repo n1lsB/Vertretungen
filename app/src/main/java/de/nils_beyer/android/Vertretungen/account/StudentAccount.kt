@@ -17,10 +17,12 @@ import de.nils_beyer.android.Vertretungen.storage.StudentStorage
 object StudentAccount : Account<StudentAccount.StudentDatasets>() {
     enum class StudentDatasets : Dataset {
         Today {
+            override fun getMOTD(context: Context): String? = StudentStorage.getMOTDToday(context)
             override fun getURL(): String = StudentDownloadService.URL_TODAY
             override fun getData(context : Context): GroupCollection = StudentStorage.getTodaySource(context)
         },
         Tomorrow {
+            override fun getMOTD(context: Context): String? = StudentStorage.getMOTDTomorrow(context)
             override fun getURL(): String = StudentDownloadService.URL_TOMORROW
             override fun getData(context : Context): GroupCollection = StudentStorage.getTomorrowSource(context)
         }

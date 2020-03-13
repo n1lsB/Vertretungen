@@ -75,7 +75,10 @@ public class StudentDownloadService extends IntentService {
                 Date immediacyToday = readImmediacy(HTML_today);
                 Date immediacyTomorrow = readImmediacy(HTML_tomorrow);
 
-                StudentStorage.save(getApplicationContext(), dataSetToday, dataSetTomorrow, dateToday, dateTomorrow, immediacyToday, immediacyTomorrow);
+                String motdToday = readMotd(HTML_today);
+                String motdTomorow = readMotd(HTML_tomorrow);
+
+                StudentStorage.save(getApplicationContext(), dataSetToday, dataSetTomorrow, dateToday, dateTomorrow, immediacyToday, immediacyTomorrow, motdToday, motdTomorow);
 
                 // If we pass until here, the download was successful and we can
                 // store that the login is still valid.
@@ -98,6 +101,26 @@ public class StudentDownloadService extends IntentService {
             }
         } catch (PendingIntent.CanceledException exc) {
             Log.i(TAG, "reply cancelled", exc);
+        }
+    }
+
+    private String readMotd(String html) {
+        Document document = Jsoup.parse(html, "UTF-8");
+        document.outputSettings().charset("UTF-8");
+
+        Elements elements = document.getElementsByClass("info");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Element el : elements) {
+            if (el.tagName().equals("td") && !el.text().isEmpty()) {
+                stringBuilder.append(el.text() + "\n");
+            }
+        }
+        Log.d("MOTD", "Parsed MOTD: " + stringBuilder.toString());
+        if (stringBuilder.toString().isEmpty()) {
+            return null;
+        } else {
+            return stringBuilder.toString();
         }
     }
 

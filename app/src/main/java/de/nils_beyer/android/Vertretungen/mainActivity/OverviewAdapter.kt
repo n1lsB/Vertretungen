@@ -34,7 +34,7 @@ class OverviewAdapter(private val context: Context, private var groupCollection:
             }
         } else {
             when (holder) {
-                is GroupViewHolder -> holder.bind(groupCollection, position - events.size)
+                is GroupViewHolder -> holder.bind(groupCollection, position - events.size - 2)
                 is ImmediacityViewHolder -> holder.bind(groupCollection.immediacity)
                 is EventViewHolder -> holder.bind(events[position - 1])
                 is MOTDHolder -> holder.bind(motd!!)

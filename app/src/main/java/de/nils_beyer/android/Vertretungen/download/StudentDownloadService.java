@@ -88,7 +88,7 @@ public class StudentDownloadService extends IntentService {
 
 
                 reply.send(this, DownloadResultCodes.RESULT_SUCCESS.ordinal(), result);
-            } catch (SecurityException exc) {
+            } catch (UnAuthorizedException exc) {
                 // The given username/password are incorrect
                 StudentAccount.INSTANCE.setLoginValid(getApplicationContext(), false);
                 Intent data = new Intent();
@@ -124,11 +124,11 @@ public class StudentDownloadService extends IntentService {
         }
     }
 
-    protected String downloadHTMLFile(String url) throws SecurityException, IllegalStateException  {
+    protected String downloadHTMLFile(String url) throws SecurityException, IllegalStateException, UnAuthorizedException  {
         return downloadHTMLFile(url, StudentAccount.getUserName(getApplicationContext()), StudentAccount.getPassword(getApplicationContext()));
     }
 
-    public static String downloadHTMLFile(String url, String username, String password) throws SecurityException, IllegalStateException {
+    public static String downloadHTMLFile(String url, String username, String password) throws SecurityException, IllegalStateException, UnAuthorizedException {
         return DownloadHTMLKt.downloadHTMLFileWithCredientials(url, username, password);
     }
 

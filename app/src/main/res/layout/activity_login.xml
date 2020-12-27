@@ -101,10 +101,19 @@
 
 
     <TextView
-        android:text="@string/login_info"
+        android:id="@+id/activity_login_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:text="@string/login_info"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/activity_login_text_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/activity_login_info"
+        android:layout_marginBottom="5dp" />
 
 
 </RelativeLayout>

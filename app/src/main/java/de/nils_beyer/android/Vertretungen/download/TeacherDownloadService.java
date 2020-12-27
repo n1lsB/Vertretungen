@@ -99,7 +99,7 @@ public class TeacherDownloadService extends IntentService {
 
                 VertretungenWidgetProvider.updateWidgetData(this);
                 reply.send(this, DownloadResultCodes.RESULT_SUCCESS.ordinal(), result);
-            } catch (SecurityException exc) {
+            } catch (UnAuthorizedException exc) {
                 // The given username/password are incorrect
                 StudentAccount.INSTANCE.setLoginValid(getApplicationContext(), false);
                 Intent data = new Intent();
@@ -120,7 +120,7 @@ public class TeacherDownloadService extends IntentService {
         return downloadHTMLFile(url, TeacherAccount.getUserName(getApplicationContext()), TeacherAccount.getPassword(getApplicationContext()));
     }
 
-    public static String downloadHTMLFile(String url, String username, String password) throws IllegalStateException, SecurityException {
+    public static String downloadHTMLFile(String url, String username, String password) throws IllegalStateException, SecurityException, UnAuthorizedException {
         return DownloadHTMLKt.downloadHTMLFileWithCredientials(url, username, password);
     }
 

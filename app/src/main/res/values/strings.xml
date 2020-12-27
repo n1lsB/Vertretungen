@@ -29,7 +29,8 @@
     <string name="no_data_downloaded">Keine Daten heruntergeladen</string>
 
     <!-- Connection Info Texts -->
-    <string name="io_error">Verbindungsfehler \nBitte überprüfen Sie Ihre Internetverbindung</string>
+    <string name="activity_login_generic_error_template">Etwas ist fehlgeschlagen.\n%s</string>
+    <string name="io_error">Etwas ist fehlgeschlagen. Prüfen Sie Ihre Internetverbindung oder versuchen Sie sich erneut anzumelden.</string>
     <string name="authentication_error">Anmeldedaten fehlerhaft.</string>
     <string name="authentication_error_reregister">Neu anmelden</string>
     <string name="download_success">Daten erfolgreich heruntergeladen</string>

@@ -7,7 +7,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-@Throws(SecurityException::class, IllegalStateException::class)
+class UnAuthorizedException : Exception()
+
+@Throws(SecurityException::class, IllegalStateException::class, UnAuthorizedException::class)
 fun downloadHTMLFileWithCredientials(url : String, username : String, password : String) : String  {
     // Setup HTTP connection
     val urlConnection = URL(url).openConnection() as HttpsURLConnection
@@ -18,7 +20,7 @@ fun downloadHTMLFileWithCredientials(url : String, username : String, password :
 
     // 401 - Unauthorized e.g. wrong credentials
     if (httpStatusCode == 401) {
-        throw SecurityException("Unauthorized HTTP request")
+        throw UnAuthorizedException()
     }
 
     if (httpStatusCode != 200) {

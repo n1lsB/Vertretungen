@@ -20,6 +20,7 @@
 
         <activity
             android:name=".mainActivity.MainActivity"
+            android:exported="true"
             android:label="@string/app_name_short" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +52,7 @@
 
         <receiver
             android:name=".widget.VertretungenWidgetProvider"
+            android:exported="false"
             android:label="Vertretungen Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -64,6 +66,7 @@
         <activity
             android:name=".widget.WidgetConfigureActivity"
             android:label="@string/title_activity_widget_configure"
+            android:exported="false"
             android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

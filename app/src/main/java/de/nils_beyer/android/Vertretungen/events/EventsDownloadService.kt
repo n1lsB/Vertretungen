@@ -25,7 +25,9 @@ class EventsDownloadService : IntentService(EventsDownloadService::class.simpleN
             pendingIntent?.send() // send a reply to enforce a refresh of MainActivity
         } catch (e : Exception) {
             Log.e("EventDownload", "could not download new events")
-            Log.e("EventDownload", e.message)
+            if (e.message != null) {
+                Log.e("EventDownload", e.message!!)
+            }
         }
     }
 
@@ -50,7 +52,7 @@ class EventsDownloadService : IntentService(EventsDownloadService::class.simpleN
             if (it.end != null) {
                 it.end.after(now)
             } else {
-                it.start.after(now)
+                it.start.after(now) || it.start.sameDay(now)
             }
         }
     }

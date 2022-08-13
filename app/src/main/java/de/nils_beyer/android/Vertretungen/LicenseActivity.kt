@@ -2,7 +2,7 @@ package de.nils_beyer.android.Vertretungen
 
 import kotlinx.android.synthetic.main.activity_license.*
 
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 

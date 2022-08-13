@@ -5,8 +5,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Browser
-import android.support.customtabs.CustomTabsIntent
-import android.support.design.widget.FloatingActionButton
+import androidx.browser.customtabs.CustomTabsIntent
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.util.AttributeSet
 import android.widget.Toast
 
@@ -32,7 +32,13 @@ class ChromeCustomTabsFAB(context: Context, attrs: AttributeSet) : FloatingActio
 
             try {
                 // Parse URL (as String) to URI
-                val uri : Uri? = Uri.parse(tabActivity.selectedURL)
+                val uriString = tabActivity.selectedURL;
+                if (uriString == null) {
+                    Toast.makeText(context, "Dieser Tab kann nicht im Browser geöffnet werden", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener;
+                }
+
+                val uri : Uri? = Uri.parse(uriString)
 
                 if (uri != null) {
                     // Call Chrome Custom Tabs

@@ -25,6 +25,7 @@ import de.nils_beyer.android.Vertretungen.account.StudentAccount;
 import de.nils_beyer.android.Vertretungen.storage.StudentStorage;
 import de.nils_beyer.android.Vertretungen.data.Group;
 import de.nils_beyer.android.Vertretungen.data.Entry;
+import de.nils_beyer.android.Vertretungen.util.ClassNameConverterKt;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
 
 
@@ -148,13 +149,16 @@ public class StudentDownloadService extends IntentService {
                     continue;
                 }
 
-                String name = row.child(0).text();
-                String time = row.child(1).text();
+                String time = row.child(0).text();
+                String name = row.child(1).text();
                 String original = row.child(2).text();
                 String modified = row.child(3).text();
                 String room = row.child(4).text();
                 String type = "";
                 String info = row.child(5).text();
+
+                // Convert 05A as 5a etc
+                name = ClassNameConverterKt.convertClassName(name);
 
                 ArrayList<String> klassenNames = parseKlassenName(name);
                 for (String klasse : klassenNames) {

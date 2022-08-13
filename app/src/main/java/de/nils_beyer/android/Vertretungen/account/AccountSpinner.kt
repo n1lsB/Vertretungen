@@ -3,7 +3,7 @@ package de.nils_beyer.android.Vertretungen.account
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.AppCompatSpinner
+import androidx.appcompat.widget.AppCompatSpinner
 import android.util.AttributeSet
 import android.view.View
 import android.widget.AdapterView

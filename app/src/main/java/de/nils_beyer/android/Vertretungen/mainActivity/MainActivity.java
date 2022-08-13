@@ -3,12 +3,12 @@ package de.nils_beyer.android.Vertretungen.mainActivity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,13 +18,12 @@ import org.jetbrains.annotations.NotNull;
 
 import de.nils_beyer.android.Vertretungen.account.AccountSpinner;
 import de.nils_beyer.android.Vertretungen.account.AvailableAccountsKt;
+import de.nils_beyer.android.Vertretungen.account.Dataset;
 import de.nils_beyer.android.Vertretungen.download.DownloadResultCodes;
-import de.nils_beyer.android.Vertretungen.download.StudentDownloadService;
 import de.nils_beyer.android.Vertretungen.InfoActivity;
 import de.nils_beyer.android.Vertretungen.LoginActivity;
 import de.nils_beyer.android.Vertretungen.R;
 import de.nils_beyer.android.Vertretungen.events.EventsDownloadService;
-import de.nils_beyer.android.Vertretungen.preferences.MarkedCoursesActivity;
 import de.nils_beyer.android.Vertretungen.widget.VertretungenWidgetProvider;
 
 public class MainActivity extends AppCompatActivity implements ChromeCustomTabsFAB.TabActivity, OverviewSectionsAdapter.DownloadingActivity, AccountSpinner.onAccountChangeListener{
@@ -218,7 +217,12 @@ public class MainActivity extends AppCompatActivity implements ChromeCustomTabsF
      * Returns the origin URL of the selected tab. Used for the chrome custom tab button
      */
     public String getSelectedURL() {
-        return mOverviewSectionsAdapter.getDataset(tabLayout.getSelectedTabPosition()).getURL();
+        Dataset d = mOverviewSectionsAdapter.getDataset(tabLayout.getSelectedTabPosition());
+        if (d != null) {
+            return d.getURL();
+        } else {
+            return null;
+        }
     }
 
     @Override @NotNull

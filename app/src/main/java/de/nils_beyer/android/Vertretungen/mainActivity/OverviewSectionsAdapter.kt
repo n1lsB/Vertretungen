@@ -2,9 +2,9 @@ package de.nils_beyer.android.Vertretungen.mainActivity
 
 
 import android.content.Context
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import android.view.ViewGroup
 import de.nils_beyer.android.Vertretungen.R
 
@@ -19,7 +19,7 @@ internal class OverviewSectionsAdapter(private val context: Context, fm: Fragmen
     //private var fragments = arrayOfNulls<Fragment>(count);
     private var datasets = account.getAvailableDatasets().map { it.getData(context) }
 
-    override fun getItem(position: Int): Fragment? {
+    override fun getItem(position: Int): Fragment {
         if (position == 0) {
             return EventListFragment();
         } else {
@@ -92,9 +92,10 @@ internal class OverviewSectionsAdapter(private val context: Context, fm: Fragmen
         notifyDataSetChanged()
     }
 
-    fun getDataset(position : Int) : Dataset {
+    fun getDataset(position : Int) : Dataset? {
         if (position - 1 < 0 || position - 1 >= account.getAvailableDatasets().size) {
-            throw RuntimeException("no groupcollection at index ${position} available.")
+            //throw RuntimeException("no groupcollection at index ${position} available.")
+            return null;
         }
         return account.getAvailableDatasets()[position - 1]
     }

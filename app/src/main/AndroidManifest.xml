@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.nils_beyer.android.Vertretungen">
-
+    package="de.nils_beyer.android.Vertretungen" >
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -11,16 +10,17 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name_short"
+        android:networkSecurityConfig="@xml/network_security"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:networkSecurityConfig="@xml/network_security">
+        android:theme="@style/AppTheme" >
+
         <meta-data
             android:name="com.samsung.android.sdk.multiwindow.enable"
             android:value="true" />
 
         <activity
             android:name=".mainActivity.MainActivity"
-            android:label="@string/app_name_short">
+            android:label="@string/app_name_short" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,23 +34,16 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".preferences.MarkedCoursesActivity" />
-        <activity android:name=".LicenseActivity" />
-
-        <!-- Download Services -->
-
+        <activity android:name=".LicenseActivity" /> <!-- Download Services -->
         <service
             android:name=".download.StudentDownloadService"
             android:exported="false" />
         <service
             android:name=".download.TeacherDownloadService"
             android:exported="false" />
-
         <service
             android:name=".events.EventsDownloadService"
-            android:exported="false" />
-
-        <!-- Widget -->
-
+            android:exported="false" /> <!-- Widget -->
         <service
             android:name=".widget.WidgetService"
             android:exported="false"
@@ -58,7 +51,7 @@
 
         <receiver
             android:name=".widget.VertretungenWidgetProvider"
-            android:label="Vertretungen Widget">
+            android:label="Vertretungen Widget" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -71,7 +64,7 @@
         <activity
             android:name=".widget.WidgetConfigureActivity"
             android:label="@string/title_activity_widget_configure"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
